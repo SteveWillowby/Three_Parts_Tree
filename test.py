@@ -18,7 +18,8 @@ using_sequence = False
 G=nx.scale_free_graph(100)
 
 # Takes in a digraph and, handling isomorphisms, outputs a number with the following bits:
-# abcdefghijkl
+# zabcdefghijkl
+# z: a bit set to 1 to indicate that this is a three-node id
 # a: Does node_0 have the external in-edges?
 # b: Does node_0 have the external out-edges?
 # c: Does node_1 have the external in-edges?
@@ -58,7 +59,8 @@ def three_nodes_to_id(G, a, b, c):
 
     three_nodes.sort(key=lambda x: (x["e_in"] << 7) + (x["e_out"] << 6) + (x["i_doub"] << 4) + (x["i_in"] << 2) + x["i_out"])
 
-    final_number = (three_nodes[0]["e_in"] << 11) + (three_nodes[0]["e_out"] << 10) + \
+    final_number = (1 << 12) + \
+                    (three_nodes[0]["e_in"] << 11) + (three_nodes[0]["e_out"] << 10) + \
                     (three_nodes[1]["e_in"] << 9) + (three_nodes[1]["e_out"] << 8) + \
                     (three_nodes[2]["e_in"] << 7) + (three_nodes[2]["e_out"] << 6)
     first = three_nodes[0]["id"]
@@ -68,8 +70,6 @@ def three_nodes_to_id(G, a, b, c):
     final_number += (int(G.has_edge(second, first)) << 3) + (int(G.has_edge(second, third)) << 4)
     final_number += (int(G.has_edge(third, first)) << 1) + int(G.has_edge(third, second))
     return final_number
-
-# verify_three_nodes_to_id_works(G)
 
 # Takes in a digraph and, handling isomorphisms, outputs a number with the following bits:
 # abcdef
@@ -152,8 +152,33 @@ def verify_three_nodes_to_id_works(G):
 verify_two_nodes_to_id_works(G)
 verify_three_nodes_to_id_works(G)
 
+# Takes a graph and replaces a node with a three-rule:
+def replace_node_with_three(G, node_id, three_id, next_id):
+    in_edges = G.in_edges(node_id)
+    out_edges = G.out_edges(node_id)
+    if not three_id & (1 << 11): # If first node has no incoming edges:
+        for edge in in_edges:
+            G.remove_edge(edge[0], edge[1])
+    if not three_id & (1 << 10): # If first node has no outgoing edges:
+        for edge in out_edges:
+            G.remove_edge(edge[0], edge[1])
+    G.add_node(next_id)
+    if three_id & (1 << 9): # If second node has incoming edges:
+        for edge in in_edges:
+            G.add_edge(edge[0], next_id)
+    if three_id & (1 << 8): # If second node has outgoing edges:
+        for edge in out_edges:
+            G.add_edge(next_id, edge[1])
+    next_id += 1
+    if three_id & (1 << 7): # If third node has incoming edges:
+        for edge in in_edges:
+            G.add_edge(edge[0], next_id)
+    if three_id & (1 << 6): # If third node has outgoing edges:
+        for edge in out_edges:
+            G.add_edge(next_id, edge[1])
 
-def replace_node_with_three(G):
-    pass
+    # TODO: Add code for connecting the three nodes.
+
+
 # GM = isomorphism.GraphMatcher(G, G_prime)
 # actual_iso = GM.is_isomorphic()

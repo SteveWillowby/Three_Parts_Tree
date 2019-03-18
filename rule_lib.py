@@ -1,7 +1,6 @@
 import networkx as nx
 from networkx import utils
 from networkx.algorithms import isomorphism
-from utils import *
 
 class RuleLib:
     """Stores grammar rules in order of how frequently they've been found"""
@@ -37,6 +36,6 @@ class RuleLib:
                         return rules[j][1]
                     return rules[i][1]
             # If not already in the library.
-            rules[size].append([graph, self._next_id, 1])
+            rules.append([graph, self._next_id, 1])
             self._next_id += 1
             return self._next_id - 1

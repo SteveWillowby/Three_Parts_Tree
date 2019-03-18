@@ -1,6 +1,5 @@
 import networkx as nx
 from networkx import utils
-from utils import *
 
 class Rule:
     """Stores a grammar rule from a graph and can apply itself to that graph"""
@@ -81,7 +80,7 @@ class Rule:
     # j: Does node_1 point to node_2?
     # k: Does node_2 point to node_0?
     # l: Does node_2 point to node_1?
-    def three_nodes_to_id(G, a, b, c):
+    def _three_nodes_to_id(self, G, a, b, c):
         three_nodes = [{"id": a, "e_in": 0, "e_out": 0, "i_doub": 0, "i_in": 0, "i_out": 0},
                        {"id": b, "e_in": 0, "e_out": 0, "i_doub": 0, "i_in": 0, "i_out": 0},
                        {"id": c, "e_in": 0, "e_out": 0, "i_doub": 0, "i_in": 0, "i_out": 0}]
@@ -129,7 +128,7 @@ class Rule:
     # d: Does node_1 have the external out-edges?
     # e: Does node_0 point to node_1?
     # f: Does node_1 point to node_0?
-    def two_nodes_to_id(G, a, b):
+    def _two_nodes_to_id(self, G, a, b):
         two_nodes = [[a, 0, 0], [b, 0, 0]]
         # First, get their relationship to the outside world.
         # 2 indicates has external in-edges

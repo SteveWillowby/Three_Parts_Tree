@@ -1,6 +1,5 @@
 import networkx as nx
 from networkx import utils
-from networkx.algorithms import isomorphism
 from utils import *
 
 class Rule:
@@ -63,12 +62,6 @@ class Rule:
         if r.size() != self._size:
             return False
         return r.id() == self._id
-
-    def contract(self, t, G):
-        pass
-
-    def expand(self, t, G):
-        pass
 
     def id(self):
         return self._id

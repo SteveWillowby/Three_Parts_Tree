@@ -49,6 +49,8 @@ class SimpleRuleMiner(RuleMinerBase):
                         indices_idx += 1
             if len(rule_occurrences) > 0:
                 break
+            else:
+                print(f"Going to size {i + 1}")
         max_len = 0
         best_rule = []
         for rule, occurrences in rule_occurrences.items():

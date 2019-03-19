@@ -10,5 +10,5 @@ class RuleMinerBase:
     def determine_best_rule(self):
         pass
 
-    def contract_valid_tuples(self, rule):
+    def contract_valid_tuples(self, rule_with_occurrences):
         pass

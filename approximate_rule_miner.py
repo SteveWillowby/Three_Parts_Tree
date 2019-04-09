@@ -3,12 +3,29 @@ from networkx import utils
 from rule_miner_base import *
 from rule import *
 from rule_lib import *
+from sets import Set
+from itertools import combinations
+from itertools import chain
+# from collections import OrderedDict
 
-class ResidueRuleMiner(RuleMinerBase):
+class ApproximateRuleMiner(RuleMinerBase):
     """Used to find and compress grammar rules in a graph"""
 
     def __init__(self, G):
         self._G = G
+
+        self.in_sets = {}
+        self.out_sets = {}
+        self.both_sets = {}
+        for node in list(self._G.nodes()):
+            in_set = Set([edge[0] for edge in self._G.in_edges(node)])
+            out_set = Set([edge[1] for edge in self._G.out_edges(node)])
+            both_set = in_set | out_set
+            in_only_set = in_set - both_set
+            out_only_set = out_set - both_set
+            self.in_sets[node] = in_only_set# OrderedDict(sorted(in_only_set))
+            self.out_sets[node] = out_only_set# OrderedDict(sorted(out_only_set))
+            self.both_sets[node] = both_set # OrderedDict(sorted(both_set))
 
     def determine_best_rule(self):
         nodes = list(self._G.nodes())
@@ -128,9 +145,72 @@ class ResidueRuleMiner(RuleMinerBase):
                 counters[n] += 1
         return True
 
-    def best_options_for_tuple(self, t):
+    # Thanks to Mark Rushakoff on Stack Overflow for the basis of this function.
+    def powerset(self, iterable):
+        "powerset([1,2,3]) --> () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"
+        s = list(iterable)
+        return chain.from_iterable(combinations(s, r) for r in range(len(s)+1))
 
-        pass
+    # Returns all valid, cheapest ways to edit the pair.
+    # Or, if the pair is already valid, returns an empty array.
+    def best_options_for_pair(self, a, b):
+        just_a = Set([a])
+        just_b = Set([b])
+
+        in_comp = [self.in_sets[a] - just_b, self.in_sets[b] - just_a]
+        in_comp.append(in_comp[0] & in_comp[1])
+        out_comp = [self.out_sets[a] - just_b, self.out_sets[b] - just_a]
+        out_comp.append(out_comp[0] & out_comp[1])
+
+        three_in_values = [len(in_comp[0]), len(in_comp[1]), len(in_comp[0]) + len(in_comp[1]) - 2 * len(in_comp[2])]
+        three_out_values = [len(out_comp[0]), len(out_comp[1]), len(out_comp[0]) + len(out_comp[1]) - 2 * len(out_comp[2])]
+
+        in_min = min(three_in_values)
+        out_min = min(three_out_values)
+
+        if in_min == 0 and out_min == 0:
+            # Already valid! No modifications needed. TODO: Add return value
+            return
+
+        # Distinct possible best edit options: TODO: Change x_comp to three_x_values:
+        if three_in_values[0] == in_min:
+            if out_comp[0] == out_min:
+                # Delete a_in and delete a_out
+                pass
+            if out_comp[1] == out_min:
+                # Delete a_in and delete b_out
+                pass
+            if out_comp[2] == out_min:
+                # Delete a_in and move outs to intersection
+                # There are actually 2^(out_comp[2]) ways to do this!
+                a_add = Set()
+                a_del = in_comp[0]
+                pass
+        if in_comp[1] == in_min:
+            if out_comp[0] == out_min:
+                # Delete b_in and delete a_out
+                pass
+            if out_comp[1] == out_min:
+                # Delete b_in and delete b_out
+                pass
+            if out_comp[2] == out_min:
+                # Delete b_in and move outs to intersection
+                # There are actually 2^(out_comp[2]) ways to do this!
+                pass
+        if in_comp[2] == in_min:
+            if out_comp[0] == out_min:
+                # Move ins to intersection and delete a_out
+                # There are actually 2^(in_comp[2]) ways to do this!
+                pass
+            if out_comp[1] == out_min:
+                # Move ins to intersection and delete b_out
+                # There are actually 2^(in_comp[2]) ways to do this!
+                pass
+            if out_comp[2] == out_min:
+                # Move both ins and outs to their respective intersections
+                # There are actually 2^(in_comp[2] + out_comp[2]) ways to do this!
+                pass
+
 
     def contract_valid_tuples(self, rule_with_occurrences):
         for i in range(1, len(rule_with_occurrences)):

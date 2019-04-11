@@ -6,6 +6,7 @@ from rule_lib import *
 from sets import Set
 from itertools import combinations
 from itertools import chain
+import random
 # from collections import OrderedDict
 
 class ApproximateRuleMiner(RuleMinerBase):
@@ -145,7 +146,7 @@ class ApproximateRuleMiner(RuleMinerBase):
                 counters[n] += 1
         return True
 
-    # Thanks to Mark Rushakoff on Stack Overflow for the basis of this function.
+    # Thanks to Mark Rushakoff on Stack Overflow for the basis of this function. Although I might not use it.
     def powerset(self, iterable):
         "powerset([1,2,3]) --> () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"
         s = list(iterable)
@@ -172,41 +173,52 @@ class ApproximateRuleMiner(RuleMinerBase):
             # Already valid! No modifications needed. TODO: Add return value
             return
 
-        # Distinct possible best edit options: TODO: Change x_comp to three_x_values:
+        a_in_add = Set()
+        a_in_del = Set()
+        b_in_add = Set()
+        b_in_del = Set()
+
+        a_out_add = Set()
+        a_out_del = Set()
+        b_out_add = Set()
+        b_out_del = Set()
+        single_return_value = [a_in_add, a_in_del, b_in_add, b_in_del, a_out_add, a_out_del, b_out_add, b_out_del]
+
+        # Distinct possible best edit options:
         if three_in_values[0] == in_min:
-            if out_comp[0] == out_min:
+            if three_out_values[0] == out_min:
                 # Delete a_in and delete a_out
-                pass
-            if out_comp[1] == out_min:
+                a_in_del = in_comp[0]
+                a_out_del = out_comp[0]
+            if three_out_values[1] == out_min:
                 # Delete a_in and delete b_out
                 pass
-            if out_comp[2] == out_min:
+            if three_out_values[2] == out_min:
                 # Delete a_in and move outs to intersection
                 # There are actually 2^(out_comp[2]) ways to do this!
-                a_add = Set()
-                a_del = in_comp[0]
+
                 pass
-        if in_comp[1] == in_min:
-            if out_comp[0] == out_min:
+        if three_in_values[1] == in_min:
+            if three_out_values[0] == out_min:
                 # Delete b_in and delete a_out
                 pass
-            if out_comp[1] == out_min:
+            if three_out_values[1] == out_min:
                 # Delete b_in and delete b_out
                 pass
-            if out_comp[2] == out_min:
+            if three_out_values[2] == out_min:
                 # Delete b_in and move outs to intersection
                 # There are actually 2^(out_comp[2]) ways to do this!
                 pass
-        if in_comp[2] == in_min:
-            if out_comp[0] == out_min:
+        if three_in_values[2] == in_min:
+            if three_out_values[0] == out_min:
                 # Move ins to intersection and delete a_out
                 # There are actually 2^(in_comp[2]) ways to do this!
                 pass
-            if out_comp[1] == out_min:
+            if three_out_values[1] == out_min:
                 # Move ins to intersection and delete b_out
                 # There are actually 2^(in_comp[2]) ways to do this!
                 pass
-            if out_comp[2] == out_min:
+            if three_out_values[2] == out_min:
                 # Move both ins and outs to their respective intersections
                 # There are actually 2^(in_comp[2] + out_comp[2]) ways to do this!
                 pass

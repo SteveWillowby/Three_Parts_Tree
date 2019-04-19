@@ -94,6 +94,9 @@ class ApproximateRuleMiner(RuleMinerBase):
                     self.rule_occurrences_by_id[rule_id].remove((node_a, node_b))
                 del dict_a[node_b]
 
+    # O(|V|*max_degree^2) on first run.
+    # O(num distinct rule_ids found) afterwards.
+    # ^^ Technically that's O(2^6) at worst = O(1), but it will be larger if we allow larger rules.
     def determine_best_rule(self):
         if self.first_round:
             self.check_all_pairs_for_rules()
@@ -140,7 +143,7 @@ class ApproximateRuleMiner(RuleMinerBase):
         out_min = min(three_out_values)
 
         if in_min == 0 and out_min == 0:
-            # Already valid! No modifications needed. TODO: Add ID
+            # Already valid! No modifications needed.
             return [[Set() for i in range(0,8)]]
 
         return_values = []

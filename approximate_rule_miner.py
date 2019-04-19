@@ -14,6 +14,7 @@ class ApproximateRuleMiner(RuleMinerBase):
 
     def __init__(self, G):
         self._G = G
+        self.first_round = True
 
         self.in_sets = {}
         self.out_sets = {}
@@ -27,6 +28,28 @@ class ApproximateRuleMiner(RuleMinerBase):
             self.in_sets[node] = in_set# OrderedDict(sorted(in_only_set))
             self.out_sets[node] = out_set# OrderedDict(sorted(out_only_set))
             # self.both_sets[node] = both_set # OrderedDict(sorted(both_set))
+
+        self.rule_occurrences_by_pair = {}
+        self.rule_occurrences_by_id = {}
+
+    def check_all_pairs_for_rules(self):
+        nodes = list(self._G.nodes())
+        nodes.sort()
+        for i in range(0, len(nodes)):
+            node_a = nodes[i]
+            self.rule_occurrences_by_pair[node_a] = {}
+            for j in range(i + 1, len(nodes)):
+                node_b = nodes[j]
+                best_options_without_ids = self.best_options_for_pair(node_a, node_b)
+                unique_best_options_with_ids = self.add_rule_ids_and_filter(best_options_without_ids)
+                self.rule_occurrences_by_pair[node_a][node_b] = unique_best_options_with_ids
+                for id_num, option in best_options_with_ids.items():
+                    if id_num not in self.rule_occurrences_by_id:
+                        self.rule_occurrences_by_id[id_num] = Set()
+                    self.rule_occurrences_by_id[id_num].add((node_a, node_b))
+
+    def check_pairs_containing_ids(self, ids):
+        pass
 
     def determine_best_rule(self):
         nodes = list(self._G.nodes())
@@ -271,6 +294,7 @@ class ApproximateRuleMiner(RuleMinerBase):
 
         return return_values
 
+    # Adds rule id information AND filters out duplicates
     # Id value will be 6 bits:
     # Bit 5: Does node x have in-edges?
     # Bit 4: Does node x have out-edges?
@@ -278,7 +302,7 @@ class ApproximateRuleMiner(RuleMinerBase):
     # Bit 2: Does node y have in-edges?
     # Bit 1: Does node y have out-edges?
     # Bit 0: Does node y point to node x?
-    def add_rule_ids(self, a, b, best_options):
+    def add_rule_ids_and_filter(self, a, b, best_options):
         just_a = Set([a])
         just_b = Set([b])
 
@@ -288,7 +312,7 @@ class ApproximateRuleMiner(RuleMinerBase):
         a_to_b = a in self.in_sets[b]
         b_to_a = b in self.in_sets[a]
 
-        best_options_with_ids = []
+        best_options_with_ids = {}
         for option in best_options:
             # [a_in_add = 0, a_in_del = 1, b_in_add = 2, b_in_del = 3, a_out_add = 4, a_out_del = 5, b_out_add = 6, b_out_del = 7]
             in_a = len((in_sets[0] - option[1]) + option[0]) > 0
@@ -298,7 +322,7 @@ class ApproximateRuleMiner(RuleMinerBase):
             a_score = in_a * 4 + out_a * 2 + a_to_b
             b_score = in_b * 4 + out_b * 2 + b_to_a
             if a_score > b_score:
-                best_options_with_ids.append([(a_score << 3) + b_score, option])
+                best_options_with_ids[(a_score << 3) + b_score] = option
             else:
-                best_options_with_ids.append([(b_score << 3) + a_score, option])
+                best_options_with_ids[(b_score << 3) + a_score] = option]
         return best_options_with_ids

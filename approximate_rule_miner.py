@@ -46,7 +46,7 @@ class ApproximateRuleMiner(RuleMinerBase):
                 best_options_without_ids = self.best_options_for_pair(node_a, node_b)
                 unique_best_options_with_ids = self.add_rule_ids_and_filter(best_options_without_ids)
                 self.rule_occurrences_by_pair[node_a][node_b] = unique_best_options_with_ids
-                for id_num, option in best_options_with_ids.items():
+                for id_num, option in unique_best_options_with_ids.items():
                     if id_num not in self.rule_occurrences_by_id:
                         self.rule_occurrences_by_id[id_num] = Set()
                     self.rule_occurrences_by_id[id_num].add((node_a, node_b))
@@ -117,7 +117,7 @@ class ApproximateRuleMiner(RuleMinerBase):
         return chain.from_iterable(combinations(s, r) for r in range(len(s)+1))
     """
 
-    def random_subset(self, iterable):
+    def random_subset(self, entities):
         subset = []
         for entity in entities:
             if random.randint(0,1):
@@ -180,8 +180,8 @@ class ApproximateRuleMiner(RuleMinerBase):
 
                 a_only = out_sets[2] - out_sets[0]
                 b_only = out_sets[2] - out_sets[1]
-                a_only_subset = Set(random_subset(a_only)) # a will delete this
-                b_only_subset = Set(random_subset(b_only)) # b will delete this
+                a_only_subset = Set(self.random_subset(a_only)) # a will delete this
+                b_only_subset = Set(self.random_subset(b_only)) # b will delete this
 
                 a_in_add = Set()
                 a_in_del = in_sets[0]
@@ -224,8 +224,8 @@ class ApproximateRuleMiner(RuleMinerBase):
 
                 a_only = out_sets[2] - out_sets[0]
                 b_only = out_sets[2] - out_sets[1]
-                a_only_subset = Set(random_subset(a_only)) # a will delete this
-                b_only_subset = Set(random_subset(b_only)) # b will delete this
+                a_only_subset = Set(self.random_subset(a_only)) # a will delete this
+                b_only_subset = Set(self.random_subset(b_only)) # b will delete this
 
                 a_in_add = Set()
                 a_in_del = Set()
@@ -244,8 +244,8 @@ class ApproximateRuleMiner(RuleMinerBase):
 
                 a_only = in_sets[2] - in_sets[0]
                 b_only = in_sets[2] - in_sets[1]
-                a_only_subset = Set(random_subset(a_only)) # a will delete this
-                b_only_subset = Set(random_subset(b_only)) # b will delete this
+                a_only_subset = Set(self.random_subset(a_only)) # a will delete this
+                b_only_subset = Set(self.random_subset(b_only)) # b will delete this
 
                 a_in_add = b_only - b_only_subset # a adds what b does not delete
                 a_in_del = a_only_subset
@@ -263,8 +263,8 @@ class ApproximateRuleMiner(RuleMinerBase):
 
                 a_only = in_sets[2] - in_sets[0]
                 b_only = in_sets[2] - in_sets[1]
-                a_only_subset = Set(random_subset(a_only)) # a will delete this
-                b_only_subset = Set(random_subset(b_only)) # b will delete this
+                a_only_subset = Set(self.random_subset(a_only)) # a will delete this
+                b_only_subset = Set(self.random_subset(b_only)) # b will delete this
 
                 a_in_add = b_only - b_only_subset # a adds what b does not delete
                 a_in_del = a_only_subset
@@ -282,8 +282,8 @@ class ApproximateRuleMiner(RuleMinerBase):
 
                 a_only = in_sets[2] - in_sets[0]
                 b_only = in_sets[2] - in_sets[1]
-                a_only_subset = Set(random_subset(a_only)) # a will delete this
-                b_only_subset = Set(random_subset(b_only)) # b will delete this
+                a_only_subset = Set(self.random_subset(a_only)) # a will delete this
+                b_only_subset = Set(self.random_subset(b_only)) # b will delete this
 
                 a_in_add = b_only - b_only_subset # a adds what b does not delete
                 a_in_del = a_only_subset
@@ -292,8 +292,8 @@ class ApproximateRuleMiner(RuleMinerBase):
 
                 a_only = out_sets[2] - out_sets[0]
                 b_only = out_sets[2] - out_sets[1]
-                a_only_subset = Set(random_subset(a_only)) # a will delete this
-                b_only_subset = Set(random_subset(b_only)) # b will delete this
+                a_only_subset = Set(self.random_subset(a_only)) # a will delete this
+                b_only_subset = Set(self.random_subset(b_only)) # b will delete this
 
                 a_out_add = b_only - b_only_subset # a adds what b does not delete
                 a_out_del = a_only_subset
@@ -333,5 +333,5 @@ class ApproximateRuleMiner(RuleMinerBase):
             if a_score > b_score:
                 best_options_with_ids[(a_score << 3) + b_score] = option
             else:
-                best_options_with_ids[(b_score << 3) + a_score] = option]
+                best_options_with_ids[(b_score << 3) + a_score] = option
         return best_options_with_ids

@@ -15,17 +15,17 @@ for i in range(0, size):
     if i * 2 + 1 < size:
         G.add_edge(i, i*2 + 1)
 
-rm = SimpleRuleMiner(G)
+rm = ApproximateRuleMiner(G)
 
 print("\nFor binary tree:")
-while len(G.nodes()) > 1:
+while not rm.done():
     best_rule = rm.determine_best_rule()
     print(f"Rule id: {best_rule[0].id()} Occurrences: {best_rule[1:len(best_rule)]}")
     rm.contract_valid_tuples(best_rule)
 
 G = nx.DiGraph(nx.random_k_out_graph(size, 2, 0.2))
 print(G.edges())
-rm = SimpleRuleMiner(G)
+rm = ApproximateRuleMiner(G)
 
 print("\nFor random k out 2, 0.2:")
 while len(G.nodes()) > 1:
@@ -34,7 +34,7 @@ while len(G.nodes()) > 1:
     rm.contract_valid_tuples(best_rule)
 
 G = nx.DiGraph(nx.barabasi_albert_graph(size, 2))
-rm = SimpleRuleMiner(G)
+rm = ApproximateRuleMiner(G)
 
 print("\nFor Barabasi Albert:")
 while len(G.nodes()) > 1:

@@ -12,3 +12,6 @@ class RuleMinerBase:
 
     def contract_valid_tuples(self, rule_with_occurrences):
         pass
+
+    def done(self):
+        pass

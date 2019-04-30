@@ -18,6 +18,7 @@ class ApproximateRuleMiner(RuleMinerBase):
 
         self.in_sets = {}
         self.out_sets = {}
+        self.neighbors = {}
         # self.both_sets = {}
         for node in list(self._G.nodes()):
             in_set = Set([edge[0] for edge in self._G.in_edges(node)])
@@ -25,8 +26,9 @@ class ApproximateRuleMiner(RuleMinerBase):
             # both_set = in_set | out_set
             # in_only_set = in_set - both_set
             # out_only_set = out_set - both_set
-            self.in_sets[node] = in_set# OrderedDict(sorted(in_only_set))
-            self.out_sets[node] = out_set# OrderedDict(sorted(out_only_set))
+            self.in_sets[node] = in_set # OrderedDict(sorted(in_only_set))
+            self.out_sets[node] = out_set # OrderedDict(sorted(out_only_set))
+            self.neighbors[node] = in_set | out_set
             # self.both_sets[node] = both_set # OrderedDict(sorted(both_set))
 
         self.rule_occurrences_by_pair = {}  # {lesser_node_id: {greater_node_id: {rule_id: [adds/deletions]}}}
@@ -40,7 +42,7 @@ class ApproximateRuleMiner(RuleMinerBase):
         nodes.sort()
         for node_a in nodes:
             self.rule_occurrences_by_pair[node_a] = {}
-            for node_b in self.in_set[node_a] | self.out_set[node_a]:
+            for node_b in self.neighbors[node_a]:
                 if node_b < node_a:
                     continue
                 best_options_without_ids = self.best_options_for_pair(node_a, node_b)
@@ -54,11 +56,12 @@ class ApproximateRuleMiner(RuleMinerBase):
     # This function is run after a rule has contracted some nodes.
     # It updates self.rule_occurrences_by_pair and self.rule_occurrences_by_id.
     # ids contains any node whose rules may have been affected.
-    # This is O(|V|*max_degree^2)
+    # This is O(|ids| * max_degree * max_degree + |ids|log|ids|) = O(max_degree^3)
     def update_pairs_containing_ids(self, ids):
+        ids = list(ids)
         ids.sort()
         for node_c in ids:
-            for node_d in self.in_set[node_c] | self.out_set[node_c]:
+            for node_d in self.neighbors[node_c]:
                 node_a = min(node_c, node_d)
                 node_b = max(node_c, node_d)
                 best_options_without_ids = self.best_options_for_pair(node_a, node_b)
@@ -79,7 +82,7 @@ class ApproximateRuleMiner(RuleMinerBase):
 
     # This function is used when a node is deleted from the graph.
     # It deletes all rules containing node_id in self.rule_occurrences_by_*.
-    # Ugh. Unfortunately this is O(|V|).
+    # This is O(degree(node_id)) = O(max_degree).
     def delete_node_from_rule_occurrences(self, node_id):
         node_a = node_id
         for node_b, rules in self.rule_occurrences_by_pair[node_a].items():
@@ -88,11 +91,74 @@ class ApproximateRuleMiner(RuleMinerBase):
         del self.rule_occurrences_by_pair[node_a]
 
         node_b = node_id
-        for node_a, dict_a in self.rule_occurrences_by_pair.items():
+        for node_a in self.neighbors[node_b]:
+            dict_a = self.rule_occurrences_by_pair[node_a]
             if node_b in dict_a:
                 for rule_id, option in dict_a[node_b].items():
                     self.rule_occurrences_by_id[rule_id].remove((node_a, node_b))
                 del dict_a[node_b]
+
+    # O(1)
+    def add_edge(self, source, target):
+        self.neighbors[source].add(target)
+        self.neighbors[target].add(source)
+        self.out_sets[source].add(target)
+        self.in_sets[target].add(source)
+
+    # O(1)
+    def remove_edge(self, source, target):
+        if source not in self.out_sets[target]: # If there isn't an edge pointing the other way...
+            self.neighbors[source].remove(target)
+            self.neighbors[target].remove(source)
+        self.out_sets[source].remove(target)
+        self.in_sets[target].remove(source)
+
+    # This is O(degree(node_id)) = O(max_degree).
+    def delete_node_entirely(self, node_id):
+        self.delete_node_from_rule_occurrences(node_id) # This must happen first.
+        for in_neighbor in self.in_sets[node_id]:
+            self.remove_edge(in_neighbor, node_id)
+        for out_neighbor in self.out_sets[node_id]:
+            self.remove_edge(node_id, out_neighbor)
+        del self.neighbors[node_id]
+        del self.in_sets[node_id]
+        del self.out_sets[node_id]
+
+    # This is O(degree(node_a) + degree(node_b)) + O(delete_node_entirely(node_b)) + O(update_pairs_containing_ids(degree(node_a) + degree(node_b)))
+    # Which is O(max_degree^3)
+    # But we can provide the tighter bound of O(max_degree + num_edges_changed * max_degree^2)
+    def collapse_pair_with_rule(self, node_a, node_b, rule_id):
+        adds_dels = self.rule_occurrences_by_pair[node_a][node_b][rule_id]
+        # [a_in_add, a_in_del, b_in_add, b_in_del, a_out_add, a_out_del, b_out_add, b_out_del]
+        to_check = ((adds_dels[0] | adds_dels[1]) | (adds_dels[2] | adds_dels[3])) | \
+                   ((adds_dels[4] | adds_dels[5]) | (adds_dels[6] | adds_dels[7]))
+
+        # Figure out how we're conceptually rewiring things before compressing a and b together.
+        new_a_in = (self.in_sets[node_a] - adds_dels[1]) | adds_dels[0]
+        new_a_out = (self.out_sets[node_a] - adds_dels[5]) | adds_dels[4]
+        new_b_in = (self.in_sets[node_b] - adds_dels[3]) | adds_dels[2]
+        new_b_out = (self.out_sets[node_b] - adds_dels[7]) | adds_dels[6]
+
+        # Figure out how to rewire a so that a is equivalent to the compressed version of original a and b.
+        actual_a_in_adds = (new_a_in | new_b_in) - self.in_sets[node_a]
+        actual_a_in_dels = self.in_sets[node_a] - (new_a_in | new_b_in)
+        actual_a_out_adds = (new_a_out | new_b_out) - self.out_sets[node_a]
+        actual_a_out_dels = self.out_sets[node_a] - (new_a_out | new_b_out)
+
+        for a_in_add in actual_a_in_adds:
+            self.add_edge(a_in_add, node_a)
+        for a_in_del in actual_a_in_dels:
+            self.remove_edge(a_in_del, node_a)
+        for a_out_add in actual_a_out_adds:
+            self.add_edge(node_a, a_out_add)
+        for a_out_del in actual_a_out_dels:
+            self.remove_edge(node_a, a_out_del)
+
+        # Delete node b.
+        self.delete_node_entirely(node_b)
+        if len(to_check) > 0:
+            to_check.add(node_a)
+            self.update_pairs_containing_ids(to_check) # IMPORTANT: We only have to update node_a's rule occurrences if edges were added or deleted.
 
     # O(|V|*max_degree^2) on first run.
     # O(num distinct rule_ids found) afterwards.
@@ -109,13 +175,15 @@ class ApproximateRuleMiner(RuleMinerBase):
                 best_id = id_num
         return [best_id, best_occ]
 
-    # Thanks to Mark Rushakoff on Stack Overflow for the basis of this function. Although I might not use it.
-    """
-    def powerset(self, iterable):
-        "powerset([1,2,3]) --> () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"
-        s = list(iterable)
-        return chain.from_iterable(combinations(s, r) for r in range(len(s)+1))
-    """
+    def contract_valid_tuples(self, rule_id_with_projected_occurrences):
+        rule_id = rule_id_with_projected_occurrences[0]
+        while len(self.rule_occurrences_by_id[rule_id]) > 0:
+            (node_a, node_b) = self.rule_occurrences_by_id[rule_id].pop()
+            self.collapse_pair_with_rule(node_a, node_b, rule_id)
+
+
+    def done(self):
+        return len(self.neighbors) == 1
 
     def random_subset(self, entities):
         subset = []

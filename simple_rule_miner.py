@@ -156,3 +156,6 @@ class SimpleRuleMiner(RuleMinerBase):
                 self._G.add_edge(source, tuple[0])
             for dest, ignored in out_edges.items():
                 self._G.add_edge(tuple[0], dest)
+
+    def done(self):
+        return len(self._G.nodes()) == 1

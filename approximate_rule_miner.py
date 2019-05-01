@@ -64,7 +64,7 @@ class ApproximateRuleMiner(RuleMinerBase):
                 node_a = min(node_c, node_d)
                 node_b = max(node_c, node_d)
                 best_options_without_ids = self.best_options_for_pair(node_a, node_b)
-                unique_best_options_with_ids = self.add_rule_ids_and_filter(best_options_without_ids)
+                unique_best_options_with_ids = self.add_rule_ids_and_filter(node_a, node_b, best_options_without_ids)
                 
                 # First delete any outdated occurrences:
                 if node_b not in self.rule_occurrences_by_pair[node_a]:
@@ -74,7 +74,7 @@ class ApproximateRuleMiner(RuleMinerBase):
                         self.rule_occurrences_by_id[id_num].remove((node_a, node_b)) # Use discard instead?
                 # Then add new occurrences:
                 self.rule_occurrences_by_pair[node_a][node_b] = unique_best_options_with_ids
-                for id_num, option in unique_best_options_with_ids:
+                for id_num, option in unique_best_options_with_ids.items():
                     if id_num not in self.rule_occurrences_by_id:
                         self.rule_occurrences_by_id[id_num] = set()
                     self.rule_occurrences_by_id[id_num].add((node_a, node_b)) # Adds if not present already.
@@ -89,13 +89,16 @@ class ApproximateRuleMiner(RuleMinerBase):
                 self.rule_occurrences_by_id[rule_id].remove((node_a, node_b))
         del self.rule_occurrences_by_pair[node_a]
 
-        node_b = node_id
-        for node_a in self.neighbors[node_b]:
-            dict_a = self.rule_occurrences_by_pair[node_a]
-            if node_b in dict_a:
-                for rule_id, option in dict_a[node_b].items():
-                    self.rule_occurrences_by_id[rule_id].remove((node_a, node_b))
-                del dict_a[node_b]
+        node_1 = node_id
+        for node_2 in self.neighbors[node_1]:
+            node_a = min(node_1, node_2)
+            node_b = max(node_1, node_2)
+            if node_a in self.rule_occurrences_by_pair:
+                dict_a = self.rule_occurrences_by_pair[node_a]
+                if node_b in dict_a:
+                    for rule_id, option in dict_a[node_b].items():
+                        self.rule_occurrences_by_id[rule_id].remove((node_a, node_b))
+                    del dict_a[node_b]
 
     # O(1)
     def add_edge(self, source, target):
@@ -115,9 +118,9 @@ class ApproximateRuleMiner(RuleMinerBase):
     # This is O(degree(node_id)) = O(max_degree).
     def delete_node_entirely(self, node_id):
         self.delete_node_from_rule_occurrences(node_id) # This must happen first.
-        for in_neighbor in self.in_sets[node_id]:
+        for in_neighbor in list(self.in_sets[node_id]): # The typecasting to a list prevents throwing of an error that set is being changed while looping.
             self.remove_edge(in_neighbor, node_id)
-        for out_neighbor in self.out_sets[node_id]:
+        for out_neighbor in list(self.out_sets[node_id]):
             self.remove_edge(node_id, out_neighbor)
         del self.neighbors[node_id]
         del self.in_sets[node_id]
@@ -127,10 +130,14 @@ class ApproximateRuleMiner(RuleMinerBase):
     # Which is O(max_degree^3)
     # But we can provide the tighter bound of O(max_degree + num_edges_changed * max_degree^2)
     def collapse_pair_with_rule(self, node_a, node_b, rule_id):
-        adds_dels = self.rule_occurrences_by_pair[node_a][node_b][rule_id]
         # [a_in_add, a_in_del, b_in_add, b_in_del, a_out_add, a_out_del, b_out_add, b_out_del]
+        adds_dels = self.rule_occurrences_by_pair[node_a][node_b][rule_id]
+
+        # Add nodes which have edges being adjusted.
         to_check = ((adds_dels[0] | adds_dels[1]) | (adds_dels[2] | adds_dels[3])) | \
                    ((adds_dels[4] | adds_dels[5]) | (adds_dels[6] | adds_dels[7]))
+        # Also add nodes which may have two edges collapse into 1:
+        to_check = to_check | (self.out_sets[node_a] & self.out_sets[node_b]) | (self.in_sets[node_a] & self.in_sets[node_b])
 
         # Figure out how we're conceptually rewiring things before compressing a and b together.
         new_a_in = (self.in_sets[node_a] - adds_dels[1]) | adds_dels[0]
@@ -139,10 +146,10 @@ class ApproximateRuleMiner(RuleMinerBase):
         new_b_out = (self.out_sets[node_b] - adds_dels[7]) | adds_dels[6]
 
         # Figure out how to rewire a so that a is equivalent to the compressed version of original a and b.
-        actual_a_in_adds = (new_a_in | new_b_in) - self.in_sets[node_a]
-        actual_a_in_dels = self.in_sets[node_a] - (new_a_in | new_b_in)
-        actual_a_out_adds = (new_a_out | new_b_out) - self.out_sets[node_a]
-        actual_a_out_dels = self.out_sets[node_a] - (new_a_out | new_b_out)
+        actual_a_in_adds = (new_a_in | new_b_in - set([node_a])) - self.in_sets[node_a]
+        actual_a_in_dels = self.in_sets[node_a] - (new_a_in | new_b_in - set([node_a]))
+        actual_a_out_adds = (new_a_out | new_b_out - set([node_a])) - self.out_sets[node_a]
+        actual_a_out_dels = self.out_sets[node_a] - (new_a_out | new_b_out - set([node_a]))
 
         for a_in_add in actual_a_in_adds:
             self.add_edge(a_in_add, node_a)
@@ -155,9 +162,9 @@ class ApproximateRuleMiner(RuleMinerBase):
 
         # Delete node b.
         self.delete_node_entirely(node_b)
-        if len(to_check) > 0:
-            to_check.add(node_a)
-            self.update_pairs_containing_ids(to_check) # IMPORTANT: We only have to update node_a's rule occurrences if edges were added or deleted.
+        to_check.add(node_a)
+        to_check.discard(node_b) # Because b might have had a self-loop that was conceptually deleted, but we don't want to check it.
+        self.update_pairs_containing_ids(to_check) # IMPORTANT: We only have to update node_a's rule occurrences if edges were added or deleted.
 
     # O(|V|*max_degree^2) on first run.
     # O(num distinct rule_ids found) afterwards.
@@ -178,6 +185,8 @@ class ApproximateRuleMiner(RuleMinerBase):
         rule_id = rule_id_with_projected_occurrences[0]
         while len(self.rule_occurrences_by_id[rule_id]) > 0:
             (node_a, node_b) = self.rule_occurrences_by_id[rule_id].pop()
+            self.rule_occurrences_by_id[rule_id].add((node_a, node_b)) # Makes other code cleaner.
+            print("Contracting %s and %s with rule_id %s." % (node_a, node_b, rule_id))
             self.collapse_pair_with_rule(node_a, node_b, rule_id)
 
 

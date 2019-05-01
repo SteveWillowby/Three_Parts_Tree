@@ -5,7 +5,7 @@ from approximate_rule_miner import *
 
 G=nx.DiGraph()
 
-size = 31
+size = 7
 
 # Builds a binary tree:
 for i in range(1, size + 1):

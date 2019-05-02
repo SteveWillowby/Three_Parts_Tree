@@ -23,6 +23,38 @@ while not rm.done():
     best_rule = rm.determine_best_rule()
     rm.contract_valid_tuples(best_rule)
 
+
+# Tree of rings:
+
+ring_size = 4
+tree_size = int(size / ring_size)
+leftovers = size % ring_size
+
+G = nx.DiGraph()
+for i in range(1, size):
+    G.add_node(i)
+for tree_idx in range(1, tree_size + 1):
+    # Make the ring.
+    graph_idx = (tree_idx - 1) * ring_size + 1
+    for ring_idx in range(graph_idx, graph_idx + ring_size):
+        G.add_edge(ring_idx, ring_idx + 1)
+    G.add_edge(graph_idx + ring_size, graph_idx)
+    # Add pointers to the other rings.
+    ring_bottom = graph_idx + int(ring_size / 2)
+    next_graph_idx = ((tree_idx * 2) - 1) * ring_size + 1
+    if next_graph_idx <= size:
+        G.add_edge(ring_bottom, next_graph_idx)
+    next_graph_idx = ((tree_idx * 2 + 1) - 1) * ring_size + 1
+    if next_graph_idx <= size:
+        G.add_edge(ring_bottom, next_graph_idx)
+
+rm = ApproximateRuleMiner(G)
+
+print("\nFor tree of size-%s rings with %s nodes:" % (ring_size, size))
+while not rm.done():
+    best_rule = rm.determine_best_rule()
+    rm.contract_valid_tuples(best_rule)
+
 # Directed double-ring:
 
 G = nx.DiGraph()

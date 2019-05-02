@@ -58,6 +58,9 @@ class ApproximateRuleMiner(RuleMinerBase):
         ids = list(ids)
         ids.sort()
         for node_c in ids:
+            if node_c not in self.neighbors:
+                print("SEVERE ERROR with node %s. SKIPPING ITERATION." % node_c)
+                continue
             for node_d in self.neighbors[node_c]:
                 node_a = min(node_c, node_d)
                 node_b = max(node_c, node_d)
@@ -113,20 +116,24 @@ class ApproximateRuleMiner(RuleMinerBase):
 
     # O(1)
     def add_edge(self, source, target):
+        if source == target:
+            print("ADDING A SELF-LOOP!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! (node %s)" % source)
         self.neighbors[source].add(target)
         self.neighbors[target].add(source)
         self.out_sets[source].add(target)
         self.in_sets[target].add(source)
-        print("Adding edge %s --> %s" % (source, target))
+        # print("Adding edge %s --> %s" % (source, target))
 
     # O(1)
     def remove_edge(self, source, target):
+        if source == target:
+            print("DELETING A SELF-LOOP!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! (node %s)" % source)
         if source not in self.out_sets[target]: # If there isn't an edge pointing the other way...
             self.neighbors[source].remove(target)
             self.neighbors[target].remove(source)
         self.out_sets[source].remove(target)
         self.in_sets[target].remove(source)
-        print("Deleting edge %s --> %s" % (source, target))
+        # print("Deleting edge %s --> %s" % (source, target))
 
     # This is O(degree(node_id)) = O(max_degree).
     def delete_node_from_edge_lists(self, node_id):
@@ -142,9 +149,6 @@ class ApproximateRuleMiner(RuleMinerBase):
     # Which is O(max_degree^3)
     # But we can provide the tighter bound of O(max_degree + num_edges_changed * max_degree^2)
     def collapse_pair_with_rule(self, node_a, node_b, rule_id):
-        # print("The pre-collapse rules are:")
-        # print("By pair: %s" % self.rule_occurrences_by_pair)
-        # print("By id: %s" % self.rule_occurrences_by_id)
         # [a_in_add, a_in_del, b_in_add, b_in_del, a_out_add, a_out_del, b_out_add, b_out_del]
         adds_dels = self.rule_occurrences_by_pair[node_a][node_b][rule_id]
         self.delete_node_from_rule_occurrences(node_b) # This one must be called before changing edge lists.
@@ -186,15 +190,7 @@ class ApproximateRuleMiner(RuleMinerBase):
 
         to_check.add(node_a)
         to_check.discard(node_b) # Because b might have had a self-loop that was conceptually deleted, but we don't want to check it.
-        # print("For nodes %s and %s, updating the following nodes: %s" % (node_a, node_b, to_check))
-        # print("The mid-collapse rules are:")
-        # print(self.rule_occurrences_by_pair)
-        # print(self.rule_occurrences_by_id)
         self.update_pairs_containing_ids(to_check)
-        # print("The post-collapse rules are:")
-        # print(self.rule_occurrences_by_pair)
-        # print(self.rule_occurrences_by_id)
-        # print("\n\n")
 
     # O(|V|*max_degree^2) on first run.
     # O(num distinct rule_ids found) afterwards.
@@ -216,7 +212,7 @@ class ApproximateRuleMiner(RuleMinerBase):
         while rule_id in self.rule_occurrences_by_id:
             (node_a, node_b) = self.rule_occurrences_by_id[rule_id].pop()
             self.rule_occurrences_by_id[rule_id].add((node_a, node_b)) # Makes other code cleaner.
-            print("Contracting %s and %s with rule_id %s." % (node_a, node_b, rule_id))
+            # print("Contracting %s and %s with rule_id %s." % (node_a, node_b, rule_id))
             self.collapse_pair_with_rule(node_a, node_b, rule_id)
 
 
@@ -237,7 +233,6 @@ class ApproximateRuleMiner(RuleMinerBase):
     # Or, if the pair is already valid, returns an empty array.
     # Note that this may currently return duplicates.
     def best_options_for_pair(self, a, b):
-        # print("For pair %s %s the best options are:" % (a, b))
         just_a = set([a])
         just_b = set([b])
 
@@ -254,7 +249,6 @@ class ApproximateRuleMiner(RuleMinerBase):
 
         if in_min == 0 and out_min == 0:
             # Already valid! No modifications needed.
-            # print("Already valid! No modifications needed.\n")
             return [[set() for i in range(0,8)]]
 
         return_values = []
@@ -263,7 +257,6 @@ class ApproximateRuleMiner(RuleMinerBase):
         if three_in_values[0] == in_min:
             if three_out_values[0] == out_min:
                 # Delete a_in and delete a_out
-                # print("Delete a_in and delete a_out")
                 a_in_add = set()
                 a_in_del = in_sets[0]
                 b_in_add = set()
@@ -276,7 +269,6 @@ class ApproximateRuleMiner(RuleMinerBase):
                 return_values.append([a_in_add, a_in_del, b_in_add, b_in_del, a_out_add, a_out_del, b_out_add, b_out_del])
             if three_out_values[1] == out_min:
                 # Delete a_in and delete b_out
-                # print("Delete a_in and delete b_out")
                 a_in_add = set()
                 a_in_del = in_sets[0]
                 b_in_add = set()
@@ -289,7 +281,6 @@ class ApproximateRuleMiner(RuleMinerBase):
                 return_values.append([a_in_add, a_in_del, b_in_add, b_in_del, a_out_add, a_out_del, b_out_add, b_out_del])
             if three_out_values[2] == out_min:
                 # Delete a_in and move outs to intersection
-                # print("Delete a_in and move outs to intersection")
                 # There are actually 2^(out_sets[2]) ways to do this!
 
                 a_only = out_sets[2] - out_sets[0]
@@ -310,7 +301,6 @@ class ApproximateRuleMiner(RuleMinerBase):
         if three_in_values[1] == in_min:
             if three_out_values[0] == out_min:
                 # Delete b_in and delete a_out
-                # print("Delete b_in and delete a_out")
                 a_in_add = set()
                 a_in_del = set()
                 b_in_add = set()
@@ -323,7 +313,6 @@ class ApproximateRuleMiner(RuleMinerBase):
                 return_values.append([a_in_add, a_in_del, b_in_add, b_in_del, a_out_add, a_out_del, b_out_add, b_out_del])
             if three_out_values[1] == out_min:
                 # Delete b_in and delete b_out
-                # print("Delete b_in and delete b_out")
                 a_in_add = set()
                 a_in_del = set()
                 b_in_add = set()
@@ -336,7 +325,6 @@ class ApproximateRuleMiner(RuleMinerBase):
                 return_values.append([a_in_add, a_in_del, b_in_add, b_in_del, a_out_add, a_out_del, b_out_add, b_out_del])
             if three_out_values[2] == out_min:
                 # Delete b_in and move outs to intersection
-                # print("Delete b_in and move outs to intersection")
                 # There are actually 2^(out_sets[2]) ways to do this!
 
                 a_only = out_sets[2] - out_sets[0]
@@ -357,7 +345,6 @@ class ApproximateRuleMiner(RuleMinerBase):
         if three_in_values[2] == in_min:
             if three_out_values[0] == out_min:
                 # Move ins to intersection and delete a_out
-                # print("Move ins to intersection and delete a_out")
                 # There are actually 2^(in_sets[2]) ways to do this!
 
                 a_only = in_sets[2] - in_sets[0]
@@ -377,7 +364,6 @@ class ApproximateRuleMiner(RuleMinerBase):
                 return_values.append([a_in_add, a_in_del, b_in_add, b_in_del, a_out_add, a_out_del, b_out_add, b_out_del])
             if three_out_values[1] == out_min:
                 # Move ins to intersection and delete b_out
-                # print("Move ins to intersection and delete b_out")
                 # There are actually 2^(in_sets[2]) ways to do this!
 
                 a_only = in_sets[2] - in_sets[0]
@@ -397,7 +383,6 @@ class ApproximateRuleMiner(RuleMinerBase):
                 return_values.append([a_in_add, a_in_del, b_in_add, b_in_del, a_out_add, a_out_del, b_out_add, b_out_del])
             if three_out_values[2] == out_min:
                 # Move both ins and outs to their respective intersections
-                # print("Move both ins and outs to their respective intersections")
                 # There are actually 2^(in_sets[2] + out_sets[2]) ways to do this!
 
                 a_only = in_sets[2] - in_sets[0]

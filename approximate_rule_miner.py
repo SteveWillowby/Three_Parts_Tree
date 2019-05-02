@@ -202,7 +202,10 @@ class ApproximateRuleMiner(RuleMinerBase):
 
 
     def done(self):
-        return len(self.neighbors) == 1
+        for node, neighbors in self.neighbors.items():
+            if len(neighbors) > 0:
+                return False
+        return True
 
     def random_subset(self, entities):
         subset = []

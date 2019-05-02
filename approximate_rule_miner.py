@@ -12,6 +12,7 @@ class ApproximateRuleMiner(RuleMinerBase):
     def __init__(self, G):
         self._G = G
         self.first_round = True
+        self.total_edges_approximated = 0
 
         self.in_sets = {}
         self.out_sets = {}
@@ -58,9 +59,6 @@ class ApproximateRuleMiner(RuleMinerBase):
         ids = list(ids)
         ids.sort()
         for node_c in ids:
-            if node_c not in self.neighbors:
-                print("SEVERE ERROR with node %s. SKIPPING ITERATION." % node_c)
-                continue
             for node_d in self.neighbors[node_c]:
                 node_a = min(node_c, node_d)
                 node_b = max(node_c, node_d)
@@ -116,24 +114,18 @@ class ApproximateRuleMiner(RuleMinerBase):
 
     # O(1)
     def add_edge(self, source, target):
-        if source == target:
-            print("ADDING A SELF-LOOP!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! (node %s)" % source)
         self.neighbors[source].add(target)
         self.neighbors[target].add(source)
         self.out_sets[source].add(target)
         self.in_sets[target].add(source)
-        # print("Adding edge %s --> %s" % (source, target))
 
     # O(1)
     def remove_edge(self, source, target):
-        if source == target:
-            print("DELETING A SELF-LOOP!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! (node %s)" % source)
         if source not in self.out_sets[target]: # If there isn't an edge pointing the other way...
             self.neighbors[source].remove(target)
             self.neighbors[target].remove(source)
         self.out_sets[source].remove(target)
         self.in_sets[target].remove(source)
-        # print("Deleting edge %s --> %s" % (source, target))
 
     # This is O(degree(node_id)) = O(max_degree).
     def delete_node_from_edge_lists(self, node_id):
@@ -156,6 +148,7 @@ class ApproximateRuleMiner(RuleMinerBase):
         # Add nodes which have edges being adjusted.
         to_check = ((adds_dels[0] | adds_dels[1]) | (adds_dels[2] | adds_dels[3])) | \
                    ((adds_dels[4] | adds_dels[5]) | (adds_dels[6] | adds_dels[7]))
+        self.total_edges_approximated += len(to_check)
         # Also add nodes which may have two edges collapsed into 1:
         to_check = to_check | (self.out_sets[node_a] & self.out_sets[node_b]) | (self.in_sets[node_a] & self.in_sets[node_b])
         to_check = to_check | (self.out_sets[node_b] - self.out_sets[node_a]) | (self.in_sets[node_b] - self.in_sets[node_a])
@@ -210,11 +203,16 @@ class ApproximateRuleMiner(RuleMinerBase):
 
     def contract_valid_tuples(self, rule_id_with_projected_occurrences):
         rule_id = rule_id_with_projected_occurrences[0]
+        old_edges_approx = self.total_edges_approximated
+        collapses = 0
         while rule_id in self.rule_occurrences_by_id:
             (node_a, node_b) = self.rule_occurrences_by_id[rule_id].pop()
             self.rule_occurrences_by_id[rule_id].add((node_a, node_b)) # Makes other code cleaner.
             # print("Contracting %s and %s with rule_id %s." % (node_a, node_b, rule_id))
             self.collapse_pair_with_rule(node_a, node_b, rule_id)
+            collapses += 1
+        edges_approx = self.total_edges_approximated - old_edges_approx
+        print("Made %s collapses with rule %s, incurring a total of %s approximated edges." % (collapses, rule_id, edges_approx))
 
 
     def done(self):

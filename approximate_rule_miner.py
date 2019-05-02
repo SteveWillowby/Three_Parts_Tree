@@ -158,6 +158,7 @@ class ApproximateRuleMiner(RuleMinerBase):
                    ((adds_dels[4] | adds_dels[5]) | (adds_dels[6] | adds_dels[7]))
         # Also add nodes which may have two edges collapsed into 1:
         to_check = to_check | (self.out_sets[node_a] & self.out_sets[node_b]) | (self.in_sets[node_a] & self.in_sets[node_b])
+        to_check = set([i for i, s in self.neighbors.items()])
 
         # Figure out how we're conceptually rewiring things before compressing a and b together.
         new_a_in = (self.in_sets[node_a] - adds_dels[1]) | adds_dels[0]

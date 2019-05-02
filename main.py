@@ -23,6 +23,25 @@ while not rm.done():
     best_rule = rm.determine_best_rule()
     rm.contract_valid_tuples(best_rule)
 
+# Directed double-ring:
+
+G = nx.DiGraph()
+for i in range(1, size + 1):
+    G.add_node(i)
+for i in range(1, size):
+    G.add_edge(i, i + 1)
+    G.add_edge(i + 1, i)
+G.add_edge(1, size)
+G.add_edge(size, 1)
+
+rm = ApproximateRuleMiner(G)
+
+print("\nFor directed double-ring of size: %s" % size)
+while not rm.done():
+    best_rule = rm.determine_best_rule()
+    rm.contract_valid_tuples(best_rule)
+
+
 # Directed erdosh reyni:
 expected_num_edges = size * 2
 prob_of_edge_numerator = expected_num_edges
@@ -40,14 +59,6 @@ for i in range(1, size + 1):
 rm = ApproximateRuleMiner(G)
 
 print("\nFor directed erdosh-reyni with %s nodes and %s edges:" % (size, len(G.edges())))
-while not rm.done():
-    best_rule = rm.determine_best_rule()
-    rm.contract_valid_tuples(best_rule)
-
-G = nx.DiGraph(nx.barabasi_albert_graph(size, 2))
-rm = ApproximateRuleMiner(G)
-
-print("\nFor Barabasi Albert:")
 while not rm.done():
     best_rule = rm.determine_best_rule()
     rm.contract_valid_tuples(best_rule)

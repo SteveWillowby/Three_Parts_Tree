@@ -153,7 +153,7 @@ class ApproximateRuleMiner(RuleMinerBase):
         # Add nodes which have edges being adjusted.
         to_check = ((adds_dels[0] | adds_dels[1]) | (adds_dels[2] | adds_dels[3])) | \
                    ((adds_dels[4] | adds_dels[5]) | (adds_dels[6] | adds_dels[7]))
-        self.total_edges_approximated += len(to_check)
+        self.total_edges_approximated += self.cost_of_an_option(adds_dels)
         # Also add nodes which may have two edges collapsed into 1:
         to_check = to_check | (self.out_sets[node_a] & self.out_sets[node_b]) | (self.in_sets[node_a] & self.in_sets[node_b])
         to_check = to_check | (self.out_sets[node_b] - self.out_sets[node_a]) | (self.in_sets[node_b] - self.in_sets[node_a])

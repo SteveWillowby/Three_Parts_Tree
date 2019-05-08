@@ -192,27 +192,41 @@ class ApproximateRuleMiner(RuleMinerBase):
         self.update_pairs_containing_ids(to_check)
 
     # O(|V|*max_degree^2) on first run.
-    # O(num distinct rule_ids found) afterwards.
-    # ^^ Technically that's O(2^6) at worst = O(1), but it will be larger if we allow larger rules.
+    # O(num distinct rule _occurrences_) afterwards.
     def determine_best_rule(self):
         if self.first_round:
             self.check_all_pairs_for_rules()
             self.first_round = False
         best_occ_len = 0
+        best_occ_cost = -1
         for id_num, occurrences in self.rule_occurrences_by_id.items():
-            if len(occurrences) > best_occ_len:
-                best_occ_len = len(occurrences)
-                best_occ = occurrences
+            if best_occ_cost == -1:
+                best_occ_cost = min([t[2] for t in occurrences])
+            curr_cost = min([t[2] for t in occurrences])
+            if curr_cost < best_occ_cost:
+                best_occ_cost = curr_cost
                 best_id = id_num
-        return [best_id, best_occ]
+                best_occ_len = len([t for t in occurrences if t[2] == curr_cost])
+            elif curr_cost == best_occ_cost:
+                length = len([t for t in occurrences if t[2] == curr_cost])
+                if length > best_occ_len:
+                    best_occ_len = length
+                    best_id = id_num
+        return [best_id, best_occ_cost]
 
     def contract_valid_tuples(self, rule_id_with_projected_occurrences):
         rule_id = rule_id_with_projected_occurrences[0]
+        cost = rule_id_with_projected_occurrences[1]
         old_edges_approx = self.total_edges_approximated
         collapses = 0
         while rule_id in self.rule_occurrences_by_id:
-            (node_a, node_b, cost) = self.rule_occurrences_by_id[rule_id].pop()
-            self.rule_occurrences_by_id[rule_id].add((node_a, node_b, cost)) # Makes other code cleaner.
+            our_copy = [t for t in self.rule_occurrences_by_id[rule_id]]
+            i = 0
+            while i < len(our_copy) and our_copy[i][2] > cost:
+                i += 1
+            if i == len(our_copy):
+                break
+            (node_a, node_b, cost) = our_copy[i]
             # print("Contracting %s and %s with rule_id %s." % (node_a, node_b, rule_id))
             self.collapse_pair_with_rule(node_a, node_b, rule_id)
             collapses += 1

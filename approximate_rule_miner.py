@@ -30,7 +30,11 @@ class ApproximateRuleMiner(RuleMinerBase):
             # self.both_sets[node] = both_set # OrderedDict(sorted(both_set))
 
         self.rule_occurrences_by_pair = {}  # {lesser_node_id: {greater_node_id: {rule_id: [adds/deletions]}}}
-        self.rule_occurrences_by_id = {}    # {rule_id: Set((lesser_node_id, greater_node_id))}
+        self.rule_occurrences_by_id = {}    # {rule_id: Set((lesser_node_id, greater_node_id, cost))}
+
+    def cost_of_an_option(self, option):
+        return len((option[0] | option[1]) | (option[2] | option[3])) + \
+            len((option[4] | option[5]) | (option[6] | option[7]))
 
     # This function is intended to be run just once at the start.
     # It looks at every pair of connected nodes and finds all rules for the respective pairs.
@@ -49,7 +53,7 @@ class ApproximateRuleMiner(RuleMinerBase):
                 for id_num, option in unique_best_options_with_ids.items():
                     if id_num not in self.rule_occurrences_by_id:
                         self.rule_occurrences_by_id[id_num] = set()
-                    self.rule_occurrences_by_id[id_num].add((node_a, node_b))
+                    self.rule_occurrences_by_id[id_num].add((node_a, node_b, self.cost_of_an_option(option)))
 
     # This function is run after a rule has contracted some nodes.
     # It updates self.rule_occurrences_by_pair and self.rule_occurrences_by_id.
@@ -70,7 +74,7 @@ class ApproximateRuleMiner(RuleMinerBase):
                     self.rule_occurrences_by_pair[node_a][node_b] = {}
                 for id_num, option in self.rule_occurrences_by_pair[node_a][node_b].items():
                     if id_num not in unique_best_options_with_ids:
-                        self.rule_occurrences_by_id[id_num].remove((node_a, node_b))
+                        self.rule_occurrences_by_id[id_num].remove((node_a, node_b, self.cost_of_an_option(option)))
                         if len(self.rule_occurrences_by_id[id_num]) == 0:
                             del self.rule_occurrences_by_id[id_num]
                 # Then add new occurrences:
@@ -78,7 +82,7 @@ class ApproximateRuleMiner(RuleMinerBase):
                 for id_num, option in unique_best_options_with_ids.items():
                     if id_num not in self.rule_occurrences_by_id:
                         self.rule_occurrences_by_id[id_num] = set()
-                    self.rule_occurrences_by_id[id_num].add((node_a, node_b)) # Adds if not present already.
+                    self.rule_occurrences_by_id[id_num].add((node_a, node_b, self.cost_of_an_option(option))) # Adds if not present already.
 
     # This function is used when a node is deleted from the graph.
     # It deletes all rules containing node_id in self.rule_occurrences_by_*.
@@ -87,7 +91,7 @@ class ApproximateRuleMiner(RuleMinerBase):
         node_a = node_id
         for node_b, rules in self.rule_occurrences_by_pair[node_a].items():
             for rule_id, option in rules.items():
-                self.rule_occurrences_by_id[rule_id].remove((node_a, node_b))
+                self.rule_occurrences_by_id[rule_id].remove((node_a, node_b, self.cost_of_an_option(option)))
                 if len(self.rule_occurrences_by_id[rule_id]) == 0:
                     del self.rule_occurrences_by_id[rule_id]
         del self.rule_occurrences_by_pair[node_a]
@@ -100,14 +104,14 @@ class ApproximateRuleMiner(RuleMinerBase):
                 dict_a = self.rule_occurrences_by_pair[node_a]
                 if node_b in dict_a:
                     for rule_id, option in dict_a[node_b].items():
-                        self.rule_occurrences_by_id[rule_id].remove((node_a, node_b))
+                        self.rule_occurrences_by_id[rule_id].remove((node_a, node_b, self.cost_of_an_option(option)))
                         if len(self.rule_occurrences_by_id[rule_id]) == 0:
                             del self.rule_occurrences_by_id[rule_id]
                     del dict_a[node_b]
 
     def delete_node_pair_from_rule_occurrences(self, node_a, node_b):
         for rule_id, option in self.rule_occurrences_by_pair[node_a][node_b].items():
-            self.rule_occurrences_by_id[rule_id].remove((node_a, node_b))
+            self.rule_occurrences_by_id[rule_id].remove((node_a, node_b, self.cost_of_an_option(option)))
             if len(self.rule_occurrences_by_id[rule_id]) == 0:
                 del self.rule_occurrences_by_id[rule_id]
         del self.rule_occurrences_by_pair[node_a][node_b]
@@ -206,8 +210,8 @@ class ApproximateRuleMiner(RuleMinerBase):
         old_edges_approx = self.total_edges_approximated
         collapses = 0
         while rule_id in self.rule_occurrences_by_id:
-            (node_a, node_b) = self.rule_occurrences_by_id[rule_id].pop()
-            self.rule_occurrences_by_id[rule_id].add((node_a, node_b)) # Makes other code cleaner.
+            (node_a, node_b, cost) = self.rule_occurrences_by_id[rule_id].pop()
+            self.rule_occurrences_by_id[rule_id].add((node_a, node_b, cost)) # Makes other code cleaner.
             # print("Contracting %s and %s with rule_id %s." % (node_a, node_b, rule_id))
             self.collapse_pair_with_rule(node_a, node_b, rule_id)
             collapses += 1

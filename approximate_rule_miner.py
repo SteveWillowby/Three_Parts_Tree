@@ -219,7 +219,7 @@ class ApproximateRuleMiner(RuleMinerBase):
         cost = rule_id_with_projected_occurrences[1]
         old_edges_approx = self.total_edges_approximated
         collapses = 0
-        while rule_id in self.rule_occurrences_by_id:
+        while rule_id in self.rule_occurrences_by_id and self.determine_best_rule()[1] == cost:
             our_copy = [t for t in self.rule_occurrences_by_id[rule_id]]
             i = 0
             while i < len(our_copy) and our_copy[i][2] > cost:

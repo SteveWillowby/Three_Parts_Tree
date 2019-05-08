@@ -73,7 +73,8 @@ class ApproximateRuleMiner(RuleMinerBase):
                 if node_b not in self.rule_occurrences_by_pair[node_a]:
                     self.rule_occurrences_by_pair[node_a][node_b] = {}
                 for id_num, option in self.rule_occurrences_by_pair[node_a][node_b].items():
-                    if id_num not in unique_best_options_with_ids:
+                    if id_num not in unique_best_options_with_ids or \
+                            self.cost_of_an_option(unique_best_options_with_ids[id_num]) != self.cost_of_an_option(option):
                         self.rule_occurrences_by_id[id_num].remove((node_a, node_b, self.cost_of_an_option(option)))
                         if len(self.rule_occurrences_by_id[id_num]) == 0:
                             del self.rule_occurrences_by_id[id_num]

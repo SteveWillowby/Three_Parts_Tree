@@ -5,7 +5,7 @@ from approximate_rule_miner import *
 
 G=nx.DiGraph()
 
-size = 1023
+size = 1024
 
 # Builds a binary tree:
 for i in range(1, size + 1):
@@ -36,16 +36,16 @@ for i in range(1, size):
 for tree_idx in range(1, tree_size + 1):
     # Make the ring.
     graph_idx = (tree_idx - 1) * ring_size + 1
-    for ring_idx in range(graph_idx, graph_idx + ring_size):
+    for ring_idx in range(graph_idx, graph_idx + ring_size - 1):
         G.add_edge(ring_idx, ring_idx + 1)
-    G.add_edge(graph_idx + ring_size, graph_idx)
+    G.add_edge(graph_idx + ring_size - 1, graph_idx)
     # Add pointers to the other rings.
     ring_bottom = graph_idx + int(ring_size / 2)
     next_graph_idx = ((tree_idx * 2) - 1) * ring_size + 1
-    if next_graph_idx <= size:
+    if next_graph_idx <= tree_size * ring_size:
         G.add_edge(ring_bottom, next_graph_idx)
     next_graph_idx = ((tree_idx * 2 + 1) - 1) * ring_size + 1
-    if next_graph_idx <= size:
+    if next_graph_idx <= tree_size * ring_size:
         G.add_edge(ring_bottom, next_graph_idx)
 
 rm = ApproximateRuleMiner(G)
@@ -73,7 +73,7 @@ while not rm.done():
     best_rule = rm.determine_best_rule()
     rm.contract_valid_tuples(best_rule)
 
-
+"""
 # Directed erdosh reyni:
 expected_num_edges = size * 2
 prob_of_edge_numerator = expected_num_edges
@@ -94,3 +94,4 @@ print("\nFor directed erdosh-reyni with %s nodes and %s edges:" % (size, len(G.e
 while not rm.done():
     best_rule = rm.determine_best_rule()
     rm.contract_valid_tuples(best_rule)
+"""

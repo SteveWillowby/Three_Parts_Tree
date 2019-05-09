@@ -4,6 +4,7 @@ from simple_rule_miner import *
 from approximate_rule_miner import *
 import heapq
 from bitstring import BitArray
+from bitstring import Bits
 
 b = BitArray(length=0)
 b.append(1)
@@ -12,6 +13,13 @@ b.clear()
 print(b.bin)
 b.append(BitArray(length=3, uint=1))
 print(b.bin)
+test = {}
+test[Bits(b)] = 7
+a = Bits(b)
+b.append(BitArray(length=1, uint=1))
+print(Bits(b) in test)
+print(a in test)
+print(a.bin)
 
 new_heap = []
 heapq.heappush(new_heap, 7)

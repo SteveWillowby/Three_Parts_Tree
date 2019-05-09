@@ -2,6 +2,28 @@ import networkx as nx
 from networkx import utils
 from simple_rule_miner import *
 from approximate_rule_miner import *
+import heapq
+from bitstring import BitArray
+
+b = BitArray(length=0)
+b.append(1)
+print(b.bin)
+b.clear()
+print(b.bin)
+b.append(BitArray(length=3, uint=1))
+print(b.bin)
+
+new_heap = []
+heapq.heappush(new_heap, 7)
+heapq.heappush(new_heap, 3)
+heapq.heappush(new_heap, 11)
+heapq.heappush(new_heap, 15)
+heapq.heappush(new_heap, 2)
+heapq.heappush(new_heap, 12)
+heapq.heappush(new_heap, 7)
+print(new_heap)
+print([heapq.heappop(new_heap) for i in range(0, 7)])
+print(new_heap)
 
 G=nx.DiGraph()
 

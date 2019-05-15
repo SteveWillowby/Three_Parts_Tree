@@ -56,8 +56,6 @@ class EdgeTypeInterpreter:
             for node in nodes_with_external_edges_by_type[type_id]:
                 G.add_edge(type_node_id, node)
 
-        print(G.edges())
-        print("")
         return G
 
 # 0 = forward edges (out)
@@ -127,9 +125,6 @@ class ApproximateRuleUtils:
         t_set = set(t)
         best_options_found = [[] for i in range(0, num_edge_types)]
         for edge_type_idx in range(0, num_edge_types):
-            print("")
-            print("Handling edge type %s" % edge_type_idx)
-            print("")
             edge_type = edge_types[edge_type_idx]
             external_neighbors = {node: set() for node in t} # Maps a node to its external neighbors
             internal_neighbors = {} # Maps an external neighbor to its neighbors in t
@@ -144,8 +139,6 @@ class ApproximateRuleUtils:
                     else:
                         internal_neighbors[neighbor].add(node)
                     max_possible_cost += 1
-            print(external_neighbors)
-            print(internal_neighbors)
 
             best_options_found[edge_type_idx] = []
             best_cost_found = max_possible_cost
@@ -173,13 +166,11 @@ class ApproximateRuleUtils:
                     best_options_found[edge_type_idx] = []
                     best_cost_found = current_cost
 
-                # If the loop is still here, this is a valid option. Add it to the list.
+                # Now that we know the cost is ok, store which edges get added or deleted.
                 deletions = []
                 additions = []
                 for node in reject_nodes:
-                    print("external_neighbors[%s] = %s" % (node, external_neighbors[node]))
-                    deletions += [(node, neighbor) for nighbor in external_neighbors[node]]
-                    print("so deletions is now %s" % deletions)
+                    deletions += [(node, neighbor) for neighbor in external_neighbors[node]]
                 for neighbor, internals in internal_neighbors.items():
                     matches = internals & keep_nodes
                     non_matches = keep_nodes - matches
@@ -188,9 +179,21 @@ class ApproximateRuleUtils:
                     else:
                         additions += [(node, neighbor) for node in non_matches]
 
+                # Lastly, check that this isn't making a node a "keep" node when it has no external edges.
+                external_degrees = {node: len(neighbors) for node, neighbors in external_neighbors.items()}
+                for deletion in deletions:
+                    external_degrees[deletion[0]] -= 1
+                for addition in additions:
+                    external_degrees[addition[1]] += 1
+                invalid = False
+                for node in keep_nodes:
+                    if external_degrees[node] == 0:
+                        invalid = True
+                        break
+                if invalid:
+                    continue
+
                 best_options_found[edge_type_idx].append((keep_nodes, deletions, additions))
-                print("For cost %s there are currently %s options, the last of which is:" % (best_cost_found, len(best_options_found[edge_type_idx])))
-                print(best_options_found[edge_type_idx][-1])
 
         rule_ids = set()
         combined_edge_type_options = []

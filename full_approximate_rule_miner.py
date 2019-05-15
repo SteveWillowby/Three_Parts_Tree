@@ -2,6 +2,9 @@ import networkx as nx
 from networkx import utils
 from rule_miner_base import *
 import random
+from approximate_rule_utils import *
+from rule_lib import *
+
 """
 import heapq
 from bitstring import BitArray
@@ -38,8 +41,13 @@ print(new_heap)
 class FullApproximateRuleMiner(RuleMinerBase):
     """Used to find and compress grammar rules in a graph"""
 
-    def __init__(self, G):
+    def __init__(self, G, max_rule_size):
         self._G = G
+        self.k = max_rule_size
+        edge_interp = BiDirectionalEdgeTypeInterpreter()
+        rule_lib = RuleLib()
+        self.utils = ApproximateRuleUtils(edge_interp, rule_lib)
+
         self.first_round = True
         self.total_edges_approximated = 0
 
@@ -58,21 +66,44 @@ class FullApproximateRuleMiner(RuleMinerBase):
             self.neighbors[node] = in_set | out_set
             # self.both_sets[node] = both_set # OrderedDict(sorted(both_set))
 
-        self.rule_occurrences_by_pair = {}  # {lesser_node_id: {greater_node_id: {rule_id: [adds/deletions]}}}
-        self.rule_occurrences_by_id = {}    # {rule_id: Set((lesser_node_id, greater_node_id, cost))}
+        # rule_occurrences_by_tuple goes up to self.k layers deep. At the first layer, occurrences is empty
+        self.rule_occurrences_by_tuple = {}  # {smallest_node_id: {occurences: list-of-rule-ids, larger_rules: recursive-version-of-same-thing}} 
+        self.rule_occurrences_by_id = {}    # {rule_id: heapq of rule occurrences sorted by cost}
+
+    # A rule here is the following data:
+    # (rule_id, cost, nodes_in_rule, nodes_with_external_edges_by_edge_type, deletions_by_edge_type, additions_by_edge_type)
+    #
+    # where rule_id and cost are ints, nodes_in_rule and nodes_with_external_edges_by_edge_type are lists of nodes,
+    # and deletions_by_edge_type and additions_by_edge_type are lists of pairs of nodes,
+    #   where the first node in the pair is always the node interior to the rule
 
     def cost_of_an_option(self, option):
-        return len((option[0] | option[1]) | (option[2] | option[3])) + \
-            len((option[4] | option[5]) | (option[6] | option[7]))
+        return option[1]
 
     # This function is intended to be run just once at the start.
-    # It looks at every pair of connected nodes and finds all rules for the respective pairs.
-    # The information is stored in self.rule_occurrences_by_pair and self.rule_occurrences_by_id.
-    def check_all_pairs_for_rules(self):
+    # It looks at every tuple of connected nodes up to size self.k and finds all rules for the respective tuples.
+    # The information is stored in self.rule_occurrences_by_tuple and self.rule_occurrences_by_id.
+    def check_all_tuples_for_rules(self):
         nodes = list(self._G.nodes())
         nodes.sort()
-        for node_a in nodes:
-            self.rule_occurrences_by_pair[node_a] = {}
+
+        frontiers = [[] for i in range(0, self.k)]
+        dicts = [{} for i in range(0, self.k)]
+        nodes = [0 for i in range(0, self.k)]
+        layer = 0
+
+        #TODO: This is partially written.
+        for first_node in nodes:
+            self.rule_occurrences_by_tuple[first_node] = {occurrences: set(), larger_rules: {}}
+            frontiers[0] = [node for node in self.neighbors[first_node] if node > first_node]
+            dicts[0] = self.rule_occurrences_by_tuple[first_node]
+            nodes[0] = first_node
+            while len(frontiers[layer]) > 0:
+                nodes[layer] = frontiers[layer].pop()
+                current_tuple = nodes[
+                    
+
+            """
             for node_b in self.neighbors[node_a]:
                 if node_b < node_a:
                     continue
@@ -83,6 +114,7 @@ class FullApproximateRuleMiner(RuleMinerBase):
                     if id_num not in self.rule_occurrences_by_id:
                         self.rule_occurrences_by_id[id_num] = set()
                     self.rule_occurrences_by_id[id_num].add((node_a, node_b, self.cost_of_an_option(option)))
+            """
 
     # This function is run after a rule has contracted some nodes.
     # It updates self.rule_occurrences_by_pair and self.rule_occurrences_by_id.

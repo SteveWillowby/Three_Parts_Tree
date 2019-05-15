@@ -110,9 +110,9 @@ class InOutBothEdgeTypeInterpreter(EdgeTypeInterpreter):
             print("MAJOR ERROR! INVALID EDGE TYPE %s" % edge_type)
 
 class ApproximateRuleUtils:
-    def __init__(self, edge_type_interpreter):
+    def __init__(self, edge_type_interpreter, rule_lib):
         self.edge_type_interpreter = edge_type_interpreter
-        self.rule_lib = RuleLib()
+        self.rule_lib = rule_lib
 
     # Right now this is O(max_degree * |t| * 2^|t|)
     def cheapest_rules_for_tuple(self, edge_types, t):
@@ -124,7 +124,11 @@ class ApproximateRuleUtils:
 
         t_set = set(t)
         best_options_found = [[] for i in range(0, num_edge_types)]
+        best_cost_found = 0
+        total_cost = 0
         for edge_type_idx in range(0, num_edge_types):
+            total_cost += best_cost_found
+
             edge_type = edge_types[edge_type_idx]
             external_neighbors = {node: set() for node in t} # Maps a node to its external neighbors
             internal_neighbors = {} # Maps an external neighbor to its neighbors in t
@@ -194,6 +198,7 @@ class ApproximateRuleUtils:
                     continue
 
                 best_options_found[edge_type_idx].append((keep_nodes, deletions, additions))
+        total_cost += best_cost_found
 
         rule_ids = set()
         combined_edge_type_options = []
@@ -209,7 +214,7 @@ class ApproximateRuleUtils:
                 rule_ids.add(rule_id)
                 deletions_by_edge_type = [best_options_found[i][counters[i]][1] for i in range(0, num_edge_types)]
                 additions_by_edge_type = [best_options_found[i][counters[i]][2] for i in range(0, num_edge_types)]
-                combined_edge_type_options.append((rule_id, keep_nodes_by_edge_type, deletions_by_edge_type, additions_by_edge_type))
+                combined_edge_type_options.append((rule_id, total_cost, t, keep_nodes_by_edge_type, deletions_by_edge_type, additions_by_edge_type))
             
             # Manage the counters
             counter_idx = 0
@@ -221,6 +226,7 @@ class ApproximateRuleUtils:
 
         return combined_edge_type_options
 
+"""
 # A test graph:
 #
 #  ____--> 6    5
@@ -241,3 +247,4 @@ results = app_rule_utils.cheapest_rules_for_tuple(edge_types, [3, 5, 6])
 for result in results:
     print(result)
     print("")
+"""

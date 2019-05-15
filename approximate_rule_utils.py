@@ -184,7 +184,7 @@ class ApproximateRuleUtils:
                 for deletion in deletions:
                     external_degrees[deletion[0]] -= 1
                 for addition in additions:
-                    external_degrees[addition[1]] += 1
+                    external_degrees[addition[0]] += 1
                 invalid = False
                 for node in keep_nodes:
                     if external_degrees[node] == 0:
@@ -221,17 +221,23 @@ class ApproximateRuleUtils:
 
         return combined_edge_type_options
 
+# A test graph:
+#
+#  ____--> 6    5
+# /       ^ ^   ^
+# |      /   \ /
+# 1 --> 2 --> 3 --> 4
 
 bi_interp = BiDirectionalEdgeTypeInterpreter()
 app_rule_utils = ApproximateRuleUtils(bi_interp)
-forward_edges = {1: set([2, 6]), 2: set([3]), 3: set([4, 5, 6]), 4: set(), 5: set(), 6: set()}
+forward_edges = {1: set([2, 6]), 2: set([3, 6]), 3: set([4, 5, 6]), 4: set(), 5: set(), 6: set()}
 backward_edges = {key: set() for key, value in forward_edges.items()}
 for node, neighbors in forward_edges.items():
     for neighbor in neighbors:
         backward_edges[neighbor].add(node)
 edge_types = [forward_edges, backward_edges]
 
-results = app_rule_utils.cheapest_rules_for_tuple(edge_types, [1, 2])
+results = app_rule_utils.cheapest_rules_for_tuple(edge_types, [3, 5, 6])
 for result in results:
     print(result)
     print("")

@@ -1,5 +1,6 @@
 from bitstring import Bits
 from bitstring import BitArray
+from rule_lib import *
 
 # An edge type interpreter lets you modify a graph while abstractly speaking of edge types.
 # From:
@@ -111,6 +112,7 @@ class InOutBothEdgeTypeInterpreter(EdgeTypeInterpreter):
 class ApproximateRuleUtils:
     def __init__(self, edge_type_interpreter):
         self.edge_type_interpreter = edge_type_interpreter
+        self.rule_lib = RuleLib()
 
     # Right now this is O(max_degree * |t| * 2^|t|)
     def cheapest_rules_for_tuple(edge_types, t):
@@ -118,9 +120,11 @@ class ApproximateRuleUtils:
             print("EXTREME ERROR. ASKING FOR A RULE OF MORE THAN 32 NODES. CANNOT DO BIT MATH.")
             exit(1)
 
+        num_edge_types = len(edge_types)
+
         t_set = Set(t)
-        best_options_found = [[] for i in range(0, len(edge_types))]
-        for edge_type_idx in range(0, len(edge_types)):
+        best_options_found = [[] for i in range(0, num_edge_types)]
+        for edge_type_idx in range(0, num_edge_types):
             edge_type = edge_types[edge_type_idx]
             external_neighbors = {} # Maps a node to its external neighbors
             internal_neighbors = {} # Maps an external neighbor to its neighbors in t
@@ -180,5 +184,28 @@ class ApproximateRuleUtils:
 
                 best_options_found[edge_type_idx].append((keep_nodes, deletions, additions))
 
-        # TODO: Combine edge type findings into full rules and give them ids.
+        rule_ids = Set()
         combined_edge_type_options = []
+        sizes = [len(best_options_found[edge_type]) for edge_type in range(0, num_edge_types)]
+        counters = [0 for edge_type in range(0, num_edge_types + 1)] # Added a dummy value at the end to make subsequent code simpler.
+        counter_idx = 0
+        while counter_idx < num_edge_types:
+            # Get rule id:
+            keep_nodes_by_edge_type = [best_options_found[counters[i]][0] for i in range(0, num_edge_types)]
+            rule_id = self.rule_lib.add_rule(self.edge_type_interpreter.make_rule_graph(edge_types, t, keep_nodes_by_edge_type))
+            # If the rule id is new for this tuple, add it to our set of results.
+            if rule_id not in rule_ids:
+                rule_ids.add(rule_id)
+                deletions_by_edge_type = [best_options_found[counters[i]][1] for i in range(0, num_edge_types)]
+                additions_by_edge_type = [best_options_found[counters[i]][2] for i in range(0, num_edge_types)]
+                combined_edge_type_options.append((keep_nodes_by_edge_type, deletions_by_edge_type, additions_by_edge_type))
+            
+            # Manage the counters
+            counter_idx = 0
+            counters[counter_idx] += 1
+            while counters[counter_idx] == sizes[counter_idx]:
+                counters[counter_idx] = 0
+                edge_type += 1
+                counters[counter_idx] += 1
+
+        return combined_edge_type_options

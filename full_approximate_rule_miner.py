@@ -125,7 +125,7 @@ class FullApproximateRuleMiner(RuleMinerBase):
     # This function is intended to be run just once at the start.
     # It looks at every tuple of connected nodes up to size self.k and finds all rules for the respective tuples.
     # The information is stored in self.rule_occurrences_by_tuple and self.rule_occurrences_by_id.
-    def check_tuples_for_rules(self, nodes_to_look_at=None):
+    def update_rules_for_tuples(self, nodes_to_look_at=None):
         always_filter_by_higher_id = False
         if nodes_to_look_at is None:
             nodes_to_look_at = list(self._G.nodes())
@@ -197,36 +197,6 @@ class FullApproximateRuleMiner(RuleMinerBase):
                 # print("For stack %s we get the new frontier %s" % (node_stack, new_frontier))
                 frontier_stack.append(new_frontier)
 
-    # This function is run after a rule has contracted some nodes.
-    # It updates self.rule_occurrences_by_pair and self.rule_occurrences_by_id.
-    # ids contains any node whose rules may have been affected.
-    # This is O(|ids| * max_degree * max_degree + |ids|log|ids|) = O(max_degree^3)
-    def update_pairs_containing_ids(self, ids):
-        ids = list(ids)
-        ids.sort()
-        for node_c in ids:
-            for node_d in self.neighbors[node_c]:
-                node_a = min(node_c, node_d)
-                node_b = max(node_c, node_d)
-                best_options_without_ids = self.best_options_for_pair(node_a, node_b)
-                unique_best_options_with_ids = self.add_rule_ids_and_filter(node_a, node_b, best_options_without_ids)
-                
-                # First delete any outdated occurrences:
-                if node_b not in self.rule_occurrences_by_pair[node_a]:
-                    self.rule_occurrences_by_pair[node_a][node_b] = {}
-                for id_num, option in self.rule_occurrences_by_pair[node_a][node_b].items():
-                    if id_num not in unique_best_options_with_ids or \
-                            self.cost_of_an_option(unique_best_options_with_ids[id_num]) != self.cost_of_an_option(option):
-                        self.rule_occurrences_by_id[id_num].remove((node_a, node_b, self.cost_of_an_option(option)))
-                        if len(self.rule_occurrences_by_id[id_num]) == 0:
-                            del self.rule_occurrences_by_id[id_num]
-                # Then add new occurrences:
-                self.rule_occurrences_by_pair[node_a][node_b] = unique_best_options_with_ids
-                for id_num, option in unique_best_options_with_ids.items():
-                    if id_num not in self.rule_occurrences_by_id:
-                        self.rule_occurrences_by_id[id_num] = set()
-                    self.rule_occurrences_by_id[id_num].add((node_a, node_b, self.cost_of_an_option(option))) # Adds if not present already.
-
     # O(1)
     def add_edge(self, source, target):
         self.neighbors[source].add(target)
@@ -252,9 +222,6 @@ class FullApproximateRuleMiner(RuleMinerBase):
         del self.in_sets[node_id]
         del self.out_sets[node_id]
 
-    # This is O(degree(node_a) + degree(node_b)) + O(delete_node_from_edge_lists(node_b)) + O(update_pairs_containing_ids(degree(node_a) + degree(node_b)))
-    # Which is O(max_degree^3)
-    # But we can provide the tighter bound of O(max_degree + num_edges_changed * max_degree^2)
     def collapse_pair_with_rule(self, node_a, node_b, rule_id):
         # [a_in_add, a_in_del, b_in_add, b_in_del, a_out_add, a_out_del, b_out_add, b_out_del]
         adds_dels = self.rule_occurrences_by_pair[node_a][node_b][rule_id]
@@ -305,41 +272,26 @@ class FullApproximateRuleMiner(RuleMinerBase):
     # O(num distinct rule _occurrences_) afterwards.
     def determine_best_rule(self):
         if self.first_round:
-            self.check_all_pairs_for_rules()
+            self.update_rules_for_tuples()
             self.first_round = False
-        best_occ_len = 0
-        best_occ_cost = -1
+        most_occ = 0
+        best_occ = []
         for id_num, occurrences in self.rule_occurrences_by_id.items():
-            if best_occ_cost == -1:
-                best_occ_cost = min([t[2] for t in occurrences])
-            curr_cost = min([t[2] for t in occurrences])
-            if curr_cost < best_occ_cost:
-                best_occ_cost = curr_cost
+            if len(occurrences) > most_occ:
+                most_occ = len(occurrences)
                 best_id = id_num
-                best_occ_len = len([t for t in occurrences if t[2] == curr_cost])
-            elif curr_cost == best_occ_cost:
-                length = len([t for t in occurrences if t[2] == curr_cost])
-                if length > best_occ_len:
-                    best_occ_len = length
-                    best_id = id_num
-        return [best_id, best_occ_cost]
+                best_occ = occurrences
+        return [best_id, best_occ]
 
     def contract_valid_tuples(self, rule_id_with_projected_occurrences):
         rule_id = rule_id_with_projected_occurrences[0]
-        cost = rule_id_with_projected_occurrences[1]
         old_edges_approx = self.total_edges_approximated
         collapses = 0
-        while rule_id in self.rule_occurrences_by_id and self.determine_best_rule()[1] == cost:
-            our_copy = [t for t in self.rule_occurrences_by_id[rule_id]]
-            i = 0
-            while i < len(our_copy) and our_copy[i][2] > cost:
-                i += 1
-            if i == len(our_copy):
-                break
-            (node_a, node_b, cost) = our_copy[i]
-            # print("Contracting %s and %s with rule_id %s." % (node_a, node_b, rule_id))
-            self.collapse_pair_with_rule(node_a, node_b, rule_id)
+        while rule_id in self.rule_occurrences_by_id:
+            rule = self.rule_occurrences_by_id[rule_id].pop()
+            self.collapse_rule(rule)
             collapses += 1
+            self.total_edges_approximated += rule[1]
         edges_approx = self.total_edges_approximated - old_edges_approx
         print("Made %s collapses with rule %s, incurring a total of %s approximated edges." % (collapses, rule_id, edges_approx))
 

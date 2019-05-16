@@ -19,11 +19,11 @@ for i in range(1, size + 1):
         G.add_edge(i, i*2 + 1)
 
 rm = FullApproximateRuleMiner(G, 2, 3)
-rm.check_tuples_for_rules()
-rm.check_tuples_for_rules()
-rm.check_tuples_for_rules([4, 5])
-rm.check_tuples_for_rules([6, 5])
-rm.check_tuples_for_rules()
+rm.update_rules_for_tuples()
+rm.update_rules_for_tuples()
+rm.update_rules_for_tuples([4, 5])
+rm.update_rules_for_tuples([6, 5])
+rm.update_rules_for_tuples()
 exit(0)
 
 rm = ApproximateRuleMiner(G)

@@ -68,8 +68,10 @@ class FullApproximateRuleMiner(RuleMinerBase):
             # self.both_sets[node] = both_set # OrderedDict(sorted(both_set))
 
         # rule_occurrences_by_tuple goes up to self.k layers deep. At the first layer, occurrences is empty
-        self.rule_occurrences_by_tuple = {}  # {smallest_node_id: {occurences: list-of-rule-ids, larger_rules: recursive-version-of-same-thing}} 
-        self.rule_occurrences_by_id = {}    # {rule_id: heapq of rule occurrences sorted by cost}
+        self.rule_occurrences_by_tuple = {} # {sorted-tuple-of-nodes: full list of occurences data} 
+        self.rule_occurrences_by_id = {}    # {rule-id: set of tuples}
+        # This next item means that rules of size s use O(s^2) space. It's really just every tuple the node is a part of.
+        self.rule_occurrences_by_node = {n: set() for n in list(G.nodes())}  # {node-id: set of tuples that this node has a rule with}
 
     # A rule here is the following data:
     # (rule_id, cost, nodes_in_rule, nodes_with_external_edges_by_edge_type, deletions_by_edge_type, additions_by_edge_type)
@@ -81,20 +83,60 @@ class FullApproximateRuleMiner(RuleMinerBase):
     def cost_of_an_option(self, option):
         return option[1]
 
-    # TODO: Implement this, such that it can add the necessary dicts if they're missing.
-    def add_rules(self, rule):
-        pass
+    # Assumes that the tuples are sorted.
+    """# COMMENTED OUT PART: Deletes outdated rule occurrences for a tuple and updates the new ones."""
+    def set_rules(self, rules):
+        rule_ids = set([rule[0] for rule in rules])
+        t = rules[0][2]
+        """
+        if t in self.rule_occurrences_by_tuple:
+            # First get rid of old occurrences in rule_occurrences_by_id
+            for rule in self.rule_occurrences_by_tuple:
+                if rule[0] not in rule_ids:
+                    self.rule_occurrences_by_id[rule[0]].remove(t)
+        """
+        self.rule_occurrences_by_tuple[t] = rules
+        for rule_id in rule_ids:
+            if rule_id not in self.rule_occurrences_by_id:
+                self.rule_occurrences_by_id[rule_id] = set([t])
+            else:
+                self.rule_occurrences_by_id[rule_id].add(t)
+        for node in t:
+            if node not in self.rule_occurrences_by_node:
+                self.rule_occurrences_by_node[node] = set([t])
+            else:
+                self.rule_occurrences_by_node[node].add(t)
+
+    def delete_node_from_rule_occurrences(self, node_id):
+        tuples = [t for t in self.rule_occurrences_by_node[node_id]]
+        for t in tuples:
+            # Delete this tuple from rules-by-nodes.
+            for node in t:
+                if node != node_id:
+                    self.rule_occurrences_by_node[node].remove(t)
+            # Delete this tuple from rules-by-ids
+            for rule in self.rule_occurrences_by_tuple[t]:
+                rule_id = rule[0]
+                self.rule_occurrences_by_id[rule_id].remove(t)
+            # Delete this tuple from rules-by-tuples
+            del self.rule_occurrences_by_tuple[t]
+        del self.rule_occurrences_by_node[node_id]
 
     # This function is intended to be run just once at the start.
     # It looks at every tuple of connected nodes up to size self.k and finds all rules for the respective tuples.
     # The information is stored in self.rule_occurrences_by_tuple and self.rule_occurrences_by_id.
-    def check_all_tuples_for_rules(self, nodes_to_look_at=None):
+    def check_tuples_for_rules(self, nodes_to_look_at=None):
         always_filter_by_higher_id = False
         if nodes_to_look_at is None:
             nodes_to_look_at = list(self._G.nodes())
             always_filter_by_higher_id = True
         nodes_to_look_at_set = set(nodes_to_look_at)
 
+        # First, delete any rules involving these nodes.
+        for node in nodes_to_look_at:
+            self.delete_node_from_rule_occurrences(node)
+
+        # Then, add new rules.
         for first_node in nodes_to_look_at:
             # Do a bfs up to depth self.k to give nodes temporary labels.
             # All nodes within h hops of first_node will have ids less than nodes h+1 hops away.
@@ -140,8 +182,11 @@ class FullApproximateRuleMiner(RuleMinerBase):
                 next_node = frontier_stack[-1].pop()
                 node_stack.append(next_node)
                 if len(node_stack) >= self.c:
-                    # TODO: check this tuple for rules!
-                    print(node_stack)
+                    node_stack_copy = [n for n in node_stack]
+                    node_stack_copy.sort()
+                    rules = self.utils.cheapest_rules_for_tuple([self.out_sets, self.in_sets], tuple(node_stack_copy))
+                    # TODO: Destroy old rules. Do that here?
+                    self.set_rules(rules)
 
                 if len(node_stack) < self.k:
                     new_frontier = frontier_stack[-1] + alternate_neighbors[next_node]
@@ -151,19 +196,6 @@ class FullApproximateRuleMiner(RuleMinerBase):
                     new_frontier = []
                 # print("For stack %s we get the new frontier %s" % (node_stack, new_frontier))
                 frontier_stack.append(new_frontier)
-
-            """
-            for node_b in self.neighbors[node_a]:
-                if node_b < node_a:
-                    continue
-                best_options_without_ids = self.best_options_for_pair(node_a, node_b)
-                unique_best_options_with_ids = self.add_rule_ids_and_filter(node_a, node_b, best_options_without_ids)
-                self.rule_occurrences_by_pair[node_a][node_b] = unique_best_options_with_ids
-                for id_num, option in unique_best_options_with_ids.items():
-                    if id_num not in self.rule_occurrences_by_id:
-                        self.rule_occurrences_by_id[id_num] = set()
-                    self.rule_occurrences_by_id[id_num].add((node_a, node_b, self.cost_of_an_option(option)))
-            """
 
     # This function is run after a rule has contracted some nodes.
     # It updates self.rule_occurrences_by_pair and self.rule_occurrences_by_id.
@@ -194,38 +226,6 @@ class FullApproximateRuleMiner(RuleMinerBase):
                     if id_num not in self.rule_occurrences_by_id:
                         self.rule_occurrences_by_id[id_num] = set()
                     self.rule_occurrences_by_id[id_num].add((node_a, node_b, self.cost_of_an_option(option))) # Adds if not present already.
-
-    # This function is used when a node is deleted from the graph.
-    # It deletes all rules containing node_id in self.rule_occurrences_by_*.
-    # This is O(degree(node_id)) = O(max_degree).
-    def delete_node_from_rule_occurrences(self, node_id):
-        node_a = node_id
-        for node_b, rules in self.rule_occurrences_by_pair[node_a].items():
-            for rule_id, option in rules.items():
-                self.rule_occurrences_by_id[rule_id].remove((node_a, node_b, self.cost_of_an_option(option)))
-                if len(self.rule_occurrences_by_id[rule_id]) == 0:
-                    del self.rule_occurrences_by_id[rule_id]
-        del self.rule_occurrences_by_pair[node_a]
-
-        node_1 = node_id
-        for node_2 in self.neighbors[node_1]:
-            node_a = min(node_1, node_2)
-            node_b = max(node_1, node_2)
-            if node_a in self.rule_occurrences_by_pair:
-                dict_a = self.rule_occurrences_by_pair[node_a]
-                if node_b in dict_a:
-                    for rule_id, option in dict_a[node_b].items():
-                        self.rule_occurrences_by_id[rule_id].remove((node_a, node_b, self.cost_of_an_option(option)))
-                        if len(self.rule_occurrences_by_id[rule_id]) == 0:
-                            del self.rule_occurrences_by_id[rule_id]
-                    del dict_a[node_b]
-
-    def delete_node_pair_from_rule_occurrences(self, node_a, node_b):
-        for rule_id, option in self.rule_occurrences_by_pair[node_a][node_b].items():
-            self.rule_occurrences_by_id[rule_id].remove((node_a, node_b, self.cost_of_an_option(option)))
-            if len(self.rule_occurrences_by_id[rule_id]) == 0:
-                del self.rule_occurrences_by_id[rule_id]
-        del self.rule_occurrences_by_pair[node_a][node_b]
 
     # O(1)
     def add_edge(self, source, target):

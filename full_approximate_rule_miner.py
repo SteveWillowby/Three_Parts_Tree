@@ -4,6 +4,7 @@ from rule_miner_base import *
 import random
 from approximate_rule_utils import *
 from rule_lib import *
+import heapq
 
 """
 import heapq
@@ -41,8 +42,9 @@ print(new_heap)
 class FullApproximateRuleMiner(RuleMinerBase):
     """Used to find and compress grammar rules in a graph"""
 
-    def __init__(self, G, max_rule_size):
+    def __init__(self, G, min_rule_size, max_rule_size):
         self._G = G
+        self.c = min_rule_size
         self.k = max_rule_size
         edge_interp = BiDirectionalEdgeTypeInterpreter()
         rule_lib = RuleLib()
@@ -80,28 +82,69 @@ class FullApproximateRuleMiner(RuleMinerBase):
     def cost_of_an_option(self, option):
         return option[1]
 
+    # TODO: Implement this, such that it can add the necessary dicts if they're missing.
+    def add_rules(self, rule):
+        pass
+
     # This function is intended to be run just once at the start.
     # It looks at every tuple of connected nodes up to size self.k and finds all rules for the respective tuples.
     # The information is stored in self.rule_occurrences_by_tuple and self.rule_occurrences_by_id.
     def check_all_tuples_for_rules(self):
-        nodes = list(self._G.nodes())
-        nodes.sort()
+        graph_nodes = list(self._G.nodes())
 
-        frontiers = [[] for i in range(0, self.k)]
-        dicts = [{} for i in range(0, self.k)]
-        nodes = [0 for i in range(0, self.k)]
-        layer = 0
+        for first_node in graph_nodes:
+            # Do a bfs up to depth self.k to give nodes temporary labels.
+            # All nodes within h hops of first_node will have ids less than nodes h+1 hops away.
+            # We only include nodes > first_node.
+            # Also, this part creates a new neighbor set, which only points to neighbors in the next depth.
+            # Note that alternate_neighbors uses the old ids.
+            alternate_ids = {}
+            alternate_neighbors = {}
+            seen = set()
+            to_explore = [set([first_node])] + [set() for depth in range(1, self.k + 1)]
+            next_id = 0
+            for depth in range(0, self.k + 1):
+                seen |= to_explore[depth]
+                for node in to_explore[depth]:
+                    alternate_ids[node] = next_id
+                    next_id += 1
+                    # Only add nodes with higher ids than
+                    if depth < self.k:
+                        alternate_neighbors[node] = set([n for n in self.neighbors[node] if n > first_node]) - seen
+                        to_explore[depth + 1] |= alternate_neighbors[node]
+                    else:
+                        alternate_neighbors[node] = set()
 
-        #TODO: This is partially written.
-        for first_node in nodes:
-            self.rule_occurrences_by_tuple[first_node] = {occurrences: set(), larger_rules: {}}
-            frontiers[0] = [node for node in self.neighbors[first_node] if node > first_node]
-            dicts[0] = self.rule_occurrences_by_tuple[first_node]
-            nodes[0] = first_node
-            while len(frontiers[layer]) > 0:
-                nodes[layer] = frontiers[layer].pop()
-                current_tuple = nodes[
-                    
+            # Sort the neighbors in reverse order.
+            for node in seen:
+                alternate_neighbors[node] = [n for n in alternate_neighbors[node]]
+                alternate_neighbors[node].sort(key = lambda x: -alternate_ids[x])
+
+            # Now that we have alternate ids and a limited neighbor set, we can traverse the nodes for tuples.
+            # This loop maintains the following invariant:
+            # 1. (n in frontiers[-1]) --> (forall m in node_stack: alternate_ids[n] > alternate_ids[m])
+            # 2. frontiers[-1] is sorted in reverse order by alternate id.
+            node_stack = [first_node]
+            frontier_stack = [alternate_neighbors[first_node]]
+            while len(node_stack) > 0:
+                if len(frontier_stack[-1]) == 0:
+                    frontier_stack.pop()
+                    node_stack.pop()
+                    continue
+                next_node = frontier_stack[-1].pop()
+                node_stack.append(next_node)
+                if len(node_stack) >= self.c:
+                    # TODO: check this tuple for rules!
+                    print(node_stack)
+
+                if len(node_stack) < self.k:
+                    new_frontier = frontier_stack[-1] + alternate_neighbors[next_node]
+                    new_frontier = [n for n in new_frontier if alternate_ids[n] > alternate_ids[next_node]]
+                    new_frontier.sort(key = lambda x: -alternate_ids[x])
+                else:
+                    new_frontier = []
+                # print("For stack %s we get the new frontier %s" % (node_stack, new_frontier))
+                frontier_stack.append(new_frontier)
 
             """
             for node_b in self.neighbors[node_a]:

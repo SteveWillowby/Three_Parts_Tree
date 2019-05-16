@@ -2,6 +2,18 @@ import networkx as nx
 from networkx import utils
 from simple_rule_miner import *
 from approximate_rule_miner import *
+from full_approximate_rule_miner import *
+
+G=nx.DiGraph()
+size = 6
+for n in range(0, size):
+    G.add_node(n)
+for n in range(0, size):
+    for n2 in range(n+1, size):
+        G.add_edge(n, n2)
+rm = FullApproximateRuleMiner(G, 2, 4)
+rm.check_all_tuples_for_rules()
+exit(0)
 
 G=nx.DiGraph()
 

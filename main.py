@@ -12,7 +12,7 @@ for n in range(0, size):
     for n2 in range(n+1, size):
         G.add_edge(n, n2)
 rm = FullApproximateRuleMiner(G, 2, 4)
-rm.check_all_tuples_for_rules()
+rm.check_all_tuples_for_rules([4, 3])
 exit(0)
 
 G=nx.DiGraph()

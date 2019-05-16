@@ -4,7 +4,6 @@ from rule_miner_base import *
 import random
 from approximate_rule_utils import *
 from rule_lib import *
-import heapq
 
 """
 import heapq
@@ -89,10 +88,14 @@ class FullApproximateRuleMiner(RuleMinerBase):
     # This function is intended to be run just once at the start.
     # It looks at every tuple of connected nodes up to size self.k and finds all rules for the respective tuples.
     # The information is stored in self.rule_occurrences_by_tuple and self.rule_occurrences_by_id.
-    def check_all_tuples_for_rules(self):
-        graph_nodes = list(self._G.nodes())
+    def check_all_tuples_for_rules(self, nodes_to_look_at=None):
+        always_filter_by_higher_id = False
+        if nodes_to_look_at is None:
+            nodes_to_look_at = list(self._G.nodes())
+            always_filter_by_higher_id = True
+        nodes_to_look_at_set = set(nodes_to_look_at)
 
-        for first_node in graph_nodes:
+        for first_node in nodes_to_look_at:
             # Do a bfs up to depth self.k to give nodes temporary labels.
             # All nodes within h hops of first_node will have ids less than nodes h+1 hops away.
             # We only include nodes > first_node.
@@ -110,7 +113,10 @@ class FullApproximateRuleMiner(RuleMinerBase):
                     next_id += 1
                     # Only add nodes with higher ids than
                     if depth < self.k:
-                        alternate_neighbors[node] = set([n for n in self.neighbors[node] if n > first_node]) - seen
+                        if always_filter_by_higher_id:
+                            alternate_neighbors[node] = set([n for n in self.neighbors[node] if n > first_node]) - seen
+                        else:
+                            alternate_neighbors[node] = set([n for n in self.neighbors[node] if n > first_node or n not in nodes_to_look_at_set]) - seen
                         to_explore[depth + 1] |= alternate_neighbors[node]
                     else:
                         alternate_neighbors[node] = set()

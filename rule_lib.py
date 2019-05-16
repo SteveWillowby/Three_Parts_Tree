@@ -39,3 +39,10 @@ class RuleLib:
             rules.append([graph, self._next_id, 1])
             self._next_id += 1
             return self._next_id - 1
+
+    def get_rule_graph_by_size_and_id(self, size, id_num):
+        rules = self._rules[size]
+        for rule in rules:
+            if rule[1] == id_num:
+                return rule[0]
+        return "NONE FOUND"

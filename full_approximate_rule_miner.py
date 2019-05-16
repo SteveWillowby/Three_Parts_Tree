@@ -46,8 +46,8 @@ class FullApproximateRuleMiner(RuleMinerBase):
         self.c = min_rule_size
         self.k = max_rule_size
         edge_interp = BiDirectionalEdgeTypeInterpreter()
-        rule_lib = RuleLib()
-        self.utils = ApproximateRuleUtils(edge_interp, rule_lib)
+        self.rule_lib = RuleLib()
+        self.utils = ApproximateRuleUtils(edge_interp, self.rule_lib)
 
         self.first_round = True
         self.total_edges_approximated = 0
@@ -118,6 +118,8 @@ class FullApproximateRuleMiner(RuleMinerBase):
             for rule in self.rule_occurrences_by_tuple[t]:
                 rule_id = rule[0]
                 self.rule_occurrences_by_id[rule_id].remove(t)
+                if len(self.rule_occurrences_by_id[rule_id]) == 0:
+                    del self.rule_occurrences_by_id[rule_id]
             # Delete this tuple from rules-by-tuples
             del self.rule_occurrences_by_tuple[t]
         del self.rule_occurrences_by_node[node_id]
@@ -222,51 +224,74 @@ class FullApproximateRuleMiner(RuleMinerBase):
         del self.in_sets[node_id]
         del self.out_sets[node_id]
 
-    def collapse_pair_with_rule(self, node_a, node_b, rule_id):
-        # [a_in_add, a_in_del, b_in_add, b_in_del, a_out_add, a_out_del, b_out_add, b_out_del]
-        adds_dels = self.rule_occurrences_by_pair[node_a][node_b][rule_id]
-        self.delete_node_from_rule_occurrences(node_b) # This one must be called before changing edge lists.
+    # A rule here is the following data:
+    # (rule_id, cost, nodes_in_rule, nodes_with_external_edges_by_edge_type, deletions_by_edge_type, additions_by_edge_type)
+    def collapse_rule(self, rule):
+        t = rule[2]
+        deletions_by_type = rule[4]
+        additions_by_type = rule[5]
 
-        # Add nodes which have edges being adjusted.
-        to_check = ((adds_dels[0] | adds_dels[1]) | (adds_dels[2] | adds_dels[3])) | \
-                   ((adds_dels[4] | adds_dels[5]) | (adds_dels[6] | adds_dels[7]))
-        self.total_edges_approximated += self.cost_of_an_option(adds_dels)
+        out_node = t[0]
+        in_node = t[0]
+        if len(rule[3][0]) > 0:
+            out_node = rule[3][0].pop()
+            rule[3][0].add(out_node)
+        if len(rule[3][1]) > 0:
+            in_node = rule[3][1].pop()
+            rule[3][1].add(in_node)
+        out_neighbors = set(self.out_sets[out_node]) - set(t)
+        in_neighbors = set(self.in_sets[in_node]) - set(t)
+
+        # Add nodes which have edges being adjusted. Also, adjust the in and out sets based on the representative nodes.
+        to_check = set()
+        for type_idx in range(0, 2):
+            for (a, b) in deletions_by_type[type_idx]:
+                to_check.add(b)
+                if type_idx == 0 and out_node == a:
+                    out_neighbors.remove(b)
+                elif type_idx == 1 and in_node == a:
+                    in_neighbors.remove(b)
+        for type_idx in range(0, 2):
+            for (a, b) in additions_by_type[type_idx]:
+                to_check.add(b)
+                if type_idx == 0 and out_node == a:
+                    out_neighbors.add(b)
+                elif type_idx == 1 and in_node == a:
+                    in_neighbors.add(b)
+
         # Also add nodes which may have two edges collapsed into 1:
-        to_check = to_check | (self.out_sets[node_a] & self.out_sets[node_b]) | (self.in_sets[node_a] & self.in_sets[node_b])
-        to_check = to_check | (self.out_sets[node_b] - self.out_sets[node_a]) | (self.in_sets[node_b] - self.in_sets[node_a])
+        for i in range(0, len(t)):
+            for j in range(i + 1, len(t)):
+                node_a = t[i]
+                node_b = t[j]
+                to_check = to_check | (self.out_sets[node_a] & self.out_sets[node_b]) | (self.in_sets[node_a] & self.in_sets[node_b])
+                to_check = to_check | (self.out_sets[node_b] - self.out_sets[node_a]) | (self.in_sets[node_b] - self.in_sets[node_a])
 
-        # Figure out how we're conceptually rewiring things before compressing a and b together.
-        new_a_in = (self.in_sets[node_a] - adds_dels[1]) | adds_dels[0]
-        new_a_out = (self.out_sets[node_a] - adds_dels[5]) | adds_dels[4]
-        new_b_in = (self.in_sets[node_b] - adds_dels[3]) | adds_dels[2]
-        new_b_out = (self.out_sets[node_b] - adds_dels[7]) | adds_dels[6]
+        # Remove nodes in the tuple, except for the single remaining node.
+        for i in range(1, len(t)):
+            to_check.discard(t[i])
+        to_check.add(t[0])
 
-        # Figure out how to rewire a so that a is equivalent to the compressed version of original a and b.
-        actual_a_in_adds = (new_a_in | new_b_in - set([node_a])) - self.in_sets[node_a]
-        actual_a_in_dels = self.in_sets[node_a] - (new_a_in | new_b_in - set([node_a]))
-        actual_a_out_adds = (new_a_out | new_b_out - set([node_a])) - self.out_sets[node_a]
-        actual_a_out_dels = self.out_sets[node_a] - (new_a_out | new_b_out - set([node_a]))
+        # Delete nodes all but a single node from edge lists.
+        for i in range(1, len(t)):
+            self.delete_node_from_edge_lists(t[i])
+            self.delete_node_from_rule_occurrences(t[i])
 
-        # Delete node b.
-        self.delete_node_from_edge_lists(node_b)
+        # Adjust single remaining node.
+        out_additions_for_t0 = out_neighbors - self.out_sets[t[0]]
+        out_deletions_for_t0 = self.out_sets[t[0]] - out_neighbors
+        in_additions_for_t0 = in_neighbors - self.in_sets[t[0]]
+        in_deletions_for_t0 = self.in_sets[t[0]] - in_neighbors
+        for neighbor in out_additions_for_t0:
+            self.add_edge(t[0], neighbor)
+        for neighbor in out_deletions_for_t0:
+            self.remove_edge(t[0], neighbor)
+        for neighbor in in_additions_for_t0:
+            self.add_edge(neighbor, t[0])
+        for neighbor in in_deletions_for_t0:
+            self.remove_edge(neighbor, t[0])
 
-        # Adjust node a.
-        for a_in_add in actual_a_in_adds:
-            self.add_edge(a_in_add, node_a)
-        for a_in_del in actual_a_in_dels:
-            self.remove_edge(a_in_del, node_a)
-            if a_in_del != node_b and a_in_del not in self.out_sets[node_a]:
-                self.delete_node_pair_from_rule_occurrences(min(a_in_del, node_a), max(a_in_del, node_a))
-        for a_out_add in actual_a_out_adds:
-            self.add_edge(node_a, a_out_add)
-        for a_out_del in actual_a_out_dels:
-            self.remove_edge(node_a, a_out_del)
-            if a_out_del != node_b and a_out_del not in self.in_sets[node_a]:
-                self.delete_node_pair_from_rule_occurrences(min(a_out_del, node_a), max(a_out_del, node_a))
-
-        to_check.add(node_a)
-        to_check.discard(node_b) # Because b might have had a self-loop that was conceptually deleted, but we don't want to check it.
-        self.update_pairs_containing_ids(to_check)
+        self.update_rules_for_tuples(to_check)
 
     # O(|V|*max_degree^2) on first run.
     # O(num distinct rule _occurrences_) afterwards.
@@ -288,235 +313,25 @@ class FullApproximateRuleMiner(RuleMinerBase):
         old_edges_approx = self.total_edges_approximated
         collapses = 0
         while rule_id in self.rule_occurrences_by_id:
-            rule = self.rule_occurrences_by_id[rule_id].pop()
-            self.collapse_rule(rule)
+            t = self.rule_occurrences_by_id[rule_id].pop()
+            self.rule_occurrences_by_id[rule_id].add(t)
+
+            full_rule_details = None
+            for rule_option in self.rule_occurrences_by_tuple[t]:
+                if rule_option[0] == rule_id:
+                    full_rule_details = rule_option
+                    break
+
+            self.collapse_rule(full_rule_details)
+
             collapses += 1
-            self.total_edges_approximated += rule[1]
+            self.total_edges_approximated += full_rule_details[1]
+
         edges_approx = self.total_edges_approximated - old_edges_approx
         print("Made %s collapses with rule %s, incurring a total of %s approximated edges." % (collapses, rule_id, edges_approx))
-
+        # print("The rule's details are: %s" % self.rule_lib.get_rule_graph_by_size_and_id(len(t) + 2, rule_id).edges())
 
     def done(self):
-        for node, neighbors in self.neighbors.items():
-            if len(neighbors) > 0:
-                return False
-        return True
-
-    def random_subset(self, entities):
-        subset = []
-        for entity in entities:
-            if random.randint(0,1):
-                subset.append[entity]
-        return subset
-
-    # Returns all valid, cheapest ways to edit the pair.
-    # Or, if the pair is already valid, returns an empty array.
-    # Note that this may currently return duplicates.
-    def best_options_for_pair(self, a, b):
-        just_a = set([a])
-        just_b = set([b])
-
-        in_sets = [self.in_sets[a] - just_b, self.in_sets[b] - just_a]
-        in_sets.append(in_sets[0] & in_sets[1])
-        out_sets = [self.out_sets[a] - just_b, self.out_sets[b] - just_a]
-        out_sets.append(out_sets[0] & out_sets[1])
-
-        three_in_values = [len(in_sets[0]), len(in_sets[1]), len(in_sets[0]) + len(in_sets[1]) - 2 * len(in_sets[2])]
-        three_out_values = [len(out_sets[0]), len(out_sets[1]), len(out_sets[0]) + len(out_sets[1]) - 2 * len(out_sets[2])]
-
-        in_min = min(three_in_values)
-        out_min = min(three_out_values)
-
-        if in_min == 0 and out_min == 0:
-            # Already valid! No modifications needed.
-            return [[set() for i in range(0,8)]]
-
-        return_values = []
-
-        # Distinct possible best edit options:
-        if three_in_values[0] == in_min:
-            if three_out_values[0] == out_min:
-                # Delete a_in and delete a_out
-                a_in_add = set()
-                a_in_del = in_sets[0]
-                b_in_add = set()
-                b_in_del = set()
-
-                a_out_add = set()
-                a_out_del = out_sets[0]
-                b_out_add = set()
-                b_out_del = set()
-                return_values.append([a_in_add, a_in_del, b_in_add, b_in_del, a_out_add, a_out_del, b_out_add, b_out_del])
-            if three_out_values[1] == out_min:
-                # Delete a_in and delete b_out
-                a_in_add = set()
-                a_in_del = in_sets[0]
-                b_in_add = set()
-                b_in_del = set()
-
-                a_out_add = set()
-                a_out_del = set()
-                b_out_add = set()
-                b_out_del = out_sets[1]
-                return_values.append([a_in_add, a_in_del, b_in_add, b_in_del, a_out_add, a_out_del, b_out_add, b_out_del])
-            if three_out_values[2] == out_min:
-                # Delete a_in and move outs to intersection
-                # There are actually 2^(out_sets[2]) ways to do this!
-
-                a_only = out_sets[2] - out_sets[0]
-                b_only = out_sets[2] - out_sets[1]
-                a_only_subset = set(self.random_subset(a_only)) # a will delete this
-                b_only_subset = set(self.random_subset(b_only)) # b will delete this
-
-                a_in_add = set()
-                a_in_del = in_sets[0]
-                b_in_add = set()
-                b_in_del = set()
-
-                a_out_add = b_only - b_only_subset # a adds what b does not delete
-                a_out_del = a_only_subset
-                b_out_add = a_only - a_only_subset # b adds what a does not delete
-                b_out_del = b_only_subset
-                return_values.append([a_in_add, a_in_del, b_in_add, b_in_del, a_out_add, a_out_del, b_out_add, b_out_del])
-        if three_in_values[1] == in_min:
-            if three_out_values[0] == out_min:
-                # Delete b_in and delete a_out
-                a_in_add = set()
-                a_in_del = set()
-                b_in_add = set()
-                b_in_del = in_sets[1]
-
-                a_out_add = set()
-                a_out_del = in_sets[0]
-                b_out_add = set()
-                b_out_del = set()
-                return_values.append([a_in_add, a_in_del, b_in_add, b_in_del, a_out_add, a_out_del, b_out_add, b_out_del])
-            if three_out_values[1] == out_min:
-                # Delete b_in and delete b_out
-                a_in_add = set()
-                a_in_del = set()
-                b_in_add = set()
-                b_in_del = in_sets[1]
-
-                a_out_add = set()
-                a_out_del = set()
-                b_out_add = set()
-                b_out_del = out_sets[1]
-                return_values.append([a_in_add, a_in_del, b_in_add, b_in_del, a_out_add, a_out_del, b_out_add, b_out_del])
-            if three_out_values[2] == out_min:
-                # Delete b_in and move outs to intersection
-                # There are actually 2^(out_sets[2]) ways to do this!
-
-                a_only = out_sets[2] - out_sets[0]
-                b_only = out_sets[2] - out_sets[1]
-                a_only_subset = set(self.random_subset(a_only)) # a will delete this
-                b_only_subset = set(self.random_subset(b_only)) # b will delete this
-
-                a_in_add = set()
-                a_in_del = set()
-                b_in_add = set()
-                b_in_del = in_sets[1]
-
-                a_out_add = b_only - b_only_subset # a adds what b does not delete
-                a_out_del = a_only_subset
-                b_out_add = a_only - a_only_subset # b adds what a does not delete
-                b_out_del = b_only_subset
-                return_values.append([a_in_add, a_in_del, b_in_add, b_in_del, a_out_add, a_out_del, b_out_add, b_out_del])
-        if three_in_values[2] == in_min:
-            if three_out_values[0] == out_min:
-                # Move ins to intersection and delete a_out
-                # There are actually 2^(in_sets[2]) ways to do this!
-
-                a_only = in_sets[2] - in_sets[0]
-                b_only = in_sets[2] - in_sets[1]
-                a_only_subset = set(self.random_subset(a_only)) # a will delete this
-                b_only_subset = set(self.random_subset(b_only)) # b will delete this
-
-                a_in_add = b_only - b_only_subset # a adds what b does not delete
-                a_in_del = a_only_subset
-                b_in_add = a_only - a_only_subset # b adds what a does not delete
-                b_in_del = b_only_subset
-                
-                a_out_add = set()
-                a_out_del = out_sets[0]
-                b_out_add = set()
-                b_out_del = set()
-                return_values.append([a_in_add, a_in_del, b_in_add, b_in_del, a_out_add, a_out_del, b_out_add, b_out_del])
-            if three_out_values[1] == out_min:
-                # Move ins to intersection and delete b_out
-                # There are actually 2^(in_sets[2]) ways to do this!
-
-                a_only = in_sets[2] - in_sets[0]
-                b_only = in_sets[2] - in_sets[1]
-                a_only_subset = set(self.random_subset(a_only)) # a will delete this
-                b_only_subset = set(self.random_subset(b_only)) # b will delete this
-
-                a_in_add = b_only - b_only_subset # a adds what b does not delete
-                a_in_del = a_only_subset
-                b_in_add = a_only - a_only_subset # b adds what a does not delete
-                b_in_del = b_only_subset
-
-                a_out_add = set()
-                a_out_del = set()
-                b_out_add = set()
-                b_out_del = out_sets[1]
-                return_values.append([a_in_add, a_in_del, b_in_add, b_in_del, a_out_add, a_out_del, b_out_add, b_out_del])
-            if three_out_values[2] == out_min:
-                # Move both ins and outs to their respective intersections
-                # There are actually 2^(in_sets[2] + out_sets[2]) ways to do this!
-
-                a_only = in_sets[2] - in_sets[0]
-                b_only = in_sets[2] - in_sets[1]
-                a_only_subset = set(self.random_subset(a_only)) # a will delete this
-                b_only_subset = set(self.random_subset(b_only)) # b will delete this
-
-                a_in_add = b_only - b_only_subset # a adds what b does not delete
-                a_in_del = a_only_subset
-                b_in_add = a_only - a_only_subset # b adds what a does not delete
-                b_in_del = b_only_subset
-
-                a_only = out_sets[2] - out_sets[0]
-                b_only = out_sets[2] - out_sets[1]
-                a_only_subset = set(self.random_subset(a_only)) # a will delete this
-                b_only_subset = set(self.random_subset(b_only)) # b will delete this
-
-                a_out_add = b_only - b_only_subset # a adds what b does not delete
-                a_out_del = a_only_subset
-                b_out_add = a_only - a_only_subset # b adds what a does not delete
-                b_out_del = b_only_subset
-                return_values.append([a_in_add, a_in_del, b_in_add, b_in_del, a_out_add, a_out_del, b_out_add, b_out_del])
-
-        return return_values
-
-    # Adds rule id information AND filters out duplicates
-    # Id value will be 6 bits:
-    # Bit 5: Does node x have in-edges?
-    # Bit 4: Does node x have out-edges?
-    # Bit 3: Does node x point to node y?
-    # Bit 2: Does node y have in-edges?
-    # Bit 1: Does node y have out-edges?
-    # Bit 0: Does node y point to node x?
-    def add_rule_ids_and_filter(self, a, b, best_options):
-        just_a = set([a])
-        just_b = set([b])
-
-        in_sets = [self.in_sets[a] - just_b, self.in_sets[b] - just_a]
-        out_sets = [self.out_sets[a] - just_b, self.out_sets[b] - just_a]
-        
-        a_to_b = a in self.in_sets[b]
-        b_to_a = b in self.in_sets[a]
-
-        best_options_with_ids = {}
-        for option in best_options:
-            # [a_in_add = 0, a_in_del = 1, b_in_add = 2, b_in_del = 3, a_out_add = 4, a_out_del = 5, b_out_add = 6, b_out_del = 7]
-            in_a = len((in_sets[0] - option[1]) | option[0]) > 0
-            in_b = len((in_sets[1] - option[3]) | option[2]) > 0
-            out_a = len((out_sets[0] - option[5]) | option[4]) > 0
-            out_b = len((out_sets[1] - option[7]) | option[6]) > 0
-            a_score = in_a * 4 + out_a * 2 + a_to_b
-            b_score = in_b * 4 + out_b * 2 + b_to_a
-            if a_score > b_score:
-                best_options_with_ids[(a_score << 3) + b_score] = option
-            else:
-                best_options_with_ids[(b_score << 3) + a_score] = option
-        return best_options_with_ids
+        if self.first_round: # TODO: Make this first condition more robust.
+            return False
+        return len(self.rule_occurrences_by_id) == 0

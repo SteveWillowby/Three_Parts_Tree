@@ -1,7 +1,7 @@
 class AugmentedPQ:
     """A priority queue with several extra options."""
     
-    def __init__(self, priority_fn=(lambda x: x)):
+    def __init__(self, priority_fn=None):
         self._priority_fn = priority_fn
         self._size = 0
         self._dict = {}
@@ -23,13 +23,13 @@ class AugmentedPQ:
         left_idx = self._left_child_index(index)
         right_idx = self._right_child_index(index)
 
-        parent_val = self._priority_fn(self._heap[index])
+        parent_val = self._heap[index][0]
         left_val = parent_val
         right_val = parent_val
         if left_idx < self._size:
-            left_val = self._priority_fn(self._heap[left_idx])
+            left_val = self._heap[left_idx][0]
             if right_idx < self._size:
-                right_val = self._priority_fn(self._heap[right_idx])
+                right_val = self._heap[right_idx][0]
         else:
             return index
 
@@ -44,16 +44,19 @@ class AugmentedPQ:
             temp = self._heap[min_child_idx]
             self._heap[min_child_idx] = self._heap[index]
             self._heap[index] = temp
-            self._dict[self._heap[index]].remove(min_child_idx)
-            self._dict[self._heap[index]].add(index)
-            self._dict[self._heap[min_child_idx]].remove(index)
-            self._dict[self._heap[min_child_idx]].add(min_child_idx)
+            self._dict[self._heap[index][1]].remove(min_child_idx)
+            self._dict[self._heap[index][1]].add(index)
+            self._dict[self._heap[min_child_idx][1]].remove(index)
+            self._dict[self._heap[min_child_idx][1]].add(min_child_idx)
             return min_child_idx
 
         return index
 
     def push(self, x):
-        self._heap.append(x)
+        if self._priority_fn is not None:
+            self._heap.append((self._priority_fn(x), x))
+        else:
+            self._heap.append((x, x))
         idx = self._size
         if x in self._dict:
             self._dict[x].add(idx)
@@ -68,7 +71,7 @@ class AugmentedPQ:
             parent_idx = self._parent_index(parent_idx)
 
     def pop(self):
-        item = self._heap[0]
+        item = self._heap[0][1]
         self.delete(item)
         return item
 
@@ -83,8 +86,8 @@ class AugmentedPQ:
             return
         
         self._heap[index] = self._heap.pop()
-        self._dict[self._heap[index]].remove(self._size)
-        self._dict[self._heap[index]].add(index)
+        self._dict[self._heap[index][1]].remove(self._size)
+        self._dict[self._heap[index][1]].add(index)
 
         child_index = self._update_at_index(index)
         while child_index != index:
@@ -95,10 +98,10 @@ class AugmentedPQ:
         return x in self._dict
 
     def top_item(self):
-        return self._heap[0]
+        return self._heap[0][1]
 
     def top_heuristic_value(self):
-        return self._priority_fn(self._heap[0])
+        return self._heap[0][0]
 
     def empty(self):
         return self._size == 0

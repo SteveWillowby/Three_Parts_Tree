@@ -52,8 +52,10 @@ class AugmentedPQ:
 
         return index
 
-    def push(self, x):
-        if self._priority_fn is not None:
+    def push(self, x, prio=None):
+        if prio is not None:
+            self._heap.append((prio, x))
+        elif self._priority_fn is not None:
             self._heap.append((self._priority_fn(x), x))
         else:
             self._heap.append((x, x))

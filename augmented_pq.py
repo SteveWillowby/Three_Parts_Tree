@@ -102,8 +102,11 @@ class AugmentedPQ:
     def top_item(self):
         return self._heap[0][1]
 
-    def top_heuristic_value(self):
+    def top_priority(self):
         return self._heap[0][0]
 
     def empty(self):
         return self._size == 0
+
+    def size(self):
+        return self._size

@@ -113,13 +113,3 @@ class AugmentedPQ:
 
     def size(self):
         return self._size
-
-test = AugmentedPQ()
-test.push("A", 4)
-test.push("C", 2)
-test.push("B", 3)
-test.push("C", 2)
-test.delete("B")
-print(test.pop())
-print(test.pop())
-print(test.pop())

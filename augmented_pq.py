@@ -87,14 +87,17 @@ class AugmentedPQ:
             self._heap = []
             return
         
-        self._heap[index] = self._heap.pop()
-        self._dict[self._heap[index][1]].remove(self._size)
-        self._dict[self._heap[index][1]].add(index)
+        if index < self._size:
+            self._heap[index] = self._heap.pop()
+            self._dict[self._heap[index][1]].remove(self._size)
+            self._dict[self._heap[index][1]].add(index)
 
-        child_index = self._update_at_index(index)
-        while child_index != index:
-            index = child_index
             child_index = self._update_at_index(index)
+            while child_index != index:
+                index = child_index
+                child_index = self._update_at_index(index)
+        else:
+            self._heap.pop()
 
     def contains(self, x):
         return x in self._dict
@@ -110,3 +113,13 @@ class AugmentedPQ:
 
     def size(self):
         return self._size
+
+test = AugmentedPQ()
+test.push("A", 4)
+test.push("C", 2)
+test.push("B", 3)
+test.push("C", 2)
+test.delete("B")
+print(test.pop())
+print(test.pop())
+print(test.pop())

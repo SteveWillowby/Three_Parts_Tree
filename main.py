@@ -74,9 +74,8 @@ while not rm.done():
     best_rule = rm.determine_best_rule()
     rm.contract_valid_tuples(best_rule)
 
-"""
 # Directed erdosh reyni:
-expected_num_edges = size * 2
+expected_num_edges = size
 prob_of_edge_numerator = expected_num_edges
 prob_of_edge_denominator = size * (size - 1)  # No div by 2 since we multiply by 2 because we can have bidirected edges.
 G = nx.DiGraph()
@@ -89,10 +88,9 @@ for i in range(1, size + 1):
         if random.randint(1, prob_of_edge_denominator) <= prob_of_edge_numerator:
             G.add_edge(i, j)
 
-rm = ApproximateRuleMiner(G)
+rm = FullApproximateRuleMiner(G, 3, 3)
 
 print("\nFor directed erdosh-reyni with %s nodes and %s edges:" % (size, len(G.edges())))
 while not rm.done():
     best_rule = rm.determine_best_rule()
     rm.contract_valid_tuples(best_rule)
-"""

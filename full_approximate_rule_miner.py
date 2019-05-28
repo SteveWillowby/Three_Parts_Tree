@@ -4,39 +4,7 @@ from rule_miner_base import *
 import random
 from approximate_rule_utils import *
 from rule_lib import *
-
-"""
-import heapq
-from bitstring import BitArray
-from bitstring import Bits
-
-b = BitArray(length=0)
-b.append(1)
-print(b.bin)
-b.clear()
-print(b.bin)
-b.append(BitArray(length=3, uint=1))
-print(b.bin)
-test = {}
-test[Bits(b)] = 7
-a = Bits(b)
-b.append(BitArray(length=1, uint=1))
-print(Bits(b) in test)
-print(a in test)
-print(a.bin)
-
-new_heap = []
-heapq.heappush(new_heap, 7)
-heapq.heappush(new_heap, 3)
-heapq.heappush(new_heap, 11)
-heapq.heappush(new_heap, 15)
-heapq.heappush(new_heap, 2)
-heapq.heappush(new_heap, 12)
-heapq.heappush(new_heap, 7)
-print(new_heap)
-print([heapq.heappop(new_heap) for i in range(0, 7)])
-print(new_heap)
-"""
+from augmented_pq import *
 
 class FullApproximateRuleMiner(RuleMinerBase):
     """Used to find and compress grammar rules in a graph"""
@@ -62,10 +30,10 @@ class FullApproximateRuleMiner(RuleMinerBase):
             # both_set = in_set | out_set
             # in_only_set = in_set - both_set
             # out_only_set = out_set - both_set
-            self.in_sets[node] = in_set # OrderedDict(sorted(in_only_set))
-            self.out_sets[node] = out_set # OrderedDict(sorted(out_only_set))
+            self.in_sets[node] = in_set
+            self.out_sets[node] = out_set
             self.neighbors[node] = in_set | out_set
-            # self.both_sets[node] = both_set # OrderedDict(sorted(both_set))
+            # self.both_sets[node] = both_set
 
         # rule_occurrences_by_tuple goes up to self.k layers deep. At the first layer, occurrences is empty
         self.rule_occurrences_by_tuple = {} # {sorted-tuple-of-nodes: full list of occurences data} 
@@ -84,23 +52,16 @@ class FullApproximateRuleMiner(RuleMinerBase):
         return option[1]
 
     # Assumes that the tuples are sorted.
-    """# COMMENTED OUT PART: Deletes outdated rule occurrences for a tuple and updates the new ones."""
     def set_rules(self, rules):
-        rule_ids = set([rule[0] for rule in rules])
         t = rules[0][2]
-        """
-        if t in self.rule_occurrences_by_tuple:
-            # First get rid of old occurrences in rule_occurrences_by_id
-            for rule in self.rule_occurrences_by_tuple:
-                if rule[0] not in rule_ids:
-                    self.rule_occurrences_by_id[rule[0]].remove(t)
-        """
+
         self.rule_occurrences_by_tuple[t] = rules
-        for rule_id in rule_ids:
+        for rule in rules:
+            rule_id = rule[0]
+            cost = rule[1]
             if rule_id not in self.rule_occurrences_by_id:
-                self.rule_occurrences_by_id[rule_id] = set([t])
-            else:
-                self.rule_occurrences_by_id[rule_id].add(t)
+                self.rule_occurrences_by_id[rule_id] = AugmentedPQ()
+            self.rule_occurrences_by_id[rule_id].push(t, cost)
         for node in t:
             if node not in self.rule_occurrences_by_node:
                 self.rule_occurrences_by_node[node] = set([t])
@@ -117,8 +78,8 @@ class FullApproximateRuleMiner(RuleMinerBase):
             # Delete this tuple from rules-by-ids
             for rule in self.rule_occurrences_by_tuple[t]:
                 rule_id = rule[0]
-                self.rule_occurrences_by_id[rule_id].remove(t)
-                if len(self.rule_occurrences_by_id[rule_id]) == 0:
+                self.rule_occurrences_by_id[rule_id].delete(t)
+                if self.rule_occurrences_by_id[rule_id].empty():
                     del self.rule_occurrences_by_id[rule_id]
             # Delete this tuple from rules-by-tuples
             del self.rule_occurrences_by_tuple[t]
@@ -300,11 +261,14 @@ class FullApproximateRuleMiner(RuleMinerBase):
             self.update_rules_for_tuples()
             self.first_round = False
         most_occ = 0
+        best_cost = -1
         best_occ = []
         for id_num, occurrences in self.rule_occurrences_by_id.items():
-            if len(occurrences) > most_occ:
-                most_occ = len(occurrences)
+            if best_cost == -1 or occurrences.top_priority() < best_cost or \
+               (best_cost == occurrences.top_priority() and occurrences.size() > most_occ):
+                most_occ = occurrences.size()
                 best_id = id_num
+                best_cost = occurrences.top_priority()
                 best_occ = occurrences
         return [best_id, best_occ]
 
@@ -312,10 +276,11 @@ class FullApproximateRuleMiner(RuleMinerBase):
         rule_id = rule_id_with_projected_occurrences[0]
         old_edges_approx = self.total_edges_approximated
         collapses = 0
-        while rule_id in self.rule_occurrences_by_id:
-            t = self.rule_occurrences_by_id[rule_id].pop()
-            self.rule_occurrences_by_id[rule_id].add(t)
+        initial_cost = self.rule_occurrences_by_id[rule_id].top_priority()
+        while rule_id in self.rule_occurrences_by_id and self.rule_occurrences_by_id[rule_id].top_priority() == initial_cost:
+            t = self.rule_occurrences_by_id[rule_id].top_item()
 
+            # TODO: Change self.rule_occurrences_by_tuple[t] to a dictionary so this is more efficient.
             full_rule_details = None
             for rule_option in self.rule_occurrences_by_tuple[t]:
                 if rule_option[0] == rule_id:

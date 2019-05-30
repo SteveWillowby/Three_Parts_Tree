@@ -4,7 +4,8 @@ from rule_miner_base import *
 import random
 from approximate_rule_utils import *
 from rule_lib import *
-from augmented_pq import *
+from rule_pq import *
+import math
 
 class FullApproximateRuleMiner(RuleMinerBase):
     """Used to find and compress grammar rules in a graph"""
@@ -19,6 +20,9 @@ class FullApproximateRuleMiner(RuleMinerBase):
 
         self.first_round = True
         self.total_edges_approximated = 0
+
+        self.already_encoded_rules = set()
+        self.bits_per_node_id = int(math.ceil(math.log(len(G.nodes), 2)))
 
         self.in_sets = {}
         self.out_sets = {}
@@ -48,9 +52,6 @@ class FullApproximateRuleMiner(RuleMinerBase):
     # and deletions_by_edge_type and additions_by_edge_type are lists of pairs of nodes,
     #   where the first node in the pair is always the node interior to the rule
 
-    def cost_of_an_option(self, option):
-        return option[1]
-
     # Assumes that the tuples are sorted.
     def set_rules(self, rules):
         t = rules[0][2]
@@ -60,7 +61,7 @@ class FullApproximateRuleMiner(RuleMinerBase):
             rule_id = rule[0]
             cost = rule[1]
             if rule_id not in self.rule_occurrences_by_id:
-                self.rule_occurrences_by_id[rule_id] = AugmentedPQ()
+                self.rule_occurrences_by_id[rule_id] = RulePQ()
             self.rule_occurrences_by_id[rule_id].push(t, cost)
         for node in t:
             if node not in self.rule_occurrences_by_node:
@@ -254,6 +255,49 @@ class FullApproximateRuleMiner(RuleMinerBase):
 
         self.update_rules_for_tuples(to_check)
 
+    # Note that this function makes multiple assumptions:
+    # 1. The number of nodes covered by a rule at a given cost will be the number of nodes collapsable by that rule at that cost.
+    # 2. The number of rule instances it will take to collapse n nodes is n / size-of-rule.
+    # 3. The set of nodes covered by rule instances of cost a is disjoint from the set of nodes covered by rule instances of cost b.
+    def determine_rule_pcd(self, rule_id, already_using_rule):
+        rule_size = len(self.rule_occurrences_by_id[rule_id].top_item())
+        bits_per_rule_node = int(math.ceil(math.log(rule_size, 2)))
+
+        cost_to_encode = 0
+        if rule_id not in self.already_encoded_rules:
+            cost_to_encode += self.bits_per_node_id # Stores number of nodes in rule.
+            cost_to_encode += rule_size * (bits_per_rule_node + 2) # The + 2 is for each node to have an id and a bit about external in/out edges.
+            cost_to_encode += rule_size * (rule_size - 1) # Each node also gets bits for whether it points to the other nodes.
+
+        # If we aren't already using the rule, we need to list the number of times that we actually use it.
+        cost_to_id_rule = 0
+        if not already_using_rule:
+            cost_to_id_rule = self.bits_per_node_id # We will use any rule at most (num-of-nodes - 1) times
+
+        best_pcd = -1.0
+        sorted_list_of_costs = self.rule_occurrences_by_id[rule_id].sorted_list_of_prios()
+        predicted_residue_cost = 0
+        predicted_num_nodes = 0
+        for cost in sorted_list_of_costs:
+            nodes_at_cost = self.rule_occurrences_by_id[rule_id].number_of_nodes_covered_at_priority(cost)
+            predicted_num_nodes += nodes_at_cost
+
+            predicted_rules_used = int(math.ceil((0.0 + nodes_at_cost) / rule_size))
+
+            predicted_residue_cost += predicted_rules_used
+            if cost > 0:
+                predicted_residue_cost += cost * (bits_per_rule_node + self.bits_per_node_id) * predicted_rules_used # One edge is a pair of interior-exterior nodes.
+                predicted_residue_cost += cost * predicted_rules_used # An indicator bit for every residue per rule
+            
+            predicted_cost_to_say_which_node = predicted_rules_used * self.bits_per_node_id
+            current_pcd = (cost_to_encode + cost_to_id_rule + \
+                            predicted_residue_cost + predicted_cost_to_say_which_node) / (0.0 + predicted_num_nodes)
+
+            if best_pcd == -1.0 or current_pcd < best_pcd:
+                best_pcd = current_pcd
+
+        return best_pcd
+
     # O(|V|*max_degree^2) on first run.
     # O(num distinct rule _occurrences_) afterwards.
     def determine_best_rule(self):
@@ -262,15 +306,22 @@ class FullApproximateRuleMiner(RuleMinerBase):
             self.first_round = False
         most_occ = 0
         best_cost = -1
+        best_pcd = -1.0
+        best_pcd_id = 0
         best_occ = []
         for id_num, occurrences in self.rule_occurrences_by_id.items():
+            pcd = self.determine_rule_pcd(id_num, False)
             if best_cost == -1 or occurrences.top_priority() < best_cost or \
                (best_cost == occurrences.top_priority() and occurrences.size() > most_occ):
                 most_occ = occurrences.size()
                 best_id = id_num
                 best_cost = occurrences.top_priority()
                 best_occ = occurrences
-        return [best_id, best_occ]
+            if best_pcd == -1.0 or pcd < best_pcd:
+                best_pcd = pcd
+                best_pcd_id = id_num
+        print("best_id vs best_pcd_id: %s vs. %s" % (best_id, best_pcd_id))
+        return [best_pcd_id, best_occ]
 
     def contract_valid_tuples(self, rule_id_with_projected_occurrences):
         rule_id = rule_id_with_projected_occurrences[0]

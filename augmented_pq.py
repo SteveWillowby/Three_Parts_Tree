@@ -6,6 +6,7 @@ class AugmentedPQ:
         self._size = 0
         self._dict = {}
         self._heap = []
+        self._priority_counts = {}
 
     def _left_child_index(self, index):
         return ((index + 1) * 2) - 1
@@ -54,11 +55,17 @@ class AugmentedPQ:
 
     def push(self, x, prio=None):
         if prio is not None:
-            self._heap.append((prio, x))
+            pass
         elif self._priority_fn is not None:
-            self._heap.append((self._priority_fn(x), x))
+            prio = self._priority_fn(x)
         else:
-            self._heap.append((x, x))
+            prio = x
+        self._heap.append((prio, x))
+        if prio in self._priority_counts:
+            self._priority_counts[prio] += 1
+        else:
+            self._priority_counts[prio] = 1
+
         idx = self._size
         if x in self._dict:
             self._dict[x].add(idx)
@@ -72,6 +79,8 @@ class AugmentedPQ:
                 break
             parent_idx = self._parent_index(parent_idx)
 
+        return prio # Important for rule_pq
+
     def pop(self):
         item = self._heap[0][1]
         self.delete(item)
@@ -80,12 +89,18 @@ class AugmentedPQ:
     def delete(self, x):
         index_set = self._dict[x]
         index = index_set.pop()
+
+        prio = self._heap[index][0]
+        self._priority_counts[prio] -= 1
+        if self._priority_counts[prio] == 0:
+            del self._priority_counts[prio]
+
         if len(index_set) == 0:
             del self._dict[x]
         self._size -= 1
         if self._size == 0:
             self._heap = []
-            return
+            return prio # Important for rule_pq
         
         if index < self._size:
             self._heap[index] = self._heap.pop()
@@ -98,6 +113,8 @@ class AugmentedPQ:
                 child_index = self._update_at_index(index)
         else:
             self._heap.pop()
+
+        return prio # Important for rule_pq
 
     def contains(self, x):
         return x in self._dict
@@ -113,3 +130,8 @@ class AugmentedPQ:
 
     def size(self):
         return self._size
+
+    def num_with_priority(self, prio):
+        if prio not in self._priority_counts:
+            return 0
+        return self._priority_counts[prio]

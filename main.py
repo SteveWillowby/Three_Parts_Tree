@@ -18,7 +18,7 @@ for i in range(1, size + 1):
     if i * 2 + 1 < size + 1:
         G.add_edge(i, i*2 + 1)
 
-rm = FullApproximateRuleMiner(G, 3, 3)
+rm = FullApproximateRuleMiner(G, 2, 3)
 
 print("\nFor binary tree with %s nodes:" % size)
 while not rm.done():
@@ -74,6 +74,7 @@ while not rm.done():
     best_rule = rm.determine_best_rule()
     rm.contract_valid_tuples(best_rule)
 
+"""
 # Directed erdosh reyni:
 expected_num_edges = size
 prob_of_edge_numerator = expected_num_edges
@@ -94,3 +95,4 @@ print("\nFor directed erdosh-reyni with %s nodes and %s edges:" % (size, len(G.e
 while not rm.done():
     best_rule = rm.determine_best_rule()
     rm.contract_valid_tuples(best_rule)
+"""

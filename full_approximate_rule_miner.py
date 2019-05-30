@@ -300,7 +300,7 @@ class FullApproximateRuleMiner(RuleMinerBase):
 
     # O(|V|*max_degree^2) on first run.
     # O(num distinct rule _occurrences_) afterwards.
-    def determine_best_rule(self):
+    def determine_best_rule(self, using_id=-1):
         if self.first_round:
             self.update_rules_for_tuples()
             self.first_round = False
@@ -308,27 +308,28 @@ class FullApproximateRuleMiner(RuleMinerBase):
         best_cost = -1
         best_pcd = -1.0
         best_pcd_id = 0
-        best_occ = []
+        best_id = 0
         for id_num, occurrences in self.rule_occurrences_by_id.items():
-            pcd = self.determine_rule_pcd(id_num, False)
+            pcd = self.determine_rule_pcd(id_num, id_num == using_id)
             if best_cost == -1 or occurrences.top_priority() < best_cost or \
                (best_cost == occurrences.top_priority() and occurrences.size() > most_occ):
                 most_occ = occurrences.size()
                 best_id = id_num
                 best_cost = occurrences.top_priority()
-                best_occ = occurrences
             if best_pcd == -1.0 or pcd < best_pcd:
                 best_pcd = pcd
                 best_pcd_id = id_num
-        print("best_id vs best_pcd_id: %s vs. %s" % (best_id, best_pcd_id))
-        return [best_pcd_id, best_occ]
+        if best_id != best_pcd_id:
+            # print("PCD disagrees with cost-number. pcd choice: %s cost-number choice: %s" % (best_pcd_id, best_id))
+            pass
+        return best_pcd_id
 
-    def contract_valid_tuples(self, rule_id_with_projected_occurrences):
-        rule_id = rule_id_with_projected_occurrences[0]
+    def contract_valid_tuples(self, rule_id):
+        self.already_encoded_rules.add(rule_id)
         old_edges_approx = self.total_edges_approximated
         collapses = 0
         initial_cost = self.rule_occurrences_by_id[rule_id].top_priority()
-        while rule_id in self.rule_occurrences_by_id and self.rule_occurrences_by_id[rule_id].top_priority() == initial_cost:
+        while self.determine_best_rule(using_id=rule_id) == rule_id:
             t = self.rule_occurrences_by_id[rule_id].top_item()
 
             # TODO: Change self.rule_occurrences_by_tuple[t] to a dictionary so this is more efficient.

@@ -7,7 +7,7 @@ from full_approximate_rule_miner import *
 
 G=nx.DiGraph()
 
-size = 1023
+size = 10023
 
 # Builds a binary tree:
 for i in range(1, size + 1):
@@ -49,7 +49,7 @@ for tree_idx in range(1, tree_size + 1):
     if next_graph_idx <= tree_size * ring_size:
         G.add_edge(ring_bottom, next_graph_idx)
 
-rm = FullApproximateRuleMiner(G, 3, 3)
+rm = FullApproximateRuleMiner(G, 2, 3)
 
 print("\nFor tree of size-%s rings with %s nodes:" % (ring_size, size))
 while not rm.done():
@@ -67,7 +67,7 @@ for i in range(1, size):
 G.add_edge(1, size)
 G.add_edge(size, 1)
 
-rm = FullApproximateRuleMiner(G, 3, 3)
+rm = FullApproximateRuleMiner(G, 2, 3)
 
 print("\nFor directed double-ring of size: %s" % size)
 while not rm.done():

@@ -149,16 +149,14 @@ class FullApproximateRuleMiner(RuleMinerBase):
                     node_stack_copy = [n for n in node_stack]
                     node_stack_copy.sort()
                     rules = self.utils.cheapest_rules_for_tuple([self.out_sets, self.in_sets], tuple(node_stack_copy))
-                    # TODO: Destroy old rules. Do that here?
                     self.set_rules(rules)
 
                 if len(node_stack) < self.k:
-                    new_frontier = frontier_stack[-1] + alternate_neighbors[next_node]
+                    new_frontier = set(frontier_stack[-1]) | set(alternate_neighbors[next_node])
                     new_frontier = [n for n in new_frontier if alternate_ids[n] > alternate_ids[next_node]]
                     new_frontier.sort(key = lambda x: -alternate_ids[x])
                 else:
                     new_frontier = []
-                # print("For stack %s we get the new frontier %s" % (node_stack, new_frontier))
                 frontier_stack.append(new_frontier)
 
     # O(1)
@@ -336,11 +334,9 @@ class FullApproximateRuleMiner(RuleMinerBase):
         initial_cost = self.rule_occurrences_by_id[rule_id].top_priority()
         while self.determine_best_rule(using_id=rule_id) == rule_id:
             t = self.rule_occurrences_by_id[rule_id].top_item()
-            print(self.rule_occurrences_by_id[rule_id]._dict[t])
 
             # TODO: Change self.rule_occurrences_by_tuple[t] to a dictionary so this is more efficient.
             full_rule_details = None
-            print("hi %s" % [node for node in t])
             for rule_option in self.rule_occurrences_by_tuple[t]:
                 if rule_option[0] == rule_id:
                     full_rule_details = rule_option

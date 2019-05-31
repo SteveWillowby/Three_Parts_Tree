@@ -281,8 +281,6 @@ class FullApproximateRuleMiner(RuleMinerBase):
         total_predicted_rules_used = 0
         for cost in sorted_list_of_costs:
             nodes_at_cost = self.rule_occurrences_by_id[rule_id].number_of_nodes_covered_at_priority(cost)
-            if rule_id == 20:
-                print("At cost %s, rule 20 has %s nodes" % (cost, nodes_at_cost))
             predicted_num_nodes += nodes_at_cost
 
             predicted_rules_used = int(math.ceil((0.0 + nodes_at_cost) / rule_size))

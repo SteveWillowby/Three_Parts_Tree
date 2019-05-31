@@ -278,24 +278,31 @@ class FullApproximateRuleMiner(RuleMinerBase):
         sorted_list_of_costs = self.rule_occurrences_by_id[rule_id].sorted_list_of_prios()
         predicted_residue_cost = 0
         predicted_num_nodes = 0
+        total_predicted_rules_used = 0
         for cost in sorted_list_of_costs:
             nodes_at_cost = self.rule_occurrences_by_id[rule_id].number_of_nodes_covered_at_priority(cost)
+            if rule_id == 20:
+                print("At cost %s, rule 20 has %s nodes" % (cost, nodes_at_cost))
             predicted_num_nodes += nodes_at_cost
 
             predicted_rules_used = int(math.ceil((0.0 + nodes_at_cost) / rule_size))
+            total_predicted_rules_used += predicted_rules_used
 
             predicted_residue_cost += predicted_rules_used
             if cost > 0:
                 predicted_residue_cost += cost * (bits_per_rule_node + self.bits_per_node_id) * predicted_rules_used # One edge is a pair of interior-exterior nodes.
                 predicted_residue_cost += cost * predicted_rules_used # An indicator bit for every residue per rule
-            
-            predicted_cost_to_say_which_node = predicted_rules_used * self.bits_per_node_id
+
+            predicted_cost_to_say_which_node = total_predicted_rules_used * self.bits_per_node_id
             current_pcd = (cost_to_encode + cost_to_id_rule + \
                             predicted_residue_cost + predicted_cost_to_say_which_node) / (0.0 + predicted_num_nodes)
 
             if best_pcd == -1.0 or current_pcd < best_pcd:
                 best_pcd = current_pcd
+                best_cost = cost
 
+        #if rule_id == 19 or rule_id == 20:
+        #    print("Best pcd for rule %s is %s at cost %s -- (already using rule = %s)" % (rule_id, best_pcd, best_cost, already_using_rule))
         return best_pcd
 
     # O(|V|*max_degree^2) on first run.
@@ -316,7 +323,7 @@ class FullApproximateRuleMiner(RuleMinerBase):
                 most_occ = occurrences.size()
                 best_id = id_num
                 best_cost = occurrences.top_priority()
-            if best_pcd == -1.0 or pcd < best_pcd:
+            if best_pcd == -1.0 or pcd < best_pcd or (pcd == best_pcd and id_num == using_id): # Gives preference to the already-found rule.
                 best_pcd = pcd
                 best_pcd_id = id_num
         if best_id != best_pcd_id:

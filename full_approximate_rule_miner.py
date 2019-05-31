@@ -36,8 +36,8 @@ class FullApproximateRuleMiner(RuleMinerBase):
                 self.cost_of_original_edge_list += 1 # done bit
 
         cost_of_sparse_matrix = len(sparse6.to_sparse6_bytes(G, header=False)) * 8 # An ascii character compression.
-        cost_of_dense_matrix = len(graph6.to_graph6_bytes(G, header=False)) * 8 # An ascii character compression.
-        self.cost_of_original_matrix = min(cost_of_sparse_matrix, cost_of_dense_matrix)
+        # cost_of_dense_matrix = len(graph6.to_graph6_bytes(G, header=False)) * 8 # An ascii character compression.
+        self.cost_of_original_matrix = cost_of_sparse_matrix # min(cost_of_sparse_matrix, cost_of_dense_matrix)
 
         self.in_sets = {}
         self.out_sets = {}

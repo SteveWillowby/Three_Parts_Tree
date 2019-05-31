@@ -4,7 +4,7 @@ from simple_rule_miner import *
 from approximate_rule_miner import *
 from full_approximate_rule_miner import *
 
-size = 1023
+size = 1024 * 8 - 1
 rule_min = 2
 rule_max = 4
 

@@ -336,9 +336,11 @@ class FullApproximateRuleMiner(RuleMinerBase):
         initial_cost = self.rule_occurrences_by_id[rule_id].top_priority()
         while self.determine_best_rule(using_id=rule_id) == rule_id:
             t = self.rule_occurrences_by_id[rule_id].top_item()
+            print(self.rule_occurrences_by_id[rule_id]._dict[t])
 
             # TODO: Change self.rule_occurrences_by_tuple[t] to a dictionary so this is more efficient.
             full_rule_details = None
+            print("hi %s" % [node for node in t])
             for rule_option in self.rule_occurrences_by_tuple[t]:
                 if rule_option[0] == rule_id:
                     full_rule_details = rule_option

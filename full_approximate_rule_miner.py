@@ -40,7 +40,7 @@ class FullApproximateRuleMiner(RuleMinerBase):
             # self.both_sets[node] = both_set
 
         # rule_occurrences_by_tuple goes up to self.k layers deep. At the first layer, occurrences is empty
-        self.rule_occurrences_by_tuple = {} # {sorted-tuple-of-nodes: full list of occurences data} 
+        self.rule_occurrences_by_tuple = {} # {sorted-tuple-of-nodes: {rule_id: full rule details}} 
         self.rule_occurrences_by_id = {}    # {rule-id: set of tuples}
         # This next item means that rules of size s use O(s^2) space. It's really just every tuple the node is a part of.
         self.rule_occurrences_by_node = {n: set() for n in list(G.nodes())}  # {node-id: set of tuples that this node has a rule with}
@@ -56,7 +56,7 @@ class FullApproximateRuleMiner(RuleMinerBase):
     def set_rules(self, rules):
         t = rules[0][2]
 
-        self.rule_occurrences_by_tuple[t] = rules
+        self.rule_occurrences_by_tuple[t] = {rule[0]: rule for rule in rules}
         for rule in rules:
             rule_id = rule[0]
             cost = rule[1]
@@ -77,8 +77,7 @@ class FullApproximateRuleMiner(RuleMinerBase):
                 if node != node_id:
                     self.rule_occurrences_by_node[node].remove(t)
             # Delete this tuple from rules-by-ids
-            for rule in self.rule_occurrences_by_tuple[t]:
-                rule_id = rule[0]
+            for rule_id, rule in self.rule_occurrences_by_tuple[t].items():
                 self.rule_occurrences_by_id[rule_id].delete(t)
                 if self.rule_occurrences_by_id[rule_id].empty():
                     del self.rule_occurrences_by_id[rule_id]
@@ -335,12 +334,7 @@ class FullApproximateRuleMiner(RuleMinerBase):
         while self.determine_best_rule(using_id=rule_id) == rule_id:
             t = self.rule_occurrences_by_id[rule_id].top_item()
 
-            # TODO: Change self.rule_occurrences_by_tuple[t] to a dictionary so this is more efficient.
-            full_rule_details = None
-            for rule_option in self.rule_occurrences_by_tuple[t]:
-                if rule_option[0] == rule_id:
-                    full_rule_details = rule_option
-                    break
+            full_rule_details = self.rule_occurrences_by_tuple[t][rule_id]
 
             self.collapse_rule(full_rule_details)
 

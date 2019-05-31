@@ -1,3 +1,4 @@
+from networkx.readwrite import sparse6
 import networkx as nx
 from networkx import utils
 from rule_miner_base import *
@@ -33,7 +34,7 @@ class FullApproximateRuleMiner(RuleMinerBase):
             else:
                 self.cost_of_original_edge_list += 1 # done bit
 
-        self.cost_of_sparse_matrix = (len(nx.generate_sparse6(G)) - 11) * 8 # An ascii character compression. There are 11 extra bytes at the front.
+        self.cost_of_sparse_matrix = len(sparse6.to_sparse6_bytes(G, header=False)) * 8 # An ascii character compression.
 
         self.in_sets = {}
         self.out_sets = {}

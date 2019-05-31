@@ -1,4 +1,5 @@
 from networkx.readwrite import sparse6
+from networkx.readwrite import graph6
 import networkx as nx
 from networkx import utils
 from rule_miner_base import *
@@ -34,7 +35,9 @@ class FullApproximateRuleMiner(RuleMinerBase):
             else:
                 self.cost_of_original_edge_list += 1 # done bit
 
-        self.cost_of_sparse_matrix = len(sparse6.to_sparse6_bytes(G, header=False)) * 8 # An ascii character compression.
+        cost_of_sparse_matrix = len(sparse6.to_sparse6_bytes(G, header=False)) * 8 # An ascii character compression.
+        cost_of_dense_matrix = len(graph6.to_graph6_bytes(G, header=False)) * 8 # An ascii character compression.
+        self.cost_of_original_matrix = min(cost_of_sparse_matrix, cost_of_dense_matrix)
 
         self.in_sets = {}
         self.out_sets = {}
@@ -390,6 +393,6 @@ class FullApproximateRuleMiner(RuleMinerBase):
 
     def cost_comparison(self):
         print("Basic edge list: %s bits" % self.cost_of_original_edge_list)
-        print("Sparse matrix:   %s bits" % self.cost_of_sparse_matrix)
+        print("Sparse matrix:   %s bits" % self.cost_of_original_matrix)
         print("Our compression: %s bits (%s percent and %s percent respectively)" % \
-            (self.total_cost, float(self.total_cost) / self.cost_of_original_edge_list, float(self.total_cost) / self.cost_of_sparse_matrix))
+            (self.total_cost, float(self.total_cost) / self.cost_of_original_edge_list, float(self.total_cost) / self.cost_of_original_matrix))

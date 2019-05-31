@@ -24,6 +24,7 @@ print("\nFor binary tree with %s nodes:" % size)
 while not rm.done():
     best_rule = rm.determine_best_rule()
     rm.contract_valid_tuples(best_rule)
+rm.cost_comparison()
 
 # Tree of rings:
 
@@ -55,6 +56,7 @@ print("\nFor tree of size-%s rings with %s nodes:" % (ring_size, size))
 while not rm.done():
     best_rule = rm.determine_best_rule()
     rm.contract_valid_tuples(best_rule)
+rm.cost_comparison()
 
 # Directed double-ring:
 
@@ -73,6 +75,7 @@ print("\nFor directed double-ring of size: %s" % size)
 while not rm.done():
     best_rule = rm.determine_best_rule()
     rm.contract_valid_tuples(best_rule)
+rm.cost_comparison()
 
 # Watts strogatz
 edges_per_node = 3
@@ -89,6 +92,7 @@ print("\nFor directed watts strogatz of size: %s with %s edges per node" % (size
 while not rm.done():
     best_rule = rm.determine_best_rule()
     rm.contract_valid_tuples(best_rule)
+rm.cost_comparison()
 
 # Directed erdosh reyni:
 expected_num_edges = size * 2
@@ -110,3 +114,4 @@ print("\nFor directed erdosh-reyni with %s nodes and %s edges:" % (size, len(G.e
 while not rm.done():
     best_rule = rm.determine_best_rule()
     rm.contract_valid_tuples(best_rule)
+rm.cost_comparison()

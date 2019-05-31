@@ -23,6 +23,17 @@ class FullApproximateRuleMiner(RuleMinerBase):
 
         self.already_encoded_rules = set()
         self.bits_per_node_id = int(math.ceil(math.log(len(G.nodes), 2)))
+        self.total_cost = 0
+
+        self.cost_of_original_edge_list = 0
+        for node in list(G.nodes()):
+            out_neighbors = len(G.out_edges(node))
+            if out_neighbors > 0:
+                self.cost_of_original_edge_list += out_neighbors * (self.bits_per_node_id + 1) # +1 is for continuation/done bits
+            else:
+                self.cost_of_original_edge_list += 1 # done bit
+
+        self.cost_of_sparse_matrix = (len(nx.generate_sparse6(G)) - 11) * 8 # An ascii character compression. There are 11 extra bytes at the front.
 
         self.in_sets = {}
         self.out_sets = {}
@@ -265,6 +276,7 @@ class FullApproximateRuleMiner(RuleMinerBase):
             cost_to_encode += self.bits_per_node_id # Stores number of nodes in rule.
             cost_to_encode += rule_size * (bits_per_rule_node + 2) # The + 2 is for each node to have an id and a bit about external in/out edges.
             cost_to_encode += rule_size * (rule_size - 1) # Each node also gets bits for whether it points to the other nodes.
+            cost_to_encode += 1 # Bit as to whether or not this is the last rule.
 
         # If we aren't already using the rule, we need to list the number of times that we actually use it.
         cost_to_id_rule = 0
@@ -296,12 +308,33 @@ class FullApproximateRuleMiner(RuleMinerBase):
                 best_pcd = current_pcd
                 best_cost = cost
 
-        #if rule_id == 19 or rule_id == 20:
-        #    print("Best pcd for rule %s is %s at cost %s -- (already using rule = %s)" % (rule_id, best_pcd, best_cost, already_using_rule))
         return best_pcd
 
-    # O(|V|*max_degree^2) on first run.
-    # O(num distinct rule _occurrences_) afterwards.
+    # This has a lot of repeat from determine_rule_pcd. Consider better structuring code.
+    def record_actual_cost(self, rule_id, already_using_rule, rule_size, cost):
+        bits_per_rule_node = int(math.ceil(math.log(rule_size, 2)))
+
+        cost_to_encode = 0
+        if rule_id not in self.already_encoded_rules:
+            cost_to_encode += self.bits_per_node_id # Stores number of nodes in rule.
+            cost_to_encode += rule_size * (bits_per_rule_node + 2) # The + 2 is for each node to have an id and a bit about external in/out edges.
+            cost_to_encode += rule_size * (rule_size - 1) # Each node also gets bits for whether it points to the other nodes.
+            cost_to_encode += 1 # Bit as to whether or not this is the last rule.
+
+        # If we aren't already using the rule, we need to list the number of times that we actually use it.
+        cost_to_id_rule = 0
+        if not already_using_rule:
+            cost_to_id_rule = self.bits_per_node_id # We will use any rule at most (num-of-nodes - 1) times
+
+        residue_cost = 1 # An indicator bit for when residue is done with.
+        if cost > 0:
+            residue_cost += cost * (bits_per_rule_node + self.bits_per_node_id) # One edge is a pair of interior-exterior nodes.
+            residue_cost += cost # An indicator bit for every residue
+
+        cost_to_say_which_node = self.bits_per_node_id
+
+        return cost_to_encode + cost_to_id_rule + residue_cost + cost_to_say_which_node
+        
     def determine_best_rule(self, using_id=-1):
         if self.first_round:
             self.update_rules_for_tuples()
@@ -327,14 +360,18 @@ class FullApproximateRuleMiner(RuleMinerBase):
         return best_pcd_id
 
     def contract_valid_tuples(self, rule_id):
-        self.already_encoded_rules.add(rule_id)
         old_edges_approx = self.total_edges_approximated
         collapses = 0
-        initial_cost = self.rule_occurrences_by_id[rule_id].top_priority()
+        first_time = True
         while self.determine_best_rule(using_id=rule_id) == rule_id:
             t = self.rule_occurrences_by_id[rule_id].top_item()
 
             full_rule_details = self.rule_occurrences_by_tuple[t][rule_id]
+
+            self.total_cost += self.record_actual_cost(rule_id, not first_time, len(t), full_rule_details[1])
+            if first_time:
+                self.already_encoded_rules.add(rule_id)
+                first_time = False
 
             self.collapse_rule(full_rule_details)
 
@@ -349,3 +386,9 @@ class FullApproximateRuleMiner(RuleMinerBase):
         if self.first_round: # TODO: Make this first condition more robust.
             return False
         return len(self.rule_occurrences_by_id) == 0
+
+    def cost_comparison(self):
+        print("Basic edge list: %s bits" % self.cost_of_original_edge_list)
+        print("Sparse matrix:   %s bits" % self.cost_of_sparse_matrix)
+        print("Our compression: %s bits (%s percent and %s percent respectively)" % \
+            (self.total_cost, float(self.total_cost) / self.cost_of_original_edge_list, float(self.total_cost) / self.cost_of_sparse_matrix))

@@ -26,6 +26,7 @@ class FullApproximateRuleMiner(RuleMinerBase):
         self.already_encoded_rules = set()
         self.bits_per_node_id = int(math.ceil(math.log(len(G.nodes), 2)))
         self.total_cost = self.bits_per_node_id # Will need a number to say how many rules were used. At most (# nodes - 1) rules will be used.
+        self.total_cost += self.bits_per_node_id + 1 # as many ones as there are bits per node id followed by a zero
 
         self.cost_of_original_edge_list = 0
         for node in list(G.nodes()):

@@ -301,7 +301,8 @@ class FullApproximateRuleMiner(RuleMinerBase):
 
             predicted_residue_cost += predicted_rules_used
             if cost > 0:
-                predicted_residue_cost += cost * (bits_per_rule_node + self.bits_per_node_id) * predicted_rules_used # One edge is a pair of interior-exterior nodes.
+                # One edge is a pair of interior-exterior nodes and a bit to say which direction the edge points.
+                predicted_residue_cost += cost * (bits_per_rule_node + self.bits_per_node_id + 1) * predicted_rules_used
                 predicted_residue_cost += cost * predicted_rules_used # An indicator bit for every residue per rule
 
             predicted_cost_to_say_which_node = total_predicted_rules_used * self.bits_per_node_id
@@ -332,7 +333,8 @@ class FullApproximateRuleMiner(RuleMinerBase):
 
         residue_cost = 1 # An indicator bit for when residue is done with.
         if cost > 0:
-            residue_cost += cost * (bits_per_rule_node + self.bits_per_node_id) # One edge is a pair of interior-exterior nodes.
+            # One edge is a pair of interior-exterior nodes and a bit to say which direction the edge points.
+            residue_cost += cost * (bits_per_rule_node + self.bits_per_node_id + 1)
             residue_cost += cost # An indicator bit for every residue
 
         cost_to_say_which_node = self.bits_per_node_id

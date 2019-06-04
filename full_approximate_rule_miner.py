@@ -28,13 +28,8 @@ class FullApproximateRuleMiner(RuleMinerBase):
         self.total_cost = self.bits_per_node_id # Will need a number to say how many rules were used. At most (# nodes - 1) rules will be used.
         self.total_cost += self.bits_per_node_id + 1 # as many ones as there are bits per node id followed by a zero
 
-        self.cost_of_original_edge_list = 0
-        for node in list(G.nodes()):
-            out_neighbors = len(G.out_edges(node))
-            if out_neighbors > 0:
-                self.cost_of_original_edge_list += out_neighbors * (self.bits_per_node_id + 1) # +1 is for continuation/done bits
-            else:
-                self.cost_of_original_edge_list += 1 # done bit
+        # Gamma-encoding of |V|, one "no-more-edges" bit per node, one "one-more-edge" bit per edge, and one node id per edge.
+        self.cost_of_original_edge_list = (2 * self.bits_per_node_id - 1) + len(G.nodes) + (self.bits_per_node_id + 1) * len(G.edges())
 
         cost_of_sparse_matrix = len(sparse6.to_sparse6_bytes(G, header=False)) * 8 # An ascii character compression.
         # cost_of_dense_matrix = len(graph6.to_graph6_bytes(G, header=False)) * 8 # An ascii character compression.

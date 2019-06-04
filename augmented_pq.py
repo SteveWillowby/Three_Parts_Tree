@@ -116,6 +116,11 @@ class AugmentedPQ:
 
         return prio # Important for rule_pq
 
+    # TODO: Make this more efficient. Will also need to edit update in rule_pq.
+    def update(self, x, new_prio):
+        self.delete(x)
+        self.push(x, new_prio)
+
     def contains(self, x):
         return x in self._dict
 

@@ -1,5 +1,4 @@
 from networkx.readwrite import sparse6
-from networkx.readwrite import graph6
 import networkx as nx
 from networkx import utils
 from rule_miner_base import *
@@ -32,29 +31,24 @@ class FullApproximateRuleMiner(RuleMinerBase):
         self.cost_of_original_edge_list = (2 * self.bits_per_node_id - 1) + len(G.nodes) + (self.bits_per_node_id + 1) * len(G.edges())
 
         cost_of_sparse_matrix = len(sparse6.to_sparse6_bytes(G, header=False)) * 8 # An ascii character compression.
-        # cost_of_dense_matrix = len(graph6.to_graph6_bytes(G, header=False)) * 8 # An ascii character compression.
         self.cost_of_original_matrix = cost_of_sparse_matrix # min(cost_of_sparse_matrix, cost_of_dense_matrix)
 
         self.in_sets = {}
         self.out_sets = {}
         self.neighbors = {}
-        # self.both_sets = {}
         for node in list(self._G.nodes()):
             in_set = set([edge[0] for edge in self._G.in_edges(node)])
             out_set = set([edge[1] for edge in self._G.out_edges(node)])
-            # both_set = in_set | out_set
-            # in_only_set = in_set - both_set
-            # out_only_set = out_set - both_set
             self.in_sets[node] = in_set
             self.out_sets[node] = out_set
             self.neighbors[node] = in_set | out_set
-            # self.both_sets[node] = both_set
 
         # rule_occurrences_by_tuple goes up to self.k layers deep. At the first layer, occurrences is empty
         self.rule_occurrences_by_tuple = {} # {sorted-tuple-of-nodes: {rule_id: full rule details}} 
         self.rule_occurrences_by_id = {}    # {rule-id: set of tuples}
         # This next item means that rules of size s use O(s^2) space. It's really just every tuple the node is a part of.
         self.rule_occurrences_by_node = {n: set() for n in list(G.nodes())}  # {node-id: set of tuples that this node has a rule with}
+        self.rule_priority_queue = AugmentedPQ()
 
     # A rule here is the following data:
     # (rule_id, cost, nodes_in_rule, nodes_with_external_edges_by_edge_type, deletions_by_edge_type, additions_by_edge_type)
@@ -64,7 +58,7 @@ class FullApproximateRuleMiner(RuleMinerBase):
     #   where the first node in the pair is always the node interior to the rule
 
     # Assumes that the tuples are sorted.
-    def set_rules(self, rules):
+    def store_rules(self, rules, affected_rule_ids_set):
         t = rules[0][2]
 
         self.rule_occurrences_by_tuple[t] = {rule[0]: rule for rule in rules}
@@ -74,13 +68,14 @@ class FullApproximateRuleMiner(RuleMinerBase):
             if rule_id not in self.rule_occurrences_by_id:
                 self.rule_occurrences_by_id[rule_id] = RulePQ()
             self.rule_occurrences_by_id[rule_id].push(t, cost)
+            affected_rule_ids_set.add(rule_id)
         for node in t:
             if node not in self.rule_occurrences_by_node:
                 self.rule_occurrences_by_node[node] = set([t])
             else:
                 self.rule_occurrences_by_node[node].add(t)
 
-    def delete_node_from_rule_occurrences(self, node_id):
+    def delete_node_from_rule_occurrences(self, node_id, rules_affected):
         tuples = [t for t in self.rule_occurrences_by_node[node_id]]
         for t in tuples:
             # Delete this tuple from rules-by-nodes.
@@ -92,14 +87,26 @@ class FullApproximateRuleMiner(RuleMinerBase):
                 self.rule_occurrences_by_id[rule_id].delete(t)
                 if self.rule_occurrences_by_id[rule_id].empty():
                     del self.rule_occurrences_by_id[rule_id]
+                rules_affected.add(rule_id)
             # Delete this tuple from rules-by-tuples
             del self.rule_occurrences_by_tuple[t]
         del self.rule_occurrences_by_node[node_id]
 
+    def update_rule_pq(self, rules_affected, rule_currently_using=-1):
+        for rule_id in rules_affected:
+            if rule_id in self.rule_occurrences_by_id:
+                pcd = self.determine_rule_pcd(rule_id, rule_id == rule_currently_using)
+                if self.rule_priority_queue.contains(rule_id):
+                    self.rule_priority_queue.update(rule_id, pcd)
+                else:
+                    self.rule_priority_queue.push(rule_id, pcd)
+            elif self.rule_priority_queue.contains(rule_id):
+                    self.rule_priority_queue.delete(rule_id)
+
     # This function is intended to be run just once at the start.
     # It looks at every tuple of connected nodes up to size self.k and finds all rules for the respective tuples.
     # The information is stored in self.rule_occurrences_by_tuple and self.rule_occurrences_by_id.
-    def update_rules_for_tuples(self, nodes_to_look_at=None):
+    def update_rules_for_tuples(self, rules_affected, nodes_to_look_at=None):
         always_filter_by_higher_id = False
         if nodes_to_look_at is None:
             nodes_to_look_at = list(self._G.nodes())
@@ -108,7 +115,7 @@ class FullApproximateRuleMiner(RuleMinerBase):
 
         # First, delete any rules involving these nodes.
         for node in nodes_to_look_at:
-            self.delete_node_from_rule_occurrences(node)
+            self.delete_node_from_rule_occurrences(node, rules_affected)
 
         # Then, add new rules.
         for first_node in nodes_to_look_at:
@@ -159,7 +166,7 @@ class FullApproximateRuleMiner(RuleMinerBase):
                     node_stack_copy = [n for n in node_stack]
                     node_stack_copy.sort()
                     rules = self.utils.cheapest_rules_for_tuple([self.out_sets, self.in_sets], tuple(node_stack_copy))
-                    self.set_rules(rules)
+                    self.store_rules(rules, rules_affected)
 
                 if len(node_stack) < self.k:
                     new_frontier = set(frontier_stack[-1]) | set(alternate_neighbors[next_node])
@@ -243,9 +250,10 @@ class FullApproximateRuleMiner(RuleMinerBase):
         to_check.add(t[0])
 
         # Delete nodes all but a single node from edge lists.
+        rules_affected = set()
         for i in range(1, len(t)):
             self.delete_node_from_edge_lists(t[i])
-            self.delete_node_from_rule_occurrences(t[i])
+            self.delete_node_from_rule_occurrences(t[i], rules_affected)
 
         # Adjust single remaining node.
         out_additions_for_t0 = out_neighbors - self.out_sets[t[0]]
@@ -261,7 +269,8 @@ class FullApproximateRuleMiner(RuleMinerBase):
         for neighbor in in_deletions_for_t0:
             self.remove_edge(neighbor, t[0])
 
-        self.update_rules_for_tuples(to_check)
+        self.update_rules_for_tuples(rules_affected, to_check)
+        self.update_rule_pq(rules_affected, rule[0])
 
     # Note that this function makes multiple assumptions:
     # 1. The number of nodes covered by a rule at a given cost will be the number of nodes collapsable by that rule at that cost.
@@ -339,8 +348,15 @@ class FullApproximateRuleMiner(RuleMinerBase):
         
     def determine_best_rule(self, using_id=-1):
         if self.first_round:
-            self.update_rules_for_tuples()
+            rules_affected = set()
+            self.update_rules_for_tuples(rules_affected)
+            self.update_rule_pq(rules_affected)
             self.first_round = False
+        if len(self.rule_occurrences_by_id) == 0:
+            return -1
+        return self.rule_priority_queue.top_item()
+
+        """
         most_occ = 0
         best_cost = -1
         best_pcd = -1.0
@@ -360,6 +376,7 @@ class FullApproximateRuleMiner(RuleMinerBase):
             # print("PCD disagrees with cost-number. pcd choice: %s cost-number choice: %s" % (best_pcd_id, best_id))
             pass
         return best_pcd_id
+        """
 
     def contract_valid_tuples(self, rule_id):
         old_edges_approx = self.total_edges_approximated
@@ -380,13 +397,15 @@ class FullApproximateRuleMiner(RuleMinerBase):
             collapses += 1
             self.total_edges_approximated += full_rule_details[1]
 
+        self.update_rule_pq(set([rule_id])) # Updates rule_pq to know that we are no longer currently using this rule id.
+
         edges_approx = self.total_edges_approximated - old_edges_approx
         print("Made %s collapses with rule %s, incurring a total of %s approximated edges." % (collapses, rule_id, edges_approx))
         # print("The rule's details are: %s" % self.rule_lib.get_rule_graph_by_size_and_id(len(t) + 2, rule_id).edges())
 
     def done(self):
-        if self.first_round: # TODO: Make this first condition more robust.
-            return False
+        if self.first_round:
+            return len(self._G.edges()) == 0
         return len(self.rule_occurrences_by_id) == 0
 
     def cost_comparison(self):

@@ -116,10 +116,49 @@ class AugmentedPQ:
 
         return prio # Important for rule_pq
 
-    # TODO: Make this more efficient. Will also need to edit update in rule_pq.
-    def update(self, x, new_prio):
-        self.delete(x)
-        self.push(x, new_prio)
+    def update(self, x, new_prio=None):
+        if new_prio is None:
+            new_prio = self._priority_fn(x)
+        index_set = self._dict[x]
+        single_pop = index_set.pop()
+        index_set.add(single_pop)
+        old_prio = self._heap[single_pop][0]
+        if new_prio == old_prio:
+            return old_prio
+
+        num_occurrences_of_x = len(index_set)
+        for i in range(0, num_occurrences_of_x):
+            index = index_set.pop()
+            popped = [index]
+            while self._heap[index][0] == new_prio: # TODO: make this more efficient
+                index = index_set.pop()
+                popped.append(index)
+            for p in popped:
+                index_set.add(p)
+
+            self._heap[index] = (new_prio, self._heap[index][1])
+
+            if old_prio < new_prio: # If we might need to move down.
+                child_index = self._update_at_index(index)
+                while child_index != index:
+                    index = child_index
+                    child_index = self._update_at_index(index)
+            else: # If we might need to move up.
+                parent_idx = self._parent_index(index)
+                while parent_idx >= 0:
+                    if self._update_at_index(parent_idx) == parent_idx:
+                        break
+                    parent_idx = self._parent_index(parent_idx)
+
+        if new_prio in self._priority_counts:
+            self._priority_counts[new_prio] += num_occurrences_of_x
+        else:
+            self._priority_counts[new_prio] = num_occurrences_of_x
+        self._priority_counts[old_prio] -= num_occurrences_of_x
+        if self._priority_counts[old_prio] == 0:
+            del self._priority_counts[old_prio]
+
+        return new_prio # Important for rule_pq
 
     def contains(self, x):
         return x in self._dict

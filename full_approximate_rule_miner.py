@@ -400,7 +400,7 @@ class FullApproximateRuleMiner(RuleMinerBase):
         self.update_rule_pq(set([rule_id])) # Updates rule_pq to know that we are no longer currently using this rule id.
 
         edges_approx = self.total_edges_approximated - old_edges_approx
-        print("Made %s collapses with rule %s, incurring a total of %s approximated edges." % (collapses, rule_id, edges_approx))
+        print("Made %s collapses with rule %s, \tincurring a total of %s approximated edges." % (collapses, rule_id, edges_approx))
         # print("The rule's details are: %s" % self.rule_lib.get_rule_graph_by_size_and_id(len(t) + 2, rule_id).edges())
 
     def done(self):

@@ -15,9 +15,9 @@ class FullApproximateRuleMiner(RuleMinerBase):
         self._G = G
         self.c = min_rule_size
         self.k = max_rule_size
-        edge_interp = BiDirectionalEdgeTypeInterpreter()
+        self.edge_interp = BiDirectionalEdgeTypeInterpreter()
         self.rule_lib = RuleLib()
-        self.utils = ApproximateRuleUtils(edge_interp, self.rule_lib)
+        self.utils = ApproximateRuleUtils(self.edge_interp, self.rule_lib)
 
         self.first_round = True
         self.total_edges_approximated = 0
@@ -401,8 +401,11 @@ class FullApproximateRuleMiner(RuleMinerBase):
 
         edges_approx = self.total_edges_approximated - old_edges_approx
         print("Made %s collapses with rule %s, \tincurring a total of %s approximated edges." % (collapses, rule_id, edges_approx))
+        rule_graph = self.rule_lib.get_rule_graph_by_size_and_id(len(t) + 2, rule_id)
         # print("The rule's details are: %s" % self.rule_lib.get_rule_graph_by_size_and_id(len(t) + 2, rule_id).edges())
-
+        self.draw = True
+        if self.draw:
+            self.edge_interp.display_rule_graph(rule_graph, "Made %s collapses with this rule. %s edges were approximated." % (collapses, edges_approx))
     def done(self):
         if self.first_round:
             return len(self._G.edges()) == 0

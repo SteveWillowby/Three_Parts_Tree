@@ -1,6 +1,5 @@
-from bitstring import Bits
-from bitstring import BitArray
 from rule_lib import *
+import matplotlib.pyplot as plt
 
 # An edge type interpreter lets you modify a graph while abstractly speaking of edge types.
 # From:
@@ -13,7 +12,7 @@ from rule_lib import *
 # "This edge is .... whatever you code it to be interpreted as."
 class EdgeTypeInterpreter:
     def __init__(self):
-        pass
+        self.type_names = []
 
     def add_edge(self, G, edge_type, node_a, node_b):
         pass
@@ -58,11 +57,27 @@ class EdgeTypeInterpreter:
 
         return G
 
+    def display_rule_graph(self, G, title):
+        non_type_nodes = list(set(G.nodes()) - set(["type_0", "type_1"]))
+        non_type_nodes.sort()
+        labels = {non_type_nodes[i]: i for i in range(0, len(non_type_nodes))}
+        for i in range(0, len(self.type_names)):
+            labels["type_%s" % i] = "has_%s_edges" % self.type_names[i]
+
+        ignored_edges = set([("type_%s" % i, "type_%s" % i) for i in range(0, len(self.type_names))] + \
+                            [("type_%s" % (i-1), "type_%s" % i) for i in range(0, len(self.type_names))])
+            
+        edge_list = list(set(G.edges()) - ignored_edges)
+        nx.draw_networkx(G, nodelist=non_type_nodes, edgelist=edge_list, labels=labels)
+        plt.title(title)
+        plt.draw()
+        plt.show()
+
 # 0 = forward edges (out)
 # 1 = backward edges (in)
 class BiDirectionalEdgeTypeInterpreter(EdgeTypeInterpreter):
     def __init__(self):
-        pass
+        self.type_names = ["out", "in"]
 
     def add_edge(self, G, edge_type, node_a, node_b):
         if edge_type == 0:
@@ -85,7 +100,7 @@ class BiDirectionalEdgeTypeInterpreter(EdgeTypeInterpreter):
 # 2 = both directions
 class InOutBothEdgeTypeInterpreter(EdgeTypeInterpreter):
     def __init__(self):
-        pass
+        self.type_names = ["out", "in", "both"]
 
     def add_edge(self, G, edge_type, node_a, node_b):
         if edge_type == 0:
@@ -225,26 +240,3 @@ class ApproximateRuleUtils:
                 counters[counter_idx] += 1
 
         return combined_edge_type_options
-
-"""
-# A test graph:
-#
-#  ____--> 6    5
-# /       ^ ^   ^
-# |      /   \ /
-# 1 --> 2 --> 3 --> 4
-
-bi_interp = BiDirectionalEdgeTypeInterpreter()
-app_rule_utils = ApproximateRuleUtils(bi_interp)
-forward_edges = {1: set([2, 6]), 2: set([3, 6]), 3: set([4, 5, 6]), 4: set(), 5: set(), 6: set()}
-backward_edges = {key: set() for key, value in forward_edges.items()}
-for node, neighbors in forward_edges.items():
-    for neighbor in neighbors:
-        backward_edges[neighbor].add(node)
-edge_types = [forward_edges, backward_edges]
-
-results = app_rule_utils.cheapest_rules_for_tuple(edge_types, [3, 5, 6])
-for result in results:
-    print(result)
-    print("")
-"""

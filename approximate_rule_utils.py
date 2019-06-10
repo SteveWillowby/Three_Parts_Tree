@@ -57,18 +57,24 @@ class EdgeTypeInterpreter:
 
         return G
 
-    def display_rule_graph(self, G, title):
-        non_type_nodes = list(set(G.nodes()) - set(["type_0", "type_1"]))
+    def display_rule_graph(self, G, title, labels=None):
+        non_type_nodes = list(set(G.nodes()) - set(["type_%s" % i for i in range(0, len(self.type_names))]))
         non_type_nodes.sort()
-        labels = {non_type_nodes[i]: i for i in range(0, len(non_type_nodes))}
-        for i in range(0, len(self.type_names)):
-            labels["type_%s" % i] = "has_%s_edges" % self.type_names[i]
+        if labels is None:
+            labels = {non_type_nodes[i]: "" for i in range(0, len(non_type_nodes))}
+            for i in range(0, len(self.type_names)):
+                labels["type_%s" % i] = "has_%s_edges" % self.type_names[i]
 
         ignored_edges = set([("type_%s" % i, "type_%s" % i) for i in range(0, len(self.type_names))] + \
                             [("type_%s" % (i-1), "type_%s" % i) for i in range(0, len(self.type_names))])
-            
+
         edge_list = list(set(G.edges()) - ignored_edges)
-        nx.draw_networkx(G, nodelist=non_type_nodes, edgelist=edge_list, labels=labels)
+        edge_colors = ['black' if type(edge[0]) is int and type(edge[1]) is int else 'r' for edge in edge_list]
+
+        # TODO: Assign better positions to the nodes.
+        
+
+        nx.draw_networkx(G, nodelist=non_type_nodes, node_color='black', labels=labels, node_size=100, edgelist=edge_list, edge_color=edge_colors)
         plt.title(title)
         plt.draw()
         plt.show()
@@ -94,6 +100,19 @@ class BiDirectionalEdgeTypeInterpreter(EdgeTypeInterpreter):
             G.remove_edge(node_b, node_a)
         else:
             print("MAJOR ERROR! INVALID EDGE TYPE %s" % edge_type)
+
+    def display_rule_graph(self, G, title):
+        G = nx.DiGraph(G)
+        # Swap direction of out edges:
+        out_edges = G.out_edges("type_0")
+        for edge in out_edges:
+            if edge[1] == "type_1":
+                continue
+            G.remove_edge(edge[0], edge[1])
+            G.add_edge(edge[1], edge[0])
+        
+        labels = {node: "" for node in G.nodes()}
+        EdgeTypeInterpreter.display_rule_graph(self, G, title, labels)
 
 # 0 = forward edge only (out)
 # 1 = backward edge only (in)

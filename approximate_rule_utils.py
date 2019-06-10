@@ -2,6 +2,7 @@ from rule_lib import *
 import random
 import math
 import matplotlib.pyplot as plt
+import numpy as np
 
 # An edge type interpreter lets you modify a graph while abstractly speaking of edge types.
 # From:
@@ -68,62 +69,73 @@ class EdgeTypeInterpreter:
             x_push = -1.0 / x_diff
         if y_diff != 0.0:
             y_push = -1.0 / y_diff
-        if x_diff == 0.0 and y_diff == 0.0:
-            x_diff = 10.0  # Arbitrary values.
-            y_diff = 10.0
+        #if x_diff == 0.0 and y_diff == 0.0:
+        #    x_diff = 10.0  # Arbitrary values.
+        #    y_diff = 10.0
         return (x_push, y_push)
 
     def a_pull_b(self, a, b):
         x_diff = a[0] - b[0]
         y_diff = a[1] - b[1]
+        dist = math.sqrt(x_diff*x_diff + y_diff*y_diff)
         x_pull = 0.0
         y_pull = 0.0
-        if x_diff != 0.0:
-            x_pull = (x_diff * x_diff) * (x_diff / abs(x_diff))
-        if y_diff != 0.0:
-            y_pull = (y_diff * y_diff) * (y_diff / abs(y_diff))
+        if dist != 0.0:
+            x_pull = x_diff * dist
+            y_pull = y_diff * dist
         return (x_pull, y_pull)
 
     def dot(self, a, b):
         return a[0] * b[0] + a[1] * b[1]
+
+    def iterate_positions(self, G, positions):
+        movement_scalar = 0.01
+        nodes = list(G.nodes())
+        node_idx = np.random.permutation(len(nodes))
+        for i in range(0, len(node_idx)):
+            node = nodes[node_idx[i]]
+            x_diff = 0.0
+            y_diff = 0.0
+            for other_node in G.nodes():
+                if other_node == node:
+                    continue
+                if other_node in G.neighbors(node):
+                    (x_d, y_d) = self.a_pull_b(positions[other_node], positions[node])
+                    x_diff += x_d
+                    y_diff += y_d
+                (x_d, y_d) = self.a_push_b(positions[other_node], positions[node])
+                x_diff += x_d
+                y_diff += y_d
+            """
+            for edge in G.edges():
+                if edge[0] == edge[1]:
+                    continue
+                edge_direction = (positions[edge[1]][0] - positions[edge[0]][0], \
+                    positions[edge[1]][1] - positions[edge[0]][1])
+                edge_direction_mag = math.sqrt(edge_direction[0]**2 + edge_direction[1]**2)
+                edge_direction = (edge_direction[0] / edge_direction_mag, edge_direction[1] / edge_direction_mag)
+                start = self.dot(positions[edge[0]], edge_direction)
+                stop = self.dot(positions[edge[1]], edge_direction)
+                point = self.dot(positions[node], edge_direction)
+                if start < point and point < stop:
+                    point = self.dot((positions[node][0] - positions[edge[0]][0], positions[node][1] - positions[edge[0]][1]), edge_direction)
+                    push_point = (point * edge_direction[0] + positions[edge[0]][0], \
+                        point * edge_direction[1] + positions[edge[0]][1])
+                    (x_d, y_d) = self.a_push_b(push_point, positions[node])
+                    x_diff += x_d
+                    y_diff += y_d
+            """
+            positions[node] = (movement_scalar * x_diff + positions[node][0], \
+                movement_scalar * y_diff + positions[node][1])
 
     def assign_display_positions_to_nodes(self, G):
         positions = {}
         for node in G.nodes():
             positions[node] = (random.uniform(-1.0, 1.0), random.uniform(-1.0, 1.0))
 
-        num_iterations = 1000
-        movement_scalar = 0.02
+        num_iterations = 1
         for i in range(0, num_iterations):
-            for node in G.nodes():
-                x_diff = 0.0
-                y_diff = 0.0
-                for other_node in G.nodes():
-                    if other_node in G.neighbors(node):
-                        (x_d, y_d) = self.a_pull_b(positions[other_node], positions[node])
-                        x_diff += x_d
-                        y_diff += y_d
-                    (x_d, y_d) = self.a_push_b(positions[other_node], positions[node])
-                    x_diff += x_d
-                    y_diff += y_d
-                for edge in G.edges():
-                    if edge[0] == edge[1]:
-                        continue
-                    edge_direction = (positions[edge[1]][0] - positions[edge[0]][0], \
-                        positions[edge[1]][1] - positions[edge[0]][1])
-                    edge_direction_mag = math.sqrt(edge_direction[0]**2 + edge_direction[1]**2)
-                    edge_direction = (edge_direction[0] / edge_direction_mag, edge_direction[1] / edge_direction_mag)
-                    start = self.dot(positions[edge[0]], edge_direction)
-                    stop = self.dot(positions[edge[1]], edge_direction)
-                    point = self.dot(positions[node], edge_direction)
-                    if start < point and point < stop:
-                        push_point = (point * edge_direction[0] + positions[edge[0]][0], \
-                            point * edge_direction[1] + positions[edge[0]][1])
-                        (x_d, y_d) = self.a_push_b(push_point, positions[node])
-                        x_diff += x_d
-                        y_diff += y_d
-                positions[node] = (movement_scalar * x_diff + positions[node][0], \
-                    movement_scalar * y_diff + positions[node][1])
+            self.iterate_positions(G, positions)
         return positions
 
     def display_rule_graph(self, G, title, labels=None):
@@ -140,9 +152,17 @@ class EdgeTypeInterpreter:
         edge_list = list(set(G.edges()) - ignored_edges)
         edge_colors = ['black' if type(edge[0]) is int and type(edge[1]) is int else 'r' for edge in edge_list]
 
-        # positions = self.assign_display_positions_to_nodes(G)
+        positions = self.assign_display_positions_to_nodes(G)
+        nx.draw_networkx(G, nodelist=non_type_nodes, node_color='blue', labels=labels, node_size=100, edgelist=edge_list, edge_color=edge_colors, pos=positions)
 
-        nx.draw_networkx(G, nodelist=non_type_nodes, node_color='black', labels=labels, node_size=100, edgelist=edge_list, edge_color=edge_colors)#, pos=positions)
+        for i in range(0, 4000):
+            self.iterate_positions(G, positions)
+            if i % 30 == 0:
+                nx.draw_networkx(G, nodelist=non_type_nodes, node_color='black', labels=labels, node_size=100, edgelist=edge_list, edge_color=edge_colors, pos=positions)
+        plt.title(title)
+        plt.draw()
+        plt.show()
+        nx.draw_networkx(G, nodelist=non_type_nodes, node_color='black', labels=labels, node_size=100, edgelist=edge_list, edge_color=edge_colors, pos=positions)
         plt.title(title)
         plt.draw()
         plt.show()

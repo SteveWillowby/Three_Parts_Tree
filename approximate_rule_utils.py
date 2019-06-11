@@ -61,18 +61,18 @@ class EdgeTypeInterpreter:
         return G
 
     def a_push_b(self, a, b):
-        x_diff = a[0] - b[0]
-        y_diff = a[1] - b[1]
-        x_push = 0.0
-        y_push = 0.0
-        if x_diff != 0.0:
-            x_push = -1.0 / x_diff
-        if y_diff != 0.0:
-            y_push = -1.0 / y_diff
-        #if x_diff == 0.0 and y_diff == 0.0:
-        #    x_diff = 10.0  # Arbitrary values.
-        #    y_diff = 10.0
-        return (x_push, y_push)
+        max_dist = 3.0
+        x_diff = b[0] - a[0]
+        y_diff = b[1] - a[1]
+        if a[0] == b[0] and a[1] == b[1]:
+            x_diff = random.uniform(-1.0, 1.0)
+            y_diff = random.uniform(-1.0, 1.0)
+        dist = math.sqrt(x_diff*x_diff + y_diff*y_diff)
+        if dist > max_dist:
+            return (0.0, 0.0)
+        direction = (x_diff / dist, y_diff / dist)
+        target = (direction[0] * max_dist + a[0], direction[1] * max_dist + a[1])
+        return self.a_pull_b(target, b)
 
     def a_pull_b(self, a, b):
         x_diff = a[0] - b[0]
@@ -106,7 +106,6 @@ class EdgeTypeInterpreter:
                 (x_d, y_d) = self.a_push_b(positions[other_node], positions[node])
                 x_diff += x_d
                 y_diff += y_d
-            """
             for edge in G.edges():
                 if edge[0] == edge[1]:
                     continue
@@ -124,7 +123,6 @@ class EdgeTypeInterpreter:
                     (x_d, y_d) = self.a_push_b(push_point, positions[node])
                     x_diff += x_d
                     y_diff += y_d
-            """
             positions[node] = (movement_scalar * x_diff + positions[node][0], \
                 movement_scalar * y_diff + positions[node][1])
 

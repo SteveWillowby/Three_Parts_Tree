@@ -1,6 +1,8 @@
-from bitstring import Bits
-from bitstring import BitArray
 from rule_lib import *
+import random
+import math
+import matplotlib.pyplot as plt
+import numpy as np
 
 # An edge type interpreter lets you modify a graph while abstractly speaking of edge types.
 # From:
@@ -13,7 +15,7 @@ from rule_lib import *
 # "This edge is .... whatever you code it to be interpreted as."
 class EdgeTypeInterpreter:
     def __init__(self):
-        pass
+        self.type_names = []
 
     def add_edge(self, G, edge_type, node_a, node_b):
         pass
@@ -58,11 +60,116 @@ class EdgeTypeInterpreter:
 
         return G
 
+    def a_push_b(self, a, b):
+        max_dist = 3.0
+        x_diff = b[0] - a[0]
+        y_diff = b[1] - a[1]
+        if a[0] == b[0] and a[1] == b[1]:
+            x_diff = random.uniform(-1.0, 1.0)
+            y_diff = random.uniform(-1.0, 1.0)
+        dist = math.sqrt(x_diff*x_diff + y_diff*y_diff)
+        if dist > max_dist:
+            return (0.0, 0.0)
+        direction = (x_diff / dist, y_diff / dist)
+        target = (direction[0] * max_dist + a[0], direction[1] * max_dist + a[1])
+        return self.a_pull_b(target, b)
+
+    def a_pull_b(self, a, b):
+        x_diff = a[0] - b[0]
+        y_diff = a[1] - b[1]
+        dist = math.sqrt(x_diff*x_diff + y_diff*y_diff)
+        x_pull = 0.0
+        y_pull = 0.0
+        if dist != 0.0:
+            x_pull = x_diff * dist
+            y_pull = y_diff * dist
+        return (x_pull, y_pull)
+
+    def dot(self, a, b):
+        return a[0] * b[0] + a[1] * b[1]
+
+    def iterate_positions(self, G, positions):
+        movement_scalar = 0.01
+        nodes = list(G.nodes())
+        node_idx = np.random.permutation(len(nodes))
+        for i in range(0, len(node_idx)):
+            node = nodes[node_idx[i]]
+            x_diff = 0.0
+            y_diff = 0.0
+            for other_node in G.nodes():
+                if other_node == node:
+                    continue
+                if other_node in G.neighbors(node):
+                    (x_d, y_d) = self.a_pull_b(positions[other_node], positions[node])
+                    x_diff += x_d
+                    y_diff += y_d
+                (x_d, y_d) = self.a_push_b(positions[other_node], positions[node])
+                x_diff += x_d
+                y_diff += y_d
+            for edge in G.edges():
+                if edge[0] == edge[1]:
+                    continue
+                edge_direction = (positions[edge[1]][0] - positions[edge[0]][0], \
+                    positions[edge[1]][1] - positions[edge[0]][1])
+                edge_direction_mag = math.sqrt(edge_direction[0]**2 + edge_direction[1]**2)
+                edge_direction = (edge_direction[0] / edge_direction_mag, edge_direction[1] / edge_direction_mag)
+                start = self.dot(positions[edge[0]], edge_direction)
+                stop = self.dot(positions[edge[1]], edge_direction)
+                point = self.dot(positions[node], edge_direction)
+                if start < point and point < stop:
+                    point = self.dot((positions[node][0] - positions[edge[0]][0], positions[node][1] - positions[edge[0]][1]), edge_direction)
+                    push_point = (point * edge_direction[0] + positions[edge[0]][0], \
+                        point * edge_direction[1] + positions[edge[0]][1])
+                    (x_d, y_d) = self.a_push_b(push_point, positions[node])
+                    x_diff += x_d
+                    y_diff += y_d
+            positions[node] = (movement_scalar * x_diff + positions[node][0], \
+                movement_scalar * y_diff + positions[node][1])
+
+    def assign_display_positions_to_nodes(self, G):
+        positions = {}
+        for node in G.nodes():
+            positions[node] = (random.uniform(-1.0, 1.0), random.uniform(-1.0, 1.0))
+
+        num_iterations = 1
+        for i in range(0, num_iterations):
+            self.iterate_positions(G, positions)
+        return positions
+
+    def display_rule_graph(self, G, title, labels=None):
+        non_type_nodes = list(set(G.nodes()) - set(["type_%s" % i for i in range(0, len(self.type_names))]))
+        non_type_nodes.sort()
+        if labels is None:
+            labels = {non_type_nodes[i]: "" for i in range(0, len(non_type_nodes))}
+            for i in range(0, len(self.type_names)):
+                labels["type_%s" % i] = "has_%s_edges" % self.type_names[i]
+
+        ignored_edges = set([("type_%s" % i, "type_%s" % i) for i in range(0, len(self.type_names))] + \
+                            [("type_%s" % (i-1), "type_%s" % i) for i in range(0, len(self.type_names))])
+
+        edge_list = list(set(G.edges()) - ignored_edges)
+        edge_colors = ['black' if type(edge[0]) is int and type(edge[1]) is int else 'r' for edge in edge_list]
+
+        positions = self.assign_display_positions_to_nodes(G)
+        nx.draw_networkx(G, nodelist=non_type_nodes, node_color='blue', labels=labels, node_size=100, edgelist=edge_list, edge_color=edge_colors, pos=positions)
+
+        for i in range(0, 4000):
+            self.iterate_positions(G, positions)
+            if i % 30 == 0:
+                nx.draw_networkx(G, nodelist=non_type_nodes, node_color='black', labels=labels, node_size=100, edgelist=edge_list, edge_color=edge_colors, pos=positions)
+        plt.title(title)
+        plt.draw()
+        plt.show()
+        nx.draw_networkx(G, nodelist=non_type_nodes, node_color='black', labels=labels, node_size=100, edgelist=edge_list, edge_color=edge_colors, pos=positions)
+        plt.title(title)
+        plt.draw()
+        plt.show()
+
 # 0 = forward edges (out)
 # 1 = backward edges (in)
 class BiDirectionalEdgeTypeInterpreter(EdgeTypeInterpreter):
     def __init__(self):
-        pass
+        self.type_names = ["out", "in"]
 
     def add_edge(self, G, edge_type, node_a, node_b):
         if edge_type == 0:
@@ -80,12 +187,25 @@ class BiDirectionalEdgeTypeInterpreter(EdgeTypeInterpreter):
         else:
             print("MAJOR ERROR! INVALID EDGE TYPE %s" % edge_type)
 
+    def display_rule_graph(self, G, title):
+        G = nx.DiGraph(G)
+        # Swap direction of out edges:
+        out_edges = G.out_edges("type_0")
+        for edge in out_edges:
+            if edge[1] == "type_1":
+                continue
+            G.remove_edge(edge[0], edge[1])
+            G.add_edge(edge[1], edge[0])
+        
+        labels = {node: "" for node in G.nodes()}
+        EdgeTypeInterpreter.display_rule_graph(self, G, title, labels)
+
 # 0 = forward edge only (out)
 # 1 = backward edge only (in)
 # 2 = both directions
 class InOutBothEdgeTypeInterpreter(EdgeTypeInterpreter):
     def __init__(self):
-        pass
+        self.type_names = ["out", "in", "both"]
 
     def add_edge(self, G, edge_type, node_a, node_b):
         if edge_type == 0:
@@ -225,26 +345,3 @@ class ApproximateRuleUtils:
                 counters[counter_idx] += 1
 
         return combined_edge_type_options
-
-"""
-# A test graph:
-#
-#  ____--> 6    5
-# /       ^ ^   ^
-# |      /   \ /
-# 1 --> 2 --> 3 --> 4
-
-bi_interp = BiDirectionalEdgeTypeInterpreter()
-app_rule_utils = ApproximateRuleUtils(bi_interp)
-forward_edges = {1: set([2, 6]), 2: set([3, 6]), 3: set([4, 5, 6]), 4: set(), 5: set(), 6: set()}
-backward_edges = {key: set() for key, value in forward_edges.items()}
-for node, neighbors in forward_edges.items():
-    for neighbor in neighbors:
-        backward_edges[neighbor].add(node)
-edge_types = [forward_edges, backward_edges]
-
-results = app_rule_utils.cheapest_rules_for_tuple(edge_types, [3, 5, 6])
-for result in results:
-    print(result)
-    print("")
-"""

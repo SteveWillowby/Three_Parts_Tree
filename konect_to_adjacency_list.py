@@ -7,17 +7,15 @@ old_lines = input_file.readlines()
 old_lines = old_lines[2:]
 old_lines = [line.split(' ') for line in old_lines]
 
-node = 'NOT A NODE NAME'
-
-new_lines = []
+new_lines = {}
 for old_line in old_lines:
-    if old_line[0] == node:
-        new_lines[-1] = new_lines[-1] + ' ' + old_line[1]
+    node = old_line[0]
+    if node in new_lines:
+        new_lines[node] = new_lines[node] + ' ' + old_line[1]
     else:
-        node = old_line[0]
-        new_lines.append(old_line[0] + ' ' + old_line[1])
+        new_lines[node] = node + ' ' + old_line[1]
 
-for new_line in new_lines:
+for node, new_line in new_lines.items():
     output_file.write(new_line + '\n')
 
 input_file.close()

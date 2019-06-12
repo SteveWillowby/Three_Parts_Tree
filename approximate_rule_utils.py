@@ -190,7 +190,7 @@ class BiDirectionalEdgeTypeInterpreter(EdgeTypeInterpreter):
     def display_rule_graph(self, G, title):
         G = nx.DiGraph(G)
         # Swap direction of out edges:
-        out_edges = G.out_edges("type_0")
+        out_edges = list(G.out_edges("type_0"))
         for edge in out_edges:
             if edge[1] == "type_1":
                 continue

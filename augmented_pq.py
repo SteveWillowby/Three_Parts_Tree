@@ -15,7 +15,7 @@ class AugmentedPQ:
         return (index + 1) * 2
 
     def _parent_index(self, index):
-        return ((index + 1) / 2) - 1
+        return int((int(index + 1) / 2)) - 1
 
     # Given an index, looks at its two children.
     # If one of those children has greater priority, swaps with that child.

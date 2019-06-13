@@ -3,6 +3,7 @@ import networkx as nx
 from networkx import utils
 from rule_miner_base import *
 import random
+import sys
 from approximate_rule_utils import *
 from rule_lib import *
 from rule_pq import *
@@ -356,28 +357,6 @@ class FullApproximateRuleMiner(RuleMinerBase):
             return -1
         return self.rule_priority_queue.top_item()
 
-        """
-        most_occ = 0
-        best_cost = -1
-        best_pcd = -1.0
-        best_pcd_id = 0
-        best_id = 0
-        for id_num, occurrences in self.rule_occurrences_by_id.items():
-            pcd = self.determine_rule_pcd(id_num, id_num == using_id)
-            if best_cost == -1 or occurrences.top_priority() < best_cost or \
-               (best_cost == occurrences.top_priority() and occurrences.size() > most_occ):
-                most_occ = occurrences.size()
-                best_id = id_num
-                best_cost = occurrences.top_priority()
-            if best_pcd == -1.0 or pcd < best_pcd or (pcd == best_pcd and id_num == using_id): # Gives preference to the already-found rule.
-                best_pcd = pcd
-                best_pcd_id = id_num
-        if best_id != best_pcd_id:
-            # print("PCD disagrees with cost-number. pcd choice: %s cost-number choice: %s" % (best_pcd_id, best_id))
-            pass
-        return best_pcd_id
-        """
-
     def contract_valid_tuples(self, rule_id):
         old_edges_approx = self.total_edges_approximated
         collapses = 0
@@ -402,8 +381,9 @@ class FullApproximateRuleMiner(RuleMinerBase):
         edges_approx = self.total_edges_approximated - old_edges_approx
         print("Made %s collapses with rule %s, \tincurring a total of %s approximated edges." % (collapses, rule_id, edges_approx))
         rule_graph = self.rule_lib.get_rule_graph_by_size_and_id(len(t) + 2, rule_id)
-        # print("The rule's details are: %s" % self.rule_lib.get_rule_graph_by_size_and_id(len(t) + 2, rule_id).edges())
-        self.draw = True
+        print("The rule's details are: %s" % rule_graph.edges())
+        sys.stdout.flush()
+        self.draw = False
         if self.draw:
             self.edge_interp.display_rule_graph(rule_graph, "Made %s collapses with this rule. %s edges were approximated." % (collapses, edges_approx))
     def done(self):

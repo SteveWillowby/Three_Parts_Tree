@@ -107,7 +107,7 @@ class FullApproximateRuleMiner(RuleMinerBase):
     # This function is intended to be run just once at the start.
     # It looks at every tuple of connected nodes up to size self.k and finds all rules for the respective tuples.
     # The information is stored in self.rule_occurrences_by_tuple and self.rule_occurrences_by_id.
-    def update_rules_for_tuples(self, rules_affected, nodes_to_look_at=None):
+    def update_rules_for_tuples(self, rules_affected, nodes_to_look_at=None, take_shortcut=True):
         always_filter_by_higher_id = False
         if nodes_to_look_at is None:
             nodes_to_look_at = list(self._G.nodes())
@@ -117,6 +117,15 @@ class FullApproximateRuleMiner(RuleMinerBase):
         # First, delete any rules involving these nodes.
         for node in nodes_to_look_at:
             self.delete_node_from_rule_occurrences(node, rules_affected)
+        
+        cheapest_cost = len(self.neighbors) * self.k
+        if take_shortcut and self.rule_priority_queue.size() > 0:
+            self.update_rule_pq(rules_affected)
+            if self.rule_priority_queue.size() > 0:
+                best_rule_id = self.rule_priority_queue.top_item()
+                t = self.rule_occurrences_by_id[best_rule_id].top_item()
+                full_rule_details = self.rule_occurrences_by_tuple[t][best_rule_id]
+                cheapest_cost = full_rule_details[1]
 
         # Then, add new rules.
         for first_node in nodes_to_look_at:
@@ -163,13 +172,18 @@ class FullApproximateRuleMiner(RuleMinerBase):
                     continue
                 next_node = frontier_stack[-1].pop()
                 node_stack.append(next_node)
+                cost = 0
                 if len(node_stack) >= self.c:
                     node_stack_copy = [n for n in node_stack]
                     node_stack_copy.sort()
                     rules = self.utils.cheapest_rules_for_tuple([self.out_sets, self.in_sets], tuple(node_stack_copy))
-                    self.store_rules(rules, rules_affected)
+                    cost = rules[0][1]
+                    if not take_shortcut or cost <= cheapest_cost + 1:
+                        self.store_rules(rules, rules_affected)
+                    if cost < cheapest_cost:
+                        cheapest_cost = cost
 
-                if len(node_stack) < self.k:
+                if len(node_stack) < self.k and (not take_shortcut or (cost - (cheapest_cost + 1)) <= (self.k - len(node_stack))):
                     new_frontier = set(frontier_stack[-1]) | set(alternate_neighbors[next_node])
                     new_frontier = [n for n in new_frontier if alternate_ids[n] > alternate_ids[next_node]]
                     new_frontier.sort(key = lambda x: -alternate_ids[x])

@@ -10,29 +10,29 @@ other_args=${array[@]:0:$len-1}
 
 end="_r=$r"
 
-python test.py $other_args -r $r > "output_files/$file$end"
+time python test.py $other_args -r $r > "output_files/$file$end"
 
 r=$(echo $r + $increment | bc)
 end="_r=$r"
 
-python test.py $other_args -r $r > "output_files/$file$end"
+time python test.py $other_args -r $r > "output_files/$file$end"
 
 r=$(echo $r + $increment | bc)
 end="_r=$r"
 
-python test.py $other_args -r $r > "output_files/$file$end"
+time python test.py $other_args -r $r > "output_files/$file$end"
 
 r=$(echo $r + $increment | bc)
 end="_r=$r"
 
-python test.py $other_args -r $r > "output_files/$file$end"
+time python test.py $other_args -r $r > "output_files/$file$end"
 
 r=$(echo $r + $increment | bc)
 end="_r=$r"
 
-python test.py $other_args -r $r > "output_files/$file$end"
+time python test.py $other_args -r $r > "output_files/$file$end"
 
 r=$(echo $r + $increment | bc)
 end="_r=$r"
 
-python test.py $other_args -r $r > "output_files/$file$end"
+time python test.py $other_args -r $r > "output_files/$file$end"

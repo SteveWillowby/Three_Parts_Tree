@@ -1,0 +1,798 @@
+Percent of connections that are bidirected: 0.3944938440492476
+Made 35 collapses with rule 1, 	incurring a total of 0 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 54 collapses with rule 3, 	incurring a total of 0 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 805)]
+Made 58 collapses with rule 2, 	incurring a total of 0 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 204 collapses with rule 3, 	incurring a total of 696 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 805)]
+Made 6 collapses with rule 0, 	incurring a total of 0 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 2 collapses with rule 2, 	incurring a total of 0 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 2 collapses with rule 1, 	incurring a total of 0 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 5 collapses with rule 19, 	incurring a total of 1 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 648), ('type_1', 'type_1'), (648, 649)]
+Made 18 collapses with rule 2, 	incurring a total of 18 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 7 collapses with rule 1, 	incurring a total of 7 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 15 collapses with rule 2, 	incurring a total of 15 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 1 collapses with rule 1, 	incurring a total of 1 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 2 collapses with rule 0, 	incurring a total of 2 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 2 collapses with rule 20, 	incurring a total of 0 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 1052), ('type_1', 'type_1'), (1051, 1052), (1052, 1051)]
+Made 5 collapses with rule 0, 	incurring a total of 5 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 3 collapses with rule 2, 	incurring a total of 3 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 2 collapses with rule 1, 	incurring a total of 2 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 3 collapses with rule 8, 	incurring a total of 2 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 118), ('type_0', 766), ('type_1', 'type_1'), ('type_1', 118), (766, 118)]
+Made 2 collapses with rule 7, 	incurring a total of 1 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 125), ('type_0', 118), ('type_1', 'type_1'), ('type_1', 118), (118, 125), (125, 118)]
+Made 4 collapses with rule 0, 	incurring a total of 4 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 1 collapses with rule 9, 	incurring a total of 0 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 177), ('type_1', 'type_1'), ('type_1', 224), ('type_1', 177), (177, 224)]
+Made 5 collapses with rule 2, 	incurring a total of 9 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 4 collapses with rule 1, 	incurring a total of 7 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 11 collapses with rule 0, 	incurring a total of 21 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 7 collapses with rule 2, 	incurring a total of 14 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 3 collapses with rule 1, 	incurring a total of 6 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 2 collapses with rule 17, 	incurring a total of 2 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 591), ('type_1', 'type_1'), (590, 591)]
+Made 2 collapses with rule 18, 	incurring a total of 2 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 1123), ('type_0', 1125), ('type_1', 'type_1'), (1123, 1125), (1125, 1123)]
+Made 19 collapses with rule 2, 	incurring a total of 45 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 1 collapses with rule 21, 	incurring a total of 0 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 576), ('type_0', 575), ('type_1', 'type_1'), (576, 575)]
+Made 1 collapses with rule 22, 	incurring a total of 0 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_1', 'type_1'), (426, 427)]
+Made 1 collapses with rule 24, 	incurring a total of 0 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_1', 'type_1'), (900, 902), (902, 900)]
+Made 2 collapses with rule 8, 	incurring a total of 4 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 118), ('type_0', 766), ('type_1', 'type_1'), ('type_1', 118), (766, 118)]
+Made 2 collapses with rule 1, 	incurring a total of 4 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 1 collapses with rule 7, 	incurring a total of 2 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 125), ('type_0', 118), ('type_1', 'type_1'), ('type_1', 118), (118, 125), (125, 118)]
+Made 7 collapses with rule 1, 	incurring a total of 20 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 4 collapses with rule 2, 	incurring a total of 12 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 2 collapses with rule 0, 	incurring a total of 6 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 5 collapses with rule 1, 	incurring a total of 15 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 2 collapses with rule 2, 	incurring a total of 6 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 13 collapses with rule 1, 	incurring a total of 50 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 1 collapses with rule 8, 	incurring a total of 3 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 118), ('type_0', 766), ('type_1', 'type_1'), ('type_1', 118), (766, 118)]
+Made 4 collapses with rule 2, 	incurring a total of 15 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 11 collapses with rule 1, 	incurring a total of 52 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 6 collapses with rule 2, 	incurring a total of 24 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 1 collapses with rule 20, 	incurring a total of 4 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 1052), ('type_1', 'type_1'), (1051, 1052), (1052, 1051)]
+Made 2 collapses with rule 0, 	incurring a total of 8 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 1 collapses with rule 2, 	incurring a total of 5 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 3 collapses with rule 1, 	incurring a total of 15 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 2 collapses with rule 2, 	incurring a total of 10 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 5 collapses with rule 0, 	incurring a total of 23 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 2 collapses with rule 1, 	incurring a total of 10 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 3 collapses with rule 2, 	incurring a total of 17 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 4 collapses with rule 4, 	incurring a total of 22 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 10 collapses with rule 1, 	incurring a total of 57 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 4 collapses with rule 2, 	incurring a total of 24 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 2 collapses with rule 0, 	incurring a total of 10 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 4 collapses with rule 2, 	incurring a total of 25 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 5 collapses with rule 0, 	incurring a total of 33 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 8 collapses with rule 1, 	incurring a total of 56 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 2 collapses with rule 7, 	incurring a total of 15 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 125), ('type_0', 118), ('type_1', 'type_1'), ('type_1', 118), (118, 125), (125, 118)]
+Made 3 collapses with rule 2, 	incurring a total of 23 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 7 collapses with rule 1, 	incurring a total of 53 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 3 collapses with rule 0, 	incurring a total of 24 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 5 collapses with rule 1, 	incurring a total of 40 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 2 collapses with rule 2, 	incurring a total of 16 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 1 collapses with rule 4, 	incurring a total of 8 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 2 collapses with rule 1, 	incurring a total of 16 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 3 collapses with rule 2, 	incurring a total of 27 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 3 collapses with rule 0, 	incurring a total of 27 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 1 collapses with rule 3, 	incurring a total of 9 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 805)]
+Made 1 collapses with rule 1, 	incurring a total of 8 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 1 collapses with rule 2, 	incurring a total of 9 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 12 collapses with rule 1, 	incurring a total of 106 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 1 collapses with rule 4, 	incurring a total of 9 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 2 collapses with rule 2, 	incurring a total of 19 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 1 collapses with rule 3, 	incurring a total of 10 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 805)]
+Made 1 collapses with rule 2, 	incurring a total of 10 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 2 collapses with rule 3, 	incurring a total of 20 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 805)]
+Made 1 collapses with rule 2, 	incurring a total of 10 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 1 collapses with rule 0, 	incurring a total of 9 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 1 collapses with rule 2, 	incurring a total of 10 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 1 collapses with rule 3, 	incurring a total of 10 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 805)]
+Made 1 collapses with rule 1, 	incurring a total of 10 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 3 collapses with rule 0, 	incurring a total of 30 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 2 collapses with rule 2, 	incurring a total of 22 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 7 collapses with rule 1, 	incurring a total of 73 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 8 collapses with rule 0, 	incurring a total of 87 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 10 collapses with rule 1, 	incurring a total of 110 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 6 collapses with rule 0, 	incurring a total of 66 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 1 collapses with rule 4, 	incurring a total of 11 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 1 collapses with rule 1, 	incurring a total of 12 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 3 collapses with rule 0, 	incurring a total of 33 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 1 collapses with rule 2, 	incurring a total of 12 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 9 collapses with rule 1, 	incurring a total of 108 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 2 collapses with rule 3, 	incurring a total of 24 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 805)]
+Made 1 collapses with rule 2, 	incurring a total of 12 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 1 collapses with rule 8, 	incurring a total of 12 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 118), ('type_0', 766), ('type_1', 'type_1'), ('type_1', 118), (766, 118)]
+Made 3 collapses with rule 0, 	incurring a total of 36 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 4 collapses with rule 3, 	incurring a total of 52 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 805)]
+Made 8 collapses with rule 0, 	incurring a total of 102 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 3 collapses with rule 4, 	incurring a total of 39 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 1 collapses with rule 1, 	incurring a total of 11 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 2 collapses with rule 4, 	incurring a total of 26 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 3 collapses with rule 5, 	incurring a total of 39 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 1 collapses with rule 2, 	incurring a total of 14 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 3 collapses with rule 1, 	incurring a total of 39 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 1 collapses with rule 2, 	incurring a total of 14 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 1 collapses with rule 3, 	incurring a total of 14 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 805)]
+Made 1 collapses with rule 2, 	incurring a total of 14 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 1 collapses with rule 0, 	incurring a total of 14 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 5 collapses with rule 1, 	incurring a total of 69 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 2 collapses with rule 0, 	incurring a total of 28 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 1 collapses with rule 1, 	incurring a total of 14 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 1 collapses with rule 2, 	incurring a total of 15 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 1 collapses with rule 0, 	incurring a total of 14 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 1 collapses with rule 2, 	incurring a total of 15 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 1 collapses with rule 0, 	incurring a total of 14 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 16 collapses with rule 1, 	incurring a total of 234 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 1 collapses with rule 7, 	incurring a total of 15 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 125), ('type_0', 118), ('type_1', 'type_1'), ('type_1', 118), (118, 125), (125, 118)]
+Made 1 collapses with rule 4, 	incurring a total of 15 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 3 collapses with rule 5, 	incurring a total of 47 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 1 collapses with rule 0, 	incurring a total of 15 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 2 collapses with rule 2, 	incurring a total of 32 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 3 collapses with rule 0, 	incurring a total of 46 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 1 collapses with rule 3, 	incurring a total of 16 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 805)]
+Made 3 collapses with rule 1, 	incurring a total of 48 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 3 collapses with rule 0, 	incurring a total of 48 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 2 collapses with rule 4, 	incurring a total of 33 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 1 collapses with rule 1, 	incurring a total of 16 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 1 collapses with rule 5, 	incurring a total of 16 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 2 collapses with rule 4, 	incurring a total of 33 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 2 collapses with rule 2, 	incurring a total of 34 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 6 collapses with rule 1, 	incurring a total of 102 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 4 collapses with rule 5, 	incurring a total of 68 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 1 collapses with rule 2, 	incurring a total of 18 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 3 collapses with rule 0, 	incurring a total of 51 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 1 collapses with rule 1, 	incurring a total of 17 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 1 collapses with rule 2, 	incurring a total of 19 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 5 collapses with rule 1, 	incurring a total of 90 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 1 collapses with rule 2, 	incurring a total of 20 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 1 collapses with rule 0, 	incurring a total of 19 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 1 collapses with rule 2, 	incurring a total of 20 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 1 collapses with rule 0, 	incurring a total of 19 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 2 collapses with rule 2, 	incurring a total of 40 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 3 collapses with rule 1, 	incurring a total of 57 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 2 collapses with rule 5, 	incurring a total of 37 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 1 collapses with rule 0, 	incurring a total of 19 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 2 collapses with rule 5, 	incurring a total of 39 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 1 collapses with rule 2, 	incurring a total of 20 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 1 collapses with rule 0, 	incurring a total of 19 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 4 collapses with rule 1, 	incurring a total of 77 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 1 collapses with rule 2, 	incurring a total of 21 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 1 collapses with rule 4, 	incurring a total of 21 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 1 collapses with rule 5, 	incurring a total of 20 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 1 collapses with rule 0, 	incurring a total of 21 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 3 collapses with rule 4, 	incurring a total of 63 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 4 collapses with rule 5, 	incurring a total of 83 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 8 collapses with rule 1, 	incurring a total of 165 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 5 collapses with rule 4, 	incurring a total of 110 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 2 collapses with rule 5, 	incurring a total of 44 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 1 collapses with rule 1, 	incurring a total of 21 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 1 collapses with rule 5, 	incurring a total of 22 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 1 collapses with rule 0, 	incurring a total of 21 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 1 collapses with rule 3, 	incurring a total of 22 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 805)]
+Made 1 collapses with rule 0, 	incurring a total of 22 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 6 collapses with rule 1, 	incurring a total of 130 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 1 collapses with rule 4, 	incurring a total of 22 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 1 collapses with rule 1, 	incurring a total of 22 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 2 collapses with rule 3, 	incurring a total of 46 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 805)]
+Made 2 collapses with rule 1, 	incurring a total of 46 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 4 collapses with rule 5, 	incurring a total of 92 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 1 collapses with rule 1, 	incurring a total of 22 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 2 collapses with rule 0, 	incurring a total of 46 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 1 collapses with rule 4, 	incurring a total of 23 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 3 collapses with rule 5, 	incurring a total of 72 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 1 collapses with rule 3, 	incurring a total of 24 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 805)]
+Made 2 collapses with rule 1, 	incurring a total of 46 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 4 collapses with rule 5, 	incurring a total of 100 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 2 collapses with rule 1, 	incurring a total of 46 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 1 collapses with rule 3, 	incurring a total of 26 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 805)]
+Made 2 collapses with rule 0, 	incurring a total of 51 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 6 collapses with rule 5, 	incurring a total of 155 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 1 collapses with rule 1, 	incurring a total of 24 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 3 collapses with rule 4, 	incurring a total of 78 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 2 collapses with rule 0, 	incurring a total of 53 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 6 collapses with rule 1, 	incurring a total of 150 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 3 collapses with rule 5, 	incurring a total of 80 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 1 collapses with rule 1, 	incurring a total of 27 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 1 collapses with rule 5, 	incurring a total of 28 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 4 collapses with rule 1, 	incurring a total of 108 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 1 collapses with rule 3, 	incurring a total of 30 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 805)]
+Made 1 collapses with rule 7, 	incurring a total of 30 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 125), ('type_0', 118), ('type_1', 'type_1'), ('type_1', 118), (118, 125), (125, 118)]
+Made 1 collapses with rule 1, 	incurring a total of 28 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 1 collapses with rule 2, 	incurring a total of 31 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 2 collapses with rule 0, 	incurring a total of 61 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 1 collapses with rule 7, 	incurring a total of 30 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 125), ('type_0', 118), ('type_1', 'type_1'), ('type_1', 118), (118, 125), (125, 118)]
+Made 1 collapses with rule 1, 	incurring a total of 28 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 1 collapses with rule 4, 	incurring a total of 27 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 2 collapses with rule 1, 	incurring a total of 56 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 3 collapses with rule 4, 	incurring a total of 88 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 3 collapses with rule 1, 	incurring a total of 91 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 4 collapses with rule 5, 	incurring a total of 119 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 3 collapses with rule 1, 	incurring a total of 93 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 1 collapses with rule 8, 	incurring a total of 31 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 118), ('type_0', 766), ('type_1', 'type_1'), ('type_1', 118), (766, 118)]
+Made 2 collapses with rule 5, 	incurring a total of 62 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 1 collapses with rule 1, 	incurring a total of 31 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 1 collapses with rule 3, 	incurring a total of 32 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 805)]
+Made 3 collapses with rule 4, 	incurring a total of 96 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 2 collapses with rule 5, 	incurring a total of 65 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 2 collapses with rule 1, 	incurring a total of 64 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 2 collapses with rule 4, 	incurring a total of 65 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 2 collapses with rule 1, 	incurring a total of 66 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 2 collapses with rule 5, 	incurring a total of 67 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 5 collapses with rule 1, 	incurring a total of 170 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 1 collapses with rule 11, 	incurring a total of 32 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 117), ('type_1', 'type_1'), ('type_1', 117), ('type_1', 15), (15, 117), (117, 15)]
+Made 1 collapses with rule 7, 	incurring a total of 32 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 125), ('type_0', 118), ('type_1', 'type_1'), ('type_1', 118), (118, 125), (125, 118)]
+Made 1 collapses with rule 5, 	incurring a total of 30 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 7 collapses with rule 4, 	incurring a total of 245 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 2 collapses with rule 7, 	incurring a total of 71 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 125), ('type_0', 118), ('type_1', 'type_1'), ('type_1', 118), (118, 125), (125, 118)]
+Made 1 collapses with rule 1, 	incurring a total of 29 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 1 collapses with rule 8, 	incurring a total of 35 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 118), ('type_0', 766), ('type_1', 'type_1'), ('type_1', 118), (766, 118)]
+Made 1 collapses with rule 5, 	incurring a total of 34 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 1 collapses with rule 1, 	incurring a total of 31 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 3 collapses with rule 4, 	incurring a total of 107 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 1 collapses with rule 1, 	incurring a total of 35 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 1 collapses with rule 5, 	incurring a total of 36 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 1 collapses with rule 1, 	incurring a total of 35 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 1 collapses with rule 2, 	incurring a total of 36 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (792, 593)]
+Made 2 collapses with rule 5, 	incurring a total of 72 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 1 collapses with rule 4, 	incurring a total of 36 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 1 collapses with rule 11, 	incurring a total of 35 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 117), ('type_1', 'type_1'), ('type_1', 117), ('type_1', 15), (15, 117), (117, 15)]
+Made 2 collapses with rule 5, 	incurring a total of 69 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 1 collapses with rule 1, 	incurring a total of 36 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 5 collapses with rule 4, 	incurring a total of 183 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 1 collapses with rule 13, 	incurring a total of 35 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 98), ('type_0', 83), ('type_1', 'type_1'), ('type_1', 83), (83, 98)]
+Made 1 collapses with rule 1, 	incurring a total of 30 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 7 collapses with rule 5, 	incurring a total of 263 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 1 collapses with rule 13, 	incurring a total of 38 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 98), ('type_0', 83), ('type_1', 'type_1'), ('type_1', 83), (83, 98)]
+Made 1 collapses with rule 4, 	incurring a total of 38 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 1 collapses with rule 3, 	incurring a total of 39 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 805)]
+Made 1 collapses with rule 0, 	incurring a total of 39 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 1 collapses with rule 5, 	incurring a total of 38 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 1 collapses with rule 4, 	incurring a total of 39 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 2 collapses with rule 5, 	incurring a total of 77 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 1 collapses with rule 4, 	incurring a total of 38 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 3 collapses with rule 5, 	incurring a total of 115 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 4 collapses with rule 1, 	incurring a total of 149 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 1 collapses with rule 0, 	incurring a total of 39 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 1 collapses with rule 4, 	incurring a total of 39 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 2 collapses with rule 5, 	incurring a total of 78 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 1 collapses with rule 7, 	incurring a total of 39 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 125), ('type_0', 118), ('type_1', 'type_1'), ('type_1', 118), (118, 125), (125, 118)]
+Made 1 collapses with rule 0, 	incurring a total of 34 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 2 collapses with rule 1, 	incurring a total of 80 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 1 collapses with rule 4, 	incurring a total of 40 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 1 collapses with rule 7, 	incurring a total of 40 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 125), ('type_0', 118), ('type_1', 'type_1'), ('type_1', 118), (118, 125), (125, 118)]
+Made 1 collapses with rule 4, 	incurring a total of 32 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 1 collapses with rule 5, 	incurring a total of 40 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 1 collapses with rule 13, 	incurring a total of 40 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 98), ('type_0', 83), ('type_1', 'type_1'), ('type_1', 83), (83, 98)]
+Made 1 collapses with rule 1, 	incurring a total of 30 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 1 collapses with rule 7, 	incurring a total of 39 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 125), ('type_0', 118), ('type_1', 'type_1'), ('type_1', 118), (118, 125), (125, 118)]
+Made 1 collapses with rule 5, 	incurring a total of 37 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 1 collapses with rule 4, 	incurring a total of 39 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 1 collapses with rule 11, 	incurring a total of 39 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 117), ('type_1', 'type_1'), ('type_1', 117), ('type_1', 15), (15, 117), (117, 15)]
+Made 1 collapses with rule 5, 	incurring a total of 37 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 1 collapses with rule 4, 	incurring a total of 39 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 1 collapses with rule 7, 	incurring a total of 38 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 125), ('type_0', 118), ('type_1', 'type_1'), ('type_1', 118), (118, 125), (125, 118)]
+Made 1 collapses with rule 11, 	incurring a total of 37 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 117), ('type_1', 'type_1'), ('type_1', 117), ('type_1', 15), (15, 117), (117, 15)]
+Made 1 collapses with rule 4, 	incurring a total of 38 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 1 collapses with rule 11, 	incurring a total of 38 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 117), ('type_1', 'type_1'), ('type_1', 117), ('type_1', 15), (15, 117), (117, 15)]
+Made 1 collapses with rule 7, 	incurring a total of 31 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 125), ('type_0', 118), ('type_1', 'type_1'), ('type_1', 118), (118, 125), (125, 118)]
+Made 2 collapses with rule 5, 	incurring a total of 69 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 1 collapses with rule 16, 	incurring a total of 35 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 79), ('type_0', 23), ('type_1', 'type_1'), ('type_1', 79), ('type_1', 23), (23, 79)]
+Made 1 collapses with rule 8, 	incurring a total of 33 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 118), ('type_0', 766), ('type_1', 'type_1'), ('type_1', 118), (766, 118)]
+Made 1 collapses with rule 9, 	incurring a total of 30 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 177), ('type_1', 'type_1'), ('type_1', 224), ('type_1', 177), (177, 224)]
+Made 1 collapses with rule 13, 	incurring a total of 35 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 98), ('type_0', 83), ('type_1', 'type_1'), ('type_1', 83), (83, 98)]
+Made 1 collapses with rule 5, 	incurring a total of 35 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 1 collapses with rule 4, 	incurring a total of 34 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 1 collapses with rule 7, 	incurring a total of 34 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 125), ('type_0', 118), ('type_1', 'type_1'), ('type_1', 118), (118, 125), (125, 118)]
+Made 2 collapses with rule 4, 	incurring a total of 64 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 1 collapses with rule 8, 	incurring a total of 33 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 118), ('type_0', 766), ('type_1', 'type_1'), ('type_1', 118), (766, 118)]
+Made 1 collapses with rule 9, 	incurring a total of 30 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 177), ('type_1', 'type_1'), ('type_1', 224), ('type_1', 177), (177, 224)]
+Made 1 collapses with rule 10, 	incurring a total of 29 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 224), ('type_1', 'type_1'), ('type_1', 224), ('type_1', 177), (177, 224)]
+Made 1 collapses with rule 5, 	incurring a total of 29 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 1 collapses with rule 12, 	incurring a total of 29 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 96), ('type_0', 151), ('type_1', 'type_1'), ('type_1', 96), ('type_1', 151), (96, 151), (151, 96)]
+Made 1 collapses with rule 7, 	incurring a total of 30 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 125), ('type_0', 118), ('type_1', 'type_1'), ('type_1', 118), (118, 125), (125, 118)]
+Made 1 collapses with rule 4, 	incurring a total of 26 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 1 collapses with rule 11, 	incurring a total of 29 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 117), ('type_1', 'type_1'), ('type_1', 117), ('type_1', 15), (15, 117), (117, 15)]
+Made 1 collapses with rule 4, 	incurring a total of 24 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 1 collapses with rule 7, 	incurring a total of 28 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 125), ('type_0', 118), ('type_1', 'type_1'), ('type_1', 118), (118, 125), (125, 118)]
+Made 1 collapses with rule 5, 	incurring a total of 25 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 2 collapses with rule 7, 	incurring a total of 52 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 125), ('type_0', 118), ('type_1', 'type_1'), ('type_1', 118), (118, 125), (125, 118)]
+Made 1 collapses with rule 5, 	incurring a total of 22 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 1 collapses with rule 4, 	incurring a total of 24 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 1 collapses with rule 1, 	incurring a total of 26 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 1 collapses with rule 16, 	incurring a total of 25 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 79), ('type_0', 23), ('type_1', 'type_1'), ('type_1', 79), ('type_1', 23), (23, 79)]
+Made 1 collapses with rule 0, 	incurring a total of 18 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 1 collapses with rule 11, 	incurring a total of 26 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 117), ('type_1', 'type_1'), ('type_1', 117), ('type_1', 15), (15, 117), (117, 15)]
+Made 1 collapses with rule 8, 	incurring a total of 19 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 118), ('type_0', 766), ('type_1', 'type_1'), ('type_1', 118), (766, 118)]
+Made 1 collapses with rule 7, 	incurring a total of 24 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 125), ('type_0', 118), ('type_1', 'type_1'), ('type_1', 118), (118, 125), (125, 118)]
+Made 1 collapses with rule 5, 	incurring a total of 23 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 1 collapses with rule 8, 	incurring a total of 23 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 118), ('type_0', 766), ('type_1', 'type_1'), ('type_1', 118), (766, 118)]
+Made 2 collapses with rule 4, 	incurring a total of 42 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 1 collapses with rule 8, 	incurring a total of 24 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 118), ('type_0', 766), ('type_1', 'type_1'), ('type_1', 118), (766, 118)]
+Made 1 collapses with rule 4, 	incurring a total of 22 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 1 collapses with rule 9, 	incurring a total of 22 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 177), ('type_1', 'type_1'), ('type_1', 224), ('type_1', 177), (177, 224)]
+Made 1 collapses with rule 4, 	incurring a total of 22 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 1 collapses with rule 8, 	incurring a total of 26 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 118), ('type_0', 766), ('type_1', 'type_1'), ('type_1', 118), (766, 118)]
+Made 1 collapses with rule 0, 	incurring a total of 26 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 1 collapses with rule 13, 	incurring a total of 26 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 98), ('type_0', 83), ('type_1', 'type_1'), ('type_1', 83), (83, 98)]
+Made 1 collapses with rule 1, 	incurring a total of 21 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 1 collapses with rule 10, 	incurring a total of 23 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 224), ('type_1', 'type_1'), ('type_1', 224), ('type_1', 177), (177, 224)]
+Made 2 collapses with rule 4, 	incurring a total of 44 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 1 collapses with rule 10, 	incurring a total of 30 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 224), ('type_1', 'type_1'), ('type_1', 224), ('type_1', 177), (177, 224)]
+Made 1 collapses with rule 1, 	incurring a total of 28 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 2 collapses with rule 5, 	incurring a total of 64 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 1 collapses with rule 1, 	incurring a total of 34 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 1 collapses with rule 13, 	incurring a total of 34 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 98), ('type_0', 83), ('type_1', 'type_1'), ('type_1', 83), (83, 98)]
+Made 2 collapses with rule 4, 	incurring a total of 67 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 1 collapses with rule 10, 	incurring a total of 37 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 224), ('type_1', 'type_1'), ('type_1', 224), ('type_1', 177), (177, 224)]
+Made 1 collapses with rule 8, 	incurring a total of 31 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 118), ('type_0', 766), ('type_1', 'type_1'), ('type_1', 118), (766, 118)]
+Made 1 collapses with rule 1, 	incurring a total of 33 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 2 collapses with rule 5, 	incurring a total of 74 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 1 collapses with rule 7, 	incurring a total of 37 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 125), ('type_0', 118), ('type_1', 'type_1'), ('type_1', 118), (118, 125), (125, 118)]
+Made 2 collapses with rule 5, 	incurring a total of 72 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 1 collapses with rule 11, 	incurring a total of 36 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 117), ('type_1', 'type_1'), ('type_1', 117), ('type_1', 15), (15, 117), (117, 15)]
+Made 1 collapses with rule 12, 	incurring a total of 32 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 96), ('type_0', 151), ('type_1', 'type_1'), ('type_1', 96), ('type_1', 151), (96, 151), (151, 96)]
+Made 2 collapses with rule 9, 	incurring a total of 70 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 177), ('type_1', 'type_1'), ('type_1', 224), ('type_1', 177), (177, 224)]
+Made 1 collapses with rule 4, 	incurring a total of 35 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 1 collapses with rule 1, 	incurring a total of 36 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 1 collapses with rule 4, 	incurring a total of 35 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 1 collapses with rule 5, 	incurring a total of 36 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 1 collapses with rule 10, 	incurring a total of 35 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 224), ('type_1', 'type_1'), ('type_1', 224), ('type_1', 177), (177, 224)]
+Made 1 collapses with rule 4, 	incurring a total of 34 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 1 collapses with rule 10, 	incurring a total of 35 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 224), ('type_1', 'type_1'), ('type_1', 224), ('type_1', 177), (177, 224)]
+Made 1 collapses with rule 7, 	incurring a total of 35 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 125), ('type_0', 118), ('type_1', 'type_1'), ('type_1', 118), (118, 125), (125, 118)]
+Made 1 collapses with rule 0, 	incurring a total of 35 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 3 collapses with rule 4, 	incurring a total of 105 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 1 collapses with rule 12, 	incurring a total of 34 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 96), ('type_0', 151), ('type_1', 'type_1'), ('type_1', 96), ('type_1', 151), (96, 151), (151, 96)]
+Made 1 collapses with rule 5, 	incurring a total of 35 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 1 collapses with rule 7, 	incurring a total of 34 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 125), ('type_0', 118), ('type_1', 'type_1'), ('type_1', 118), (118, 125), (125, 118)]
+Made 2 collapses with rule 0, 	incurring a total of 68 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 2 collapses with rule 11, 	incurring a total of 68 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 117), ('type_1', 'type_1'), ('type_1', 117), ('type_1', 15), (15, 117), (117, 15)]
+Made 1 collapses with rule 4, 	incurring a total of 34 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 1 collapses with rule 7, 	incurring a total of 34 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 125), ('type_0', 118), ('type_1', 'type_1'), ('type_1', 118), (118, 125), (125, 118)]
+Made 1 collapses with rule 5, 	incurring a total of 34 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 1 collapses with rule 8, 	incurring a total of 33 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 118), ('type_0', 766), ('type_1', 'type_1'), ('type_1', 118), (766, 118)]
+Made 2 collapses with rule 5, 	incurring a total of 65 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 3 collapses with rule 12, 	incurring a total of 97 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 96), ('type_0', 151), ('type_1', 'type_1'), ('type_1', 96), ('type_1', 151), (96, 151), (151, 96)]
+Made 3 collapses with rule 7, 	incurring a total of 93 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 125), ('type_0', 118), ('type_1', 'type_1'), ('type_1', 118), (118, 125), (125, 118)]
+Made 1 collapses with rule 5, 	incurring a total of 26 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 802), ('type_1', 'type_1'), ('type_1', 689), (689, 802)]
+Made 1 collapses with rule 11, 	incurring a total of 29 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 117), ('type_1', 'type_1'), ('type_1', 117), ('type_1', 15), (15, 117), (117, 15)]
+Made 1 collapses with rule 8, 	incurring a total of 26 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 118), ('type_0', 766), ('type_1', 'type_1'), ('type_1', 118), (766, 118)]
+Made 1 collapses with rule 12, 	incurring a total of 27 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 96), ('type_0', 151), ('type_1', 'type_1'), ('type_1', 96), ('type_1', 151), (96, 151), (151, 96)]
+Made 1 collapses with rule 7, 	incurring a total of 27 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 125), ('type_0', 118), ('type_1', 'type_1'), ('type_1', 118), (118, 125), (125, 118)]
+Made 1 collapses with rule 11, 	incurring a total of 28 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 117), ('type_1', 'type_1'), ('type_1', 117), ('type_1', 15), (15, 117), (117, 15)]
+Made 2 collapses with rule 9, 	incurring a total of 53 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 177), ('type_1', 'type_1'), ('type_1', 224), ('type_1', 177), (177, 224)]
+Made 2 collapses with rule 11, 	incurring a total of 51 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 117), ('type_1', 'type_1'), ('type_1', 117), ('type_1', 15), (15, 117), (117, 15)]
+Made 1 collapses with rule 8, 	incurring a total of 21 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 118), ('type_0', 766), ('type_1', 'type_1'), ('type_1', 118), (766, 118)]
+Made 1 collapses with rule 12, 	incurring a total of 24 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 96), ('type_0', 151), ('type_1', 'type_1'), ('type_1', 96), ('type_1', 151), (96, 151), (151, 96)]
+Made 1 collapses with rule 7, 	incurring a total of 23 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 125), ('type_0', 118), ('type_1', 'type_1'), ('type_1', 118), (118, 125), (125, 118)]
+Made 1 collapses with rule 10, 	incurring a total of 23 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 224), ('type_1', 'type_1'), ('type_1', 224), ('type_1', 177), (177, 224)]
+Made 1 collapses with rule 8, 	incurring a total of 22 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 118), ('type_0', 766), ('type_1', 'type_1'), ('type_1', 118), (766, 118)]
+Made 1 collapses with rule 4, 	incurring a total of 19 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 1 collapses with rule 16, 	incurring a total of 20 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 79), ('type_0', 23), ('type_1', 'type_1'), ('type_1', 79), ('type_1', 23), (23, 79)]
+Made 1 collapses with rule 0, 	incurring a total of 13 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 1 collapses with rule 12, 	incurring a total of 19 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 96), ('type_0', 151), ('type_1', 'type_1'), ('type_1', 96), ('type_1', 151), (96, 151), (151, 96)]
+Made 2 collapses with rule 7, 	incurring a total of 37 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 125), ('type_0', 118), ('type_1', 'type_1'), ('type_1', 118), (118, 125), (125, 118)]
+Made 1 collapses with rule 9, 	incurring a total of 18 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 177), ('type_1', 'type_1'), ('type_1', 224), ('type_1', 177), (177, 224)]
+Made 1 collapses with rule 12, 	incurring a total of 17 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 96), ('type_0', 151), ('type_1', 'type_1'), ('type_1', 96), ('type_1', 151), (96, 151), (151, 96)]
+Made 1 collapses with rule 11, 	incurring a total of 18 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 117), ('type_1', 'type_1'), ('type_1', 117), ('type_1', 15), (15, 117), (117, 15)]
+Made 1 collapses with rule 9, 	incurring a total of 17 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 177), ('type_1', 'type_1'), ('type_1', 224), ('type_1', 177), (177, 224)]
+Made 1 collapses with rule 8, 	incurring a total of 15 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 118), ('type_0', 766), ('type_1', 'type_1'), ('type_1', 118), (766, 118)]
+Made 1 collapses with rule 10, 	incurring a total of 17 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 224), ('type_1', 'type_1'), ('type_1', 224), ('type_1', 177), (177, 224)]
+Made 1 collapses with rule 12, 	incurring a total of 16 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 96), ('type_0', 151), ('type_1', 'type_1'), ('type_1', 96), ('type_1', 151), (96, 151), (151, 96)]
+Made 1 collapses with rule 4, 	incurring a total of 15 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 1 collapses with rule 10, 	incurring a total of 15 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 224), ('type_1', 'type_1'), ('type_1', 224), ('type_1', 177), (177, 224)]
+Made 1 collapses with rule 1, 	incurring a total of 13 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 787), ('type_1', 'type_1'), ('type_1', 593), (787, 593)]
+Made 1 collapses with rule 9, 	incurring a total of 14 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 177), ('type_1', 'type_1'), ('type_1', 224), ('type_1', 177), (177, 224)]
+Made 1 collapses with rule 4, 	incurring a total of 14 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 1 collapses with rule 8, 	incurring a total of 13 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 118), ('type_0', 766), ('type_1', 'type_1'), ('type_1', 118), (766, 118)]
+Made 1 collapses with rule 16, 	incurring a total of 11 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 79), ('type_0', 23), ('type_1', 'type_1'), ('type_1', 79), ('type_1', 23), (23, 79)]
+Made 1 collapses with rule 0, 	incurring a total of 11 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 1 collapses with rule 11, 	incurring a total of 11 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 117), ('type_1', 'type_1'), ('type_1', 117), ('type_1', 15), (15, 117), (117, 15)]
+Made 1 collapses with rule 8, 	incurring a total of 9 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 118), ('type_0', 766), ('type_1', 'type_1'), ('type_1', 118), (766, 118)]
+Made 2 collapses with rule 16, 	incurring a total of 15 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 79), ('type_0', 23), ('type_1', 'type_1'), ('type_1', 79), ('type_1', 23), (23, 79)]
+Made 1 collapses with rule 0, 	incurring a total of 6 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 1 collapses with rule 16, 	incurring a total of 6 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 79), ('type_0', 23), ('type_1', 'type_1'), ('type_1', 79), ('type_1', 23), (23, 79)]
+Made 1 collapses with rule 13, 	incurring a total of 4 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 98), ('type_0', 83), ('type_1', 'type_1'), ('type_1', 83), (83, 98)]
+Made 1 collapses with rule 7, 	incurring a total of 6 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 125), ('type_0', 118), ('type_1', 'type_1'), ('type_1', 118), (118, 125), (125, 118)]
+Made 1 collapses with rule 10, 	incurring a total of 5 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 224), ('type_1', 'type_1'), ('type_1', 224), ('type_1', 177), (177, 224)]
+Made 1 collapses with rule 13, 	incurring a total of 3 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 98), ('type_0', 83), ('type_1', 'type_1'), ('type_1', 83), (83, 98)]
+Made 1 collapses with rule 4, 	incurring a total of 4 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 688), ('type_1', 'type_1'), ('type_1', 593), (593, 688), (688, 593)]
+Made 1 collapses with rule 16, 	incurring a total of 2 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 79), ('type_0', 23), ('type_1', 'type_1'), ('type_1', 79), ('type_1', 23), (23, 79)]
+Made 2 collapses with rule 7, 	incurring a total of 4 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 125), ('type_0', 118), ('type_1', 'type_1'), ('type_1', 118), (118, 125), (125, 118)]
+Made 2 collapses with rule 0, 	incurring a total of 1 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_0', 593), ('type_1', 'type_1'), ('type_1', 593), (593, 782), (782, 593)]
+Made 1 collapses with rule 24, 	incurring a total of 0 approximated edges.
+The rule's details are: [('type_0', 'type_0'), ('type_0', 'type_1'), ('type_1', 'type_1'), (900, 902), (902, 900)]
+Basic edge list: 229509 bits
+Sparse matrix:   304544 bits
+Our compression: 229424 bits (0.9996296441533883 percent and 0.7533361353367658 percent respectively)

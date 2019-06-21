@@ -120,9 +120,9 @@ class FullApproximateRuleMiner(RuleMinerBase):
         
         cheapest_cost = len(self.neighbors) * self.k
         if take_shortcut and len(self.rule_occurrences_by_id) > 0:
-            for rule_id, occurrences in self.rule_occurrences_by_id:
+            for rule_id, occurrences in self.rule_occurrences_by_id.items():
                 t = occurrences.top_item()
-                full_rule_details = self.rule_occurrences_by_tuple[t][best_rule_id]
+                full_rule_details = self.rule_occurrences_by_tuple[t][rule_id]
                 if full_rule_details[1] < cheapest_cost:
                     cheapest_cost = full_rule_details[1]
             """

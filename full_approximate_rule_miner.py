@@ -121,20 +121,23 @@ class FullApproximateRuleMiner(RuleMinerBase):
             self.delete_node_from_rule_occurrences(node, rules_affected)
         
         cheapest_cost = len(self.neighbors) * self.k
-        if take_shortcut and self.rule_priority_queue.size() > 0:
-            """
+        if take_shortcut and len(self.rule_occurrences_by_id) > 0:
             for rule_id, occurrences in self.rule_occurrences_by_id.items():
                 t = occurrences.top_item()
                 full_rule_details = self.rule_occurrences_by_tuple[t][rule_id]
                 if full_rule_details[1] < cheapest_cost:
                     cheapest_cost = full_rule_details[1]
-            """
+                if cheapest_cost == 0:
+                    break
+        """
+        if take_shortcut and self.rule_priority_queue.size() > 0:
             self.update_rule_pq(rules_affected)
             if self.rule_priority_queue.size() > 0:
                 best_rule_id = self.rule_priority_queue.top_item()
                 t = self.rule_occurrences_by_id[best_rule_id].top_item()
                 full_rule_details = self.rule_occurrences_by_tuple[t][best_rule_id]
                 cheapest_cost = full_rule_details[1]
+        """
 
         # Then, add new rules.
         for first_node in nodes_to_look_at:

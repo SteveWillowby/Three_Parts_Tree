@@ -48,16 +48,23 @@ def watts_strogatz(size, k, bidirected=True):
     return G
 
 def rewire_graph(G, rewiring_prob):
-    current_edges = list(G.edges())
-    nodes = list(G.nodes())
-    for edge in current_edges:
+    original_edges = set([edge for edge in G.edges()])
+    rewired_edges = set()
+    # Choose which edges to rewire and delete them from the graph.
+    for edge in original_edges:
         if random.uniform(0.0, 0.999999999999999) < rewiring_prob:
-            # Randomly pick a new place for edge[0] to point
-            new_target = edge[0]
-            while new_target == edge[0] or (edge[0], new_target) in G.out_edges(edge[0]):
-                new_target = nodes[random.randint(0, len(nodes) - 1)]
-            G.add_edge(edge[0], new_target)
+            rewired_edges.add(edge)
             G.remove_edge(edge[0], edge[1])
+    
+    # Put the rewired edges back into the graph.
+    final_edges = original_edges - rewired_edges
+    nodes = list(G.nodes())
+    for edge in rewired_edges:
+        new_edge = (nodes[random.randint(0, len(nodes) - 1)], nodes[random.randint(0, len(nodes) - 1)])
+        while new_edge in final_edges: # While there's a collision
+            new_edge = (nodes[random.randint(0, len(nodes) - 1)], nodes[random.randint(0, len(nodes) - 1)])
+        G.add_edge(new_edge[0], new_edge[1])
+        final_edges.add(new_edge)
 
 def remove_self_loops(G):
     for node in G.nodes():

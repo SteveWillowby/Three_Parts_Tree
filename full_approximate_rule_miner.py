@@ -25,14 +25,23 @@ class FullApproximateRuleMiner(RuleMinerBase):
 
         self.already_encoded_rules = set()
         self.bits_per_node_id = int(math.ceil(math.log(len(G.nodes), 2)))
-        self.total_cost = self.bits_per_node_id # Will need a number to say how many rules were used. At most (# nodes - 1) rules will be used.
-        self.total_cost += self.bits_per_node_id + 1 # as many ones as there are bits per node id followed by a zero
 
-        # Gamma-encoding of |V|, one "no-more-edges" bit per node, one "one-more-edge" bit per edge, and one node id per edge.
-        self.cost_of_original_edge_list = (2 * self.bits_per_node_id - 1) + len(G.nodes) + (self.bits_per_node_id + 1) * len(G.edges())
+        self.cost_to_encode_v = 2 * self.bits_per_node_id - 1
 
-        cost_of_sparse_matrix = len(sparse6.to_sparse6_bytes(G, header=False)) * 8 # An ascii character compression.
-        self.cost_of_original_matrix = cost_of_sparse_matrix # min(cost_of_sparse_matrix, cost_of_dense_matrix)
+        self.compression_cost = self.bits_per_node_id # Will need a number to say how many rules were used. At most (# nodes - 1) rules will be used.
+
+        self.original_num_nodes = len(G.nodes)
+        self.num_nodes = self.original_num_nodes
+        self.num_edges = len(G.edges)
+
+        # Removes the extra bits_per_node_id that is necessary when some compression has been done.
+        self.original_total_cost = self.cost_to_encode_v + self.cost_of_remaining_edge_list() - self.bits_per_node_id
+        self.best_total_cost = self.original_total_cost
+        self.best_total_nodes = self.num_nodes
+        self.total_cost = self.best_total_cost
+
+        # cost_of_sparse_matrix = len(sparse6.to_sparse6_bytes(G, header=False)) * 8 # An ascii character compression.
+        # self.cost_of_original_matrix = cost_of_sparse_matrix # min(cost_of_sparse_matrix, cost_of_dense_matrix)
 
         self.in_sets = {}
         self.out_sets = {}
@@ -50,6 +59,11 @@ class FullApproximateRuleMiner(RuleMinerBase):
         # This next item means that rules of size s use O(s^2) space. It's really just every tuple the node is a part of.
         self.rule_occurrences_by_node = {n: set() for n in list(G.nodes())}  # {node-id: set of tuples that this node has a rule with}
         self.rule_priority_queue = AugmentedPQ()
+
+    def cost_of_remaining_edge_list(self):
+        # Num of non-compressed nodes, one "no-more-edges" bit per node, one "one-more-edge" bit per edge, and one node id per edge.
+        return self.bits_per_node_id + self.num_nodes + (self.bits_per_node_id + 1) * self.num_edges
+        
 
     # A rule here is the following data:
     # (rule_id, cost, nodes_in_rule, nodes_with_external_edges_by_edge_type, deletions_by_edge_type, additions_by_edge_type)
@@ -109,7 +123,7 @@ class FullApproximateRuleMiner(RuleMinerBase):
     # This function is intended to be run just once at the start.
     # It looks at every tuple of connected nodes up to size self.k and finds all rules for the respective tuples.
     # The information is stored in self.rule_occurrences_by_tuple and self.rule_occurrences_by_id.
-    def update_rules_for_tuples(self, rules_affected, nodes_to_look_at=None, take_shortcut=True):
+    def update_rules_for_tuples(self, rules_affected, nodes_to_look_at=None, take_shortcut=False):
         always_filter_by_higher_id = False
         if nodes_to_look_at is None:
             nodes_to_look_at = list(self._G.nodes())
@@ -209,6 +223,7 @@ class FullApproximateRuleMiner(RuleMinerBase):
         self.neighbors[target].add(source)
         self.out_sets[source].add(target)
         self.in_sets[target].add(source)
+        self.num_edges += 1
 
     # O(1)
     def remove_edge(self, source, target):
@@ -217,6 +232,7 @@ class FullApproximateRuleMiner(RuleMinerBase):
             self.neighbors[target].remove(source)
         self.out_sets[source].remove(target)
         self.in_sets[target].remove(source)
+        self.num_edges -= 1
 
     # This is O(degree(node_id)) = O(max_degree).
     def delete_node_from_edge_lists(self, node_id):
@@ -227,6 +243,7 @@ class FullApproximateRuleMiner(RuleMinerBase):
         del self.neighbors[node_id]
         del self.in_sets[node_id]
         del self.out_sets[node_id]
+        self.num_nodes -= 1
 
     # A rule here is the following data:
     # (rule_id, cost, nodes_in_rule, nodes_with_external_edges_by_edge_type, deletions_by_edge_type, additions_by_edge_type)
@@ -392,7 +409,7 @@ class FullApproximateRuleMiner(RuleMinerBase):
 
             full_rule_details = self.rule_occurrences_by_tuple[t][rule_id]
 
-            self.total_cost += self.record_actual_cost(rule_id, not first_time, len(t), full_rule_details[1])
+            self.compression_cost += self.record_actual_cost(rule_id, not first_time, len(t), full_rule_details[1])
             if first_time:
                 self.already_encoded_rules.add(rule_id)
                 first_time = False
@@ -412,13 +429,22 @@ class FullApproximateRuleMiner(RuleMinerBase):
         self.draw = False
         if self.draw:
             self.edge_interp.display_rule_graph(rule_graph, "Made %s collapses with this rule. %s edges were approximated." % (collapses, edges_approx))
+
+        self.total_cost = self.cost_to_encode_v + self.compression_cost + self.cost_of_remaining_edge_list()
+        if self.total_cost < self.best_total_cost:
+            self.best_total_cost = self.total_cost
+            self.best_total_nodes = self.num_nodes
+
     def done(self):
         if self.first_round:
             return len(self._G.edges()) == 0
         return len(self.rule_occurrences_by_id) == 0
 
     def cost_comparison(self):
-        print("Basic edge list: %s bits" % self.cost_of_original_edge_list)
-        print("Sparse matrix:   %s bits" % self.cost_of_original_matrix)
-        print("Our compression: %s bits (%s percent and %s percent respectively)" % \
-            (self.total_cost, float(self.total_cost) / self.cost_of_original_edge_list, float(self.total_cost) / self.cost_of_original_matrix))
+        print("Basic edge list: %s bits" % self.original_total_cost)
+        print("Final compression: %s bits (%s percent)" % \
+            (self.total_cost, 100.0 * float(self.total_cost) / self.original_total_cost))
+        print("Best compression: %s bits (%s percent) occurred with %s of %s nodes compressed (%s percent)" % \
+            (self.best_total_cost, 100.0 * float(self.best_total_cost) / self.original_total_cost, \
+             self.original_num_nodes - self.best_total_nodes, self.original_num_nodes, \
+             (100.0 * float(self.original_num_nodes - self.best_total_nodes) / self.original_num_nodes)))

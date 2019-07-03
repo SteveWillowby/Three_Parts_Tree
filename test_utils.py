@@ -61,7 +61,7 @@ def rewire_graph(G, rewiring_prob):
     nodes = list(G.nodes())
     for edge in rewired_edges:
         new_edge = (nodes[random.randint(0, len(nodes) - 1)], nodes[random.randint(0, len(nodes) - 1)])
-        while new_edge in final_edges: # While there's a collision
+        while new_edge[0] == new_edge[1] or new_edge in final_edges: # While there's a self-loop or a collision
             new_edge = (nodes[random.randint(0, len(nodes) - 1)], nodes[random.randint(0, len(nodes) - 1)])
         G.add_edge(new_edge[0], new_edge[1])
         final_edges.add(new_edge)

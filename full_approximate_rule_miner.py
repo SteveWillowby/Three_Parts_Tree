@@ -60,6 +60,11 @@ class FullApproximateRuleMiner(RuleMinerBase):
         self.rule_occurrences_by_node = {n: set() for n in list(G.nodes())}  # {node-id: set of tuples that this node has a rule with}
         self.rule_priority_queue = AugmentedPQ()
 
+        self.csv_format = True
+        if self.csv_format:
+            # Column headers are rule_id, collapses, edges_approx, total_cost, rule_details
+            print("rule_id, collapses, edges_approx, total_cost, rule_details")
+
     def cost_of_remaining_edge_list(self):
         # Num of non-compressed nodes, one "no-more-edges" bit per node, one "one-more-edge" bit per edge, and one node id per edge.
         return self.bits_per_node_id + self.num_nodes + (self.bits_per_node_id + 1) * self.num_edges
@@ -123,7 +128,7 @@ class FullApproximateRuleMiner(RuleMinerBase):
     # This function is intended to be run just once at the start.
     # It looks at every tuple of connected nodes up to size self.k and finds all rules for the respective tuples.
     # The information is stored in self.rule_occurrences_by_tuple and self.rule_occurrences_by_id.
-    def update_rules_for_tuples(self, rules_affected, nodes_to_look_at=None, take_shortcut=False):
+    def update_rules_for_tuples(self, rules_affected, nodes_to_look_at=None, take_shortcut=True):
         always_filter_by_higher_id = False
         if nodes_to_look_at is None:
             nodes_to_look_at = list(self._G.nodes())
@@ -422,18 +427,25 @@ class FullApproximateRuleMiner(RuleMinerBase):
         self.update_rule_pq(set([rule_id])) # Updates rule_pq to know that we are no longer currently using this rule id.
 
         edges_approx = self.total_edges_approximated - old_edges_approx
-        print("Made %s collapses with rule %s, \tincurring a total of %s approximated edges." % (collapses, rule_id, edges_approx))
+        
         rule_graph = self.rule_lib.get_rule_graph_by_size_and_id(len(t) + 2, rule_id)
-        print("The rule's details are: %s" % rule_graph.edges())
+        self.total_cost = self.cost_to_encode_v + self.compression_cost + self.cost_of_remaining_edge_list()
+        if self.total_cost < self.best_total_cost:
+            self.best_total_cost = self.total_cost
+            self.best_total_nodes = self.num_nodes
+
+        if self.csv_format:
+            # Column headers are rule_id, collapses, edges_approx, total_cost, rule_details
+            print("%s, %s, %s, %s, %s" % (rule_id, collapses, edges_approx, self.total_cost, rule_graph.edges()))
+        else:
+            print("Made %s collapses with rule %s, \tincurring a total of %s approximated edges." % (collapses, rule_id, edges_approx))
+            print("The rule's details are: %s" % rule_graph.edges())
+            print("The total cost in bits thus far is %s\n" % self.total_cost)
         sys.stdout.flush()
         self.draw = False
         if self.draw:
             self.edge_interp.display_rule_graph(rule_graph, "Made %s collapses with this rule. %s edges were approximated." % (collapses, edges_approx))
 
-        self.total_cost = self.cost_to_encode_v + self.compression_cost + self.cost_of_remaining_edge_list()
-        if self.total_cost < self.best_total_cost:
-            self.best_total_cost = self.total_cost
-            self.best_total_nodes = self.num_nodes
 
     def done(self):
         if self.first_round:

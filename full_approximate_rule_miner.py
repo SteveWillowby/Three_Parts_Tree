@@ -443,8 +443,10 @@ class FullApproximateRuleMiner(RuleMinerBase):
             self.best_total_nodes = self.num_nodes
 
         if self.csv_format:
+            rule_edges_string = str(rule_graph.edges())
+            rule_edges_string = rule_edges_string.replace(","," ")
             # Column headers are rule_id, collapses, edges_approx, total_cost, rule_details
-            print("%s, %s, %s, %s, %s" % (rule_id, collapses, edges_approx, self.total_cost, rule_graph.edges()))
+            print("%s, %s, %s, %s, %s" % (rule_id, collapses, edges_approx, self.total_cost, rule_edges_string))
         else:
             print("Made %s collapses with rule %s, \tincurring a total of %s approximated edges." % (collapses, rule_id, edges_approx))
             print("The rule's details are: %s" % rule_graph.edges())

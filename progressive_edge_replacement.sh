@@ -17,42 +17,42 @@ end="_r=$r"
 
 { time python test.py $other_args -r $r; } &> "output_files/$file$end"
 
-r=$(echo "$(($r * $increase))" | bc -l)
+r=0.005
 end="_r=$r"
 
 { time python test.py $other_args -r $r; } &> "output_files/$file$end"
 
-r=$(echo "$(($r * $increase))" | bc -l)
+r=0.01
 end="_r=$r"
 
 { time python test.py $other_args -r $r; } &> "output_files/$file$end"
 
-r=$(echo "$(($r * $increase))" | bc -l)
+r=0.02
 end="_r=$r"
 
 { time python test.py $other_args -r $r; } &> "output_files/$file$end"
 
-r=$(echo "$(($r * $increase))" | bc -l)
+r=0.04
 end="_r=$r"
 
 { time python test.py $other_args -r $r; } &> "output_files/$file$end"
 
-r=$(echo "$(($r * $increase))" | bc -l)
+r=0.08
 end="_r=$r"
 
 { time python test.py $other_args -r $r; } &> "output_files/$file$end"
 
-r=$(echo "$(($r * $increase))" | bc -l)
+r=0.16
 end="_r=$r"
 
 { time python test.py $other_args -r $r; } &> "output_files/$file$end"
 
-r=$(echo "$(($r * $increase))" | bc -l)
+r=0.32
 end="_r=$r"
 
 { time python test.py $other_args -r $r; } &> "output_files/$file$end"
 
-r=$(echo "$(($r * $increase))" | bc -l)
+r=0.64
 end="_r=$r"
 
 { time python test.py $other_args -r $r; } &> "output_files/$file$end"

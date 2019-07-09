@@ -8,7 +8,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument("rule_min", type=int, help="Minimum rule size")
 parser.add_argument("rule_max", type=int, help="Maximum rule size")
 parser.add_argument("graph_type", help="The graph type. Either the path to an edgelist file or one of the following: watts_strogats, n_tree, and n_tree_of_k_rings")
-parser.add_argument("-s", "--size", type=int, help="The number of nodes in the graph.")
+parser.add_argument("-v", "--vertices", type=int, help="The number of nodes in the graph.")
+parser.add_argument("-s", "--shortcut", type=int, help="A parameter to make the code run faster. 0 is fastest, but low numbers may result in finding fewer good rules.")
 parser.add_argument("-n", type=int, help="A graph parameter. For watts_strogats, specifies number of neighbors. For the trees, specifies number of children.")
 parser.add_argument("-k", type=int, help="A graph parameter. For n_tree_of_k_rings, specifies the ring size.")
 parser.add_argument("-r", type=float, help="Probability that an edge gets rewired.")
@@ -43,12 +44,12 @@ if args.r is not None and (args.r < 0.0 or 1.0 < args.r):
 
 G = None
 if args.graph_type == "n_tree":
-    G = n_ary_tree(args.size, args.n) 
+    G = n_ary_tree(args.vertices, args.n) 
 elif args.graph_type == "n_tree_of_k_rings":
-    G = n_ary_tree_of_k_rings(args.size, args.n, args.k)
+    G = n_ary_tree_of_k_rings(args.vertices, args.n, args.k)
 elif args.graph_type == "watts_strogatz":
     bidirected = args.bidirected is not None
-    G = watts_strogatz(args.size, args.n, bidirected)
+    G = watts_strogatz(args.vertices, args.n, bidirected)
 else:
     G = nx.read_adjlist(args.graph_type, create_using=nx.DiGraph, nodetype=int)
     G = nx.DiGraph(G)
@@ -66,7 +67,7 @@ else:
 if args.r is not None:
     rewire_graph(G, args.r)
 
-rm = FullApproximateRuleMiner(G, args.rule_min, args.rule_max)
+rm = FullApproximateRuleMiner(G, args.rule_min, args.rule_max, args.shortcut)
 
 while not rm.done():
     best_rule = rm.determine_best_rule()

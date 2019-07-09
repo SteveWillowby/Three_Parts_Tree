@@ -12,13 +12,14 @@ import math
 class FullApproximateRuleMiner(RuleMinerBase):
     """Used to find and compress grammar rules in a graph"""
 
-    def __init__(self, G, min_rule_size, max_rule_size):
+    def __init__(self, G, min_rule_size, max_rule_size, shortcut=None):
         self._G = G
         self.c = min_rule_size
         self.k = max_rule_size
         self.edge_interp = BiDirectionalEdgeTypeInterpreter()
         self.rule_lib = RuleLib()
         self.utils = ApproximateRuleUtils(self.edge_interp, self.rule_lib)
+        self.shortcut = shortcut
 
         self.first_round = True
         self.total_edges_approximated = 0
@@ -128,11 +129,11 @@ class FullApproximateRuleMiner(RuleMinerBase):
     # This function is intended to be run just once at the start.
     # It looks at every tuple of connected nodes up to size self.k and finds all rules for the respective tuples.
     # The information is stored in self.rule_occurrences_by_tuple and self.rule_occurrences_by_id.
-    def update_rules_for_tuples(self, rules_affected, nodes_to_look_at=None, take_shortcut=1):
+    def update_rules_for_tuples(self, rules_affected, nodes_to_look_at=None):
         always_filter_by_higher_id = False
         if nodes_to_look_at is None:
             nodes_to_look_at = list(self._G.nodes())
-            if take_shortcut is not None:
+            if self.shortcut is not None:
                 nodes_to_look_at = list(np.random.permutation(nodes_to_look_at)) # Removes 'adversarial' time until cheapest cost is found
             always_filter_by_higher_id = True
         nodes_to_look_at_set = set(nodes_to_look_at)
@@ -142,7 +143,7 @@ class FullApproximateRuleMiner(RuleMinerBase):
             self.delete_node_from_rule_occurrences(node, rules_affected)
         
         cheapest_cost = len(self.neighbors) * self.k
-        if take_shortcut is not None and len(self.rule_occurrences_by_id) > 0:
+        if self.shortcut is not None and len(self.rule_occurrences_by_id) > 0:
             for rule_id, occurrences in self.rule_occurrences_by_id.items():
                 t = occurrences.top_item()
                 full_rule_details = self.rule_occurrences_by_tuple[t][rule_id]
@@ -151,7 +152,7 @@ class FullApproximateRuleMiner(RuleMinerBase):
                 if cheapest_cost == 0:
                     break
         """
-        if take_shortcut is not None and self.rule_priority_queue.size() > 0:
+        if self.shortcut is not None and self.rule_priority_queue.size() > 0:
             self.update_rule_pq(rules_affected)
             if self.rule_priority_queue.size() > 0:
                 best_rule_id = self.rule_priority_queue.top_item()
@@ -211,16 +212,16 @@ class FullApproximateRuleMiner(RuleMinerBase):
                     node_stack_copy.sort()
                     rules = self.utils.cheapest_rules_for_tuple([self.out_sets, self.in_sets], tuple(node_stack_copy))
                     cost = rules[0][1]
-                    if take_shortcut is None or cost <= cheapest_cost + 1:
+                    if self.shortcut is None or cost <= cheapest_cost + 1:
                         self.store_rules(rules, rules_affected)
                     if cost < cheapest_cost:
                         cheapest_cost = cost
 
                 continue_expanding = False
-                if take_shortcut is None or len(node_stack) == self.k:
+                if self.shortcut is None or len(node_stack) == self.k:
                     continue_expanding = len(node_stack) < self.k
                 else:
-                    allowed_extra_cost = min(take_shortcut + int(math.log(self.k - len(node_stack))), 1 + self.k - len(node_stack))
+                    allowed_extra_cost = min(self.shortcut + int(math.log(self.k - len(node_stack))), 1 + self.k - len(node_stack))
                     continue_expanding = (cost - cheapest_cost) <= allowed_extra_cost
                 if continue_expanding:
                     new_frontier = set(frontier_stack[-1]) | set(alternate_neighbors[next_node])

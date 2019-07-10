@@ -501,3 +501,7 @@ rule_id, collapses, edges_approx, total_cost, rule_details
 Basic edge list: 229509 bits
 Final compression: 229908 bits (100.17384939152713 percent)
 Best compression: 229036 bits (99.79390786417962 percent) occurred with 303 of 1224 nodes compressed (24.754901960784313 percent)
+
+real    615m11.128s
+user    614m51.132s
+sys     0m6.744s

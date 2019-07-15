@@ -314,8 +314,8 @@ class ApproximateRuleUtils:
                     if external_degrees[node] == 0:
                         invalid = True
                         break
-                if invalid:
-                    continue
+                # if invalid:
+                #     continue
 
                 best_options_found[edge_type_idx].append((keep_nodes, deletions, additions))
         total_cost += best_cost_found

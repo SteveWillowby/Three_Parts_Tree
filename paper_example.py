@@ -2,19 +2,17 @@ import networkx as nx
 from full_approximate_rule_miner import *
 
 G = nx.DiGraph()
-# Min size at which k_min = 3 compresses better than k_min = 2 is 9 nodes.
-# Min size at which (2, 3) compresses using 3-node rules is 17 nodes.
-# Still uses 3-node rules with an edge deletion in the 17 node graph.
-size = 9
-for i in range(0, size):
+for i in range(0, 6):
     G.add_node(i)
-    for j in range(0, i):
-        G.add_edge(j, i)
+G.add_edge(0, 1)
+G.add_edge(1, 2)
+G.add_edge(2, 3)
+G.add_edge(3, 4)
 
-edge_loss_pos = 0
-#G.remove_edge(size - (3 + edge_loss_pos), size - (1 + edge_loss_pos))
+G.add_edge(1, 3)
+G.add_edge(5, 3)
 
-rm = FullApproximateRuleMiner(G, 2, 3, 0)
+rm = FullApproximateRuleMiner(G, 2, 2, None)
 
 while not rm.done():
     best_rule = rm.determine_best_rule()

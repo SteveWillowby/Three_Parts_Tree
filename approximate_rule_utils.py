@@ -303,19 +303,21 @@ class ApproximateRuleUtils:
                     else:
                         additions += [(node, neighbor) for node in non_matches]
 
-                # Lastly, check that this isn't making a node a "keep" node when it has no external edges.
-                external_degrees = {node: len(neighbors) for node, neighbors in external_neighbors.items()}
-                for deletion in deletions:
-                    external_degrees[deletion[0]] -= 1
-                for addition in additions:
-                    external_degrees[addition[0]] += 1
-                invalid = False
-                for node in keep_nodes:
-                    if external_degrees[node] == 0:
-                        invalid = True
-                        break
-                # if invalid:
-                #     continue
+                use_KT = True
+                if not use_KT:
+                    # Lastly, check that this isn't making a node a "keep" node when it has no external edges.
+                    external_degrees = {node: len(neighbors) for node, neighbors in external_neighbors.items()}
+                    for deletion in deletions:
+                        external_degrees[deletion[0]] -= 1
+                    for addition in additions:
+                        external_degrees[addition[0]] += 1
+                    invalid = False
+                    for node in keep_nodes:
+                        if external_degrees[node] == 0:
+                            invalid = True
+                            break
+                    if invalid:
+                        continue
 
                 best_options_found[edge_type_idx].append((keep_nodes, deletions, additions))
         total_cost += best_cost_found

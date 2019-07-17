@@ -1,13 +1,11 @@
 #!/bin/bash
 
-r=0.0
-increase=2.0
-
 array=( $@ )
 len=${#array[@]}
 file=${array[$len-1]}
 other_args=${array[@]:0:$len-1}
 
+r=0.0
 end="_r=$r"
 
 { time python test.py $other_args -r $r; } &> "output_files/$file$end"

@@ -45,11 +45,14 @@ if args.r is not None and (args.r < 0.0 or 1.0 < args.r):
 G = None
 if args.graph_type == "n_tree":
     G = n_ary_tree(args.vertices, args.n) 
+    G = relabel_nodes(G)
 elif args.graph_type == "n_tree_of_k_rings":
     G = n_ary_tree_of_k_rings(args.vertices, args.n, args.k)
+    G = relabel_nodes(G)
 elif args.graph_type == "watts_strogatz":
     bidirected = args.bidirected is not None
     G = watts_strogatz(args.vertices, args.n, bidirected)
+    G = relabel_nodes(G)
 else:
     G = nx.read_adjlist(args.graph_type, create_using=nx.DiGraph, nodetype=int)
     G = nx.DiGraph(G)

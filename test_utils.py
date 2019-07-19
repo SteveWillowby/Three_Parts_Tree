@@ -1,5 +1,6 @@
 import networkx as nx
 import random
+import numpy as np
 
 def n_ary_tree(size, n):
     G=nx.DiGraph()
@@ -70,3 +71,17 @@ def remove_self_loops(G):
     for node in G.nodes():
         if (node, node) in G.edges():
             G.remove_edge(node, node)
+
+def relabel_nodes(G):
+    G_prime = nx.DiGraph()
+    nodes = list(G.nodes())
+    for node in nodes:
+        G_prime.add_node(node)
+
+    perm = np.random.permutation(len(nodes))
+    old_to_new = {nodes[i]: nodes[perm[i]] for i in range(0, len(nodes))}
+    for edge in G.edges():
+        G_prime.add_edge(old_to_new[edge[0]], old_to_new[edge[1]])
+
+    return G_prime
+        

@@ -76,6 +76,7 @@ if args.degree_copy:
     in_degs = [G.in_degree(node) for node in node_list]
     out_degs = [G.out_degree(node) for node in node_list]
     G = nx.DiGraph(nx.directed_configuration_model(in_degs, out_degs))
+    remove_self_loops(G)
 
 rm = FullApproximateRuleMiner(G, args.rule_min, args.rule_max, args.shortcut)
 

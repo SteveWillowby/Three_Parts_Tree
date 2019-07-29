@@ -14,6 +14,7 @@ parser.add_argument("-n", type=int, help="A graph parameter. For watts_strogats,
 parser.add_argument("-k", type=int, help="A graph parameter. For n_tree_of_k_rings, specifies the ring size.")
 parser.add_argument("-r", type=float, help="Probability that an edge gets rewired.")
 parser.add_argument("--bidirected", help="Add if the graph should be bidirected. Currently just for watts_strogatz")
+parser.add_argument("--degree_copy", help="Runs on a graph with the same degree distribution as the specified graph.")
 args = parser.parse_args()
 if args.graph_type == "watts_strogatz":
     if args.k:
@@ -69,6 +70,12 @@ else:
 
 if args.r is not None:
     rewire_graph(G, args.r)
+
+if args.degree_copy:
+    node_list = list(G.nodes())
+    in_degs = [G.in_degree(node) for node in node_list]
+    out_degs = [G.out_degree(node) for node in node_list]
+    G = nx.DiGraph(nx.directed_configuration_model(in_degs, out_degs))
 
 rm = FullApproximateRuleMiner(G, args.rule_min, args.rule_max, args.shortcut)
 

@@ -15,6 +15,7 @@ parser.add_argument("-k", type=int, help="A graph parameter. For n_tree_of_k_rin
 parser.add_argument("-r", type=float, help="Probability that an edge gets rewired.")
 parser.add_argument("--bidirected", help="Add if the graph should be bidirected. Currently just for watts_strogatz")
 parser.add_argument("--degree_copy", help="Runs on a graph with the same degree distribution as the specified graph.")
+parser.add_argument("--export_edge_list", help="A file to which the edge list of the generated graph should be exported.")
 args = parser.parse_args()
 if args.graph_type == "watts_strogatz":
     if args.k:
@@ -77,6 +78,9 @@ if args.degree_copy:
     out_degs = [G.out_degree(node) for node in node_list]
     G = nx.DiGraph(nx.directed_configuration_model(in_degs, out_degs))
     remove_self_loops(G)
+
+if args.export_edge_list:
+    nx.write_adjlist(G, args.export_edge_list)
 
 rm = FullApproximateRuleMiner(G, args.rule_min, args.rule_max, args.shortcut)
 

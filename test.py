@@ -62,12 +62,11 @@ else:
     bidirected = 0.0
     connections = 0.0
     for edge in G.edges():
-        if edge[0] > edge[1]:
-            continue
         connections += 1.0
-        if (edge[1], edge[0]) in G.edges():
+        if edge[0] < edge[1] and ((edge[1], edge[0]) in G.edges()):
             bidirected += 1.0
-    print("Percent of connections that are bidirected: %s" % (bidirected / connections))
+            connections -= 1.0
+    print("Percent of connections that are bidirected: %s" % (100.0 * bidirected / connections))
 
 if args.r is not None:
     rewire_graph(G, args.r)

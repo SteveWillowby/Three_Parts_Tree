@@ -1,4 +1,4 @@
-Percent of connections that are bidirected: 0.3944938440492476
+Percent of connections that are bidirected: 13.80197427460365
 rule_id, collapses, edges_approx, total_cost, rule_details
 30, 3, 0, 229501, [('type_0'  'type_0')  ('type_0'  'type_1')  ('type_0'  1068)  ('type_1'  'type_1')  ('type_1'  163)  (92  163)  (1066  163)  (1068  163)]
 45, 8, 0, 229336, [('type_0'  'type_0')  ('type_0'  'type_1')  ('type_0'  193)  ('type_1'  'type_1')  ('type_1'  193)  (193  383)  (193  679)  (193  680)]

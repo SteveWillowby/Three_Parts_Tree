@@ -8,8 +8,11 @@ remove_self_loops(G)
 single_citation_articles = set(filter(lambda n: G.in_degree(n) == 1, G.nodes()))
 no_citation_articles = set(filter(lambda n: G.in_degree(n) == 0, G.nodes()))
 
-single_citations_that_are_cited_by_no_citations = set(filter(lambda n: len(set([i for i, j in G.in_edges(n)]) & no_citation_articles) == 1, single_citation_articles))
-any_citations_that_are_cited_by_no_citations = set(filter(lambda n: len(set([i for i, j in G.in_edges(n)]) & no_citation_articles) >= 1, G.nodes()))
+out_neighbors = {n: set([j for (i, j) in G.out_edges(n)]) for n in G.nodes()}
+in_neighbors = {n: set([i for (i, j) in G.in_edges(n)]) for n in G.nodes()}
+
+single_citations_that_are_cited_by_no_citations = set(filter(lambda n: len(in_neighbors[n] & no_citation_articles) == 1, single_citation_articles))
+any_citations_that_are_cited_by_no_citations = set(filter(lambda n: len(in_neighbors[n] & no_citation_articles) >= 1, G.nodes()))
 
 print("Single citation articles (cited once) that are cited by no-citation articles: %s" % len(single_citations_that_are_cited_by_no_citations))
 print("Single citation articles: %s" % len(single_citation_articles))
@@ -23,7 +26,7 @@ print("Num articles with at least on citation: %s" % (len(list(G.nodes())) - len
 
 print("\n")
 
-all_that_cite_singles = set(filter(lambda n: len(set([j for i, j in G.out_edges(n)]) & single_citation_articles) >= 1, G.nodes()))
+all_that_cite_singles = set(filter(lambda n: len(out_neighbors[n] & single_citation_articles) >= 1, G.nodes()))
 no_citations_that_cite_singles = no_citation_articles & all_that_cite_singles
 
 print("Number of no-citation articles that cite single-citation articles: %s" % len(no_citations_that_cite_singles))
@@ -42,7 +45,62 @@ count_of_all_citations_that_are_singles = len(single_citation_articles)
 print("Percent of non-cited articles' citations that are articles with single citations: %s" % (count_of_nones_citations_that_are_singles / float(count_of_nones_citations)))
 print("Percent of any articles' citations that are articles with single citation: %s" % (count_of_all_citations_that_are_singles / float(count_of_all_citations)))
 
-# Now to compare to barabasi albert
+print("\n")
+
+out_equal = 0.0
+out_distinct = 0.0
+out_distinct_by_degree = 0.0
+out_similar = 0.0
+in_equal = 0.0
+in_distinct = 0.0
+in_distinct_by_degree = 0.0
+in_similar = 0.0
+total = 0.0
+
+nodes = list(G.nodes())
+for node_a in nodes:
+    for node_b in (out_neighbors[node_a] | in_neighbors[node_a]):
+        if node_a > node_b:
+            continue
+        out_neighbors_a = out_neighbors[node_a] - set([node_b])
+        out_neighbors_b = out_neighbors[node_b] - set([node_a])
+        in_neighbors_a = in_neighbors[node_a] - set([node_b])
+        in_neighbors_b = in_neighbors[node_b] - set([node_a])
+        out_overlap = out_neighbors_a & out_neighbors_b
+        out_union = out_neighbors_a | out_neighbors_b
+        out_difference = out_union - out_overlap
+        in_overlap = in_neighbors_a & in_neighbors_b
+        in_union = in_neighbors_a | in_neighbors_b
+        in_difference = in_union - in_overlap
+        if len(out_difference) == len(out_overlap):
+            out_equal += 1.0
+        elif len(out_difference) < len(out_overlap):
+            out_similar += 1.0
+        else:
+            if abs(len(out_neighbors_a) - len(out_neighbors_b)) > min(len(in_neighbors_a), len(in_neighbors_b)):
+                out_distinct_by_degree += 1.0
+            else:
+                out_distinct += 1.0
+
+        if len(in_difference) == len(in_overlap):
+            in_equal += 1.0
+        elif len(in_difference) < len(in_overlap):
+            in_similar += 1.0
+        else:
+            if abs(len(in_neighbors_a) - len(in_neighbors_b)) > min(len(in_neighbors_a), len(in_neighbors_b)):
+                in_distinct_by_degree += 1.0
+            else:
+                in_distinct += 1.0
+        total += 1.0
+
+total /= 100.0
+
+print("Neighbors Citing Same Articles:    Similar %.2f | Equal %.2f | Different %.2f | Different by degree %.2f" % \
+    (out_similar / total, out_equal / total, out_distinct / total, out_distinct_by_degree / total))
+print("Neighbors Cited By Same Articles:  Similar %.2f | Equal %.2f | Different %.2f | Different by degree %.2f" % \
+    (in_similar / total, in_equal / total, in_distinct / total, in_distinct_by_degree / total))
+
+"""
 
 print("\n")
 
@@ -91,3 +149,4 @@ count_of_all_citations_that_are_singles = len(single_citation_articles)
 
 print("Percent of non-cited articles' citations that are articles with single citations: %s" % (count_of_nones_citations_that_are_singles / float(count_of_nones_citations)))
 print("Percent of any articles' citations that are articles with single citation: %s" % (count_of_all_citations_that_are_singles / float(count_of_all_citations)))
+"""

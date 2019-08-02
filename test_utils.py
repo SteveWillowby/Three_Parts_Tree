@@ -131,3 +131,19 @@ def make_graph_with_same_degree_dist(G):
             #print("Graph creation successful")
             done = True
     return G_prime
+
+def weird():
+    G = nx.DiGraph()
+    for i in range(0, 21):
+        G.add_node(i)
+    for block in [0, 7, 14]:
+        G.add_edge(0 + block, 1 + block)
+        G.add_edge(0 + block, 2 + block)
+        G.add_edge(1 + block, 3 + block)
+        G.add_edge(1 + block, 4 + block)
+        G.add_edge(2 + block, 5 + block)
+        G.add_edge(2 + block, 6 + block)
+        for i in range(0, 7):
+            for j in range(7, 21):
+                G.add_edge(i + block, (i + block + j) % 21)
+    return G

@@ -7,7 +7,7 @@ from sys import argv
 def read_graph(fname):
     g = nx.read_edgelist(fname, nodetype=int, create_using=nx.Graph())
     name = fname.split('/')[-1]
-    name = '_'.join(name.split('_')[: -2])
+    name = name[: name.find('.g')]
     g.name = name
     print(f'Read {name}, n = {g.order()}, m = {g.size()}')
     return g
@@ -67,5 +67,7 @@ def main():
         return 
     g = read_graph(argv[1])
     vog(g)
+
+
 if __name__ == '__main__':
     main()

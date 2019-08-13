@@ -12,7 +12,7 @@ def read_graph(fname):
     print(f'Read {name}, n = {g.order()}, m = {g.size()}')
     return g
     
-def vog(g):    
+def vog(g):
     print('Starting VoG....')
     
     assert len(g) > 1, 'graph must have a name'
@@ -54,6 +54,9 @@ def vog(g):
     start_time = time()
 
     completed_process = subprocess.run('cd ../vog; cat {}_vog_code.m | matlab'.format(name), shell=True)
+    completed_process = subprocess.run(f'cd ../vog; ./run_vog.bash {g.name}', shell=True)
+    
+
     print('VoG ran in {} secs'.format(round(time() - start_time, 3)))
 
     if completed_process.returncode != 0:

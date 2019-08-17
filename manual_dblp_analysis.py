@@ -95,10 +95,19 @@ for node_a in nodes:
 
 total /= 100.0
 
-print("Neighbors Citing Same Articles:    Similar %.2f | Equal %.2f | Different %.2f | Different by degree %.2f" % \
+print("Neighbors Citing Both Articles:    Similar %.2f | Equal %.2f | Different %.2f | Different by degree %.2f" % \
     (out_similar / total, out_equal / total, out_distinct / total, out_distinct_by_degree / total))
-print("Neighbors Cited By Same Articles:  Similar %.2f | Equal %.2f | Different %.2f | Different by degree %.2f" % \
+print("Neighbors Cited By Both Articles:  Similar %.2f | Equal %.2f | Different %.2f | Different by degree %.2f" % \
     (in_similar / total, in_equal / total, in_distinct / total, in_distinct_by_degree / total))
+
+print("Without difference by degree:")
+
+total = (out_similar + out_equal + out_distinct) / 100.0
+print("Neighbors Citing Both Articles:    Similar %.2f | Equal %.2f | Different %.2f" % \
+    (out_similar / total, out_equal / total, out_distinct / total))
+total = (in_similar + in_equal + in_distinct) / 100.0
+print("Neighbors Cited By Both Articles:  Similar %.2f | Equal %.2f | Different %.2f" % \
+    (in_similar / total, in_equal / total, in_distinct / total))
 
 """
 

@@ -141,35 +141,40 @@ def merged_probabilities(merged_lists):
     return [[x[0], (x[1] + 1.0) / sum_a, (x[2] + 1.0) / sum_b, (x[3] + 1.0) / sum_c] for x in merged_lists]
 
 def ratios(prob_list, idx_1, idx_2):
-    alternate = [[x[0], x[idx_1] / x[idx_2] if x[idx_1] > x[idx_2] else -1.0 * x[idx_2] / x[idx_1]] for x in prob_list]
-    alternate.sort(key=(lambda x: -1.0 * abs(x[1])))
-    return alternate
+    ratio_list = [[x[0], x[idx_1] / x[idx_2] if x[idx_1] > x[idx_2] else -1.0 * x[idx_2] / x[idx_1]] for x in prob_list]
+    ratio_list.sort(key=(lambda x: -1.0 * abs(x[1])))
+    return ratio_list
 
-def KL_divergence(prob_list, idx_1, idx_2):
+def kl_contributions(prob_list, idx_1, idx_2):
+    contributions = [[x[0], -1.0 * x[idx_1] * math.log(x[idx_2] / x[idx_1])] for x in prob_list]
+    contributions.sort(key=(lambda x: -1.0 * x[1]))
+    return contributions
+
+def KL_divergence(kl_contributions):
     kl = 0.0
-    for item in prob_list:
-        kl -= item[idx_1] * math.log(item[idx_2] / item[idx_1])
+    for item in kl_contributions:
+        kl += item[1]
     return kl
 
-def display_ratios(some_ratios, title):
+def display_kl_contributions(some_kl, title):
     print(title)
-    for i in range(0, min(len(some_ratios), 3)):
-        edges = list(some_ratios[i][0].edges())
+    for i in range(0, min(len(some_kl), 3)):
+        edges = list(some_kl[i][0].edges())
         edges.sort()
-        print("%s %s" % (edges, some_ratios[i][1]))
+        print("%s %s" % (edges, some_kl[i][1]))
 
 orig_ppi_list = make_graph_list(ORIG_PPI)
 cl_ppi_list = make_graph_list(CL_PPI)
 er_ppi_list = make_graph_list(ER_PPI)
 merged_list = merge_graph_lists(orig_ppi_list, cl_ppi_list, er_ppi_list)
 probs_list = merged_probabilities(merged_list)
-orig_cl_ratios = ratios(probs_list, 1, 2)
-orig_er_ratios = ratios(probs_list, 1, 3)
-display_ratios(orig_cl_ratios, "PPI: Original vs CL")
-display_ratios(orig_er_ratios, "PPI: Original vs ER")
-orig_cl_kl = KL_divergence(probs_list, 1, 2)
+orig_cl_kl_contributions = kl_contributions(probs_list, 1, 2)
+orig_er_kl_contributions = kl_contributions(probs_list, 1, 3)
+display_kl_contributions(orig_cl_kl_contributions, "PPI: Original vs CL")
+display_kl_contributions(orig_er_kl_contributions, "PPI: Original vs ER")
+orig_cl_kl = KL_divergence(orig_cl_kl_contributions)
 print("orig_cl_kl: %s" % orig_cl_kl)
-orig_er_kl = KL_divergence(probs_list, 1, 3)
+orig_er_kl = KL_divergence(orig_er_kl_contributions)
 print("orig_er_kl: %s" % orig_er_kl)
 
 orig_blogs_list = make_graph_list(ORIG_BLOGS)
@@ -177,11 +182,11 @@ cl_blogs_list = make_graph_list(CL_BLOGS)
 er_blogs_list = make_graph_list(ER_BLOGS)
 merged_list = merge_graph_lists(orig_blogs_list, cl_blogs_list, er_blogs_list)
 probs_list = merged_probabilities(merged_list)
-orig_cl_ratios = ratios(probs_list, 1, 2)
-orig_er_ratios = ratios(probs_list, 1, 3)
-display_ratios(orig_cl_ratios, "Blogs: Original vs CL")
-display_ratios(orig_er_ratios, "Blogs: Original vs ER")
-orig_cl_kl = KL_divergence(probs_list, 1, 2)
+orig_cl_kl_contributions = kl_contributions(probs_list, 1, 2)
+orig_er_kl_contributions = kl_contributions(probs_list, 1, 3)
+display_kl_contributions(orig_cl_kl_contributions, "Blogs: Original vs CL")
+display_kl_contributions(orig_er_kl_contributions, "Blogs: Original vs ER")
+orig_cl_kl = KL_divergence(orig_cl_kl_contributions)
 print("orig_cl_kl: %s" % orig_cl_kl)
-orig_er_kl = KL_divergence(probs_list, 1, 3)
+orig_er_kl = KL_divergence(orig_er_kl_contributions)
 print("orig_er_kl: %s" % orig_er_kl)

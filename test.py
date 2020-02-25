@@ -3,6 +3,7 @@ import argparse
 import os
 from full_approximate_rule_miner import *
 from test_utils import *
+from generation import *
 
 parser = argparse.ArgumentParser()
 parser.add_argument("rule_min", type=int, help="Minimum rule size")
@@ -80,6 +81,9 @@ if args.degree_copy:
 
 if args.export_edge_list:
     nx.write_adjlist(G, args.export_edge_list)
+
+model = fit(G, args.rule_min, args.rule_max, args.shortcut)
+generated = generate(model)
 
 rm = FullApproximateRuleMiner(G, args.rule_min, args.rule_max, args.shortcut)
 

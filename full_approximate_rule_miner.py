@@ -61,7 +61,7 @@ class FullApproximateRuleMiner(RuleMinerBase):
         self.rule_occurrences_by_node = {n: set() for n in list(G.nodes())}  # {node-id: set of tuples that this node has a rule with}
         self.rule_priority_queue = AugmentedPQ()
 
-        self.csv_format = True
+        self.csv_format = False
         if self.csv_format:
             # Column headers are rule_id, collapses, edges_approx, total_cost, rule_details
             print("rule_id, collapses, edges_approx, total_cost, rule_details")
@@ -69,7 +69,6 @@ class FullApproximateRuleMiner(RuleMinerBase):
     def cost_of_remaining_edge_list(self):
         # Num of non-compressed nodes, one "no-more-edges" bit per node, one "one-more-edge" bit per edge, and one node id per edge.
         return self.bits_per_node_id + self.num_nodes + (self.bits_per_node_id + 1) * self.num_edges
-        
 
     # A rule here is the following data:
     # (rule_id, cost, nodes_in_rule, nodes_with_external_edges_by_edge_type, deletions_by_edge_type, additions_by_edge_type)
@@ -457,6 +456,7 @@ class FullApproximateRuleMiner(RuleMinerBase):
         if self.draw:
             self.edge_interp.display_rule_graph(rule_graph, "Made %s collapses with this rule. %s edges were approximated." % (collapses, edges_approx))
 
+        return collapses, edges_approx, rule_id, rule_graph
 
     def done(self):
         if self.first_round:
@@ -471,3 +471,12 @@ class FullApproximateRuleMiner(RuleMinerBase):
             (self.best_total_cost, 100.0 * float(self.best_total_cost) / self.original_total_cost, \
              self.original_num_nodes - self.best_total_nodes, self.original_num_nodes, \
              (100.0 * float(self.original_num_nodes - self.best_total_nodes) / self.original_num_nodes)))
+
+    def get_remaining_graph(self):
+        G = nx.DiGraph()
+        for n, neighbors in self.out_sets.items():
+            G.add_node(n)
+        for n, neighbors in self.out_sets.items():
+            for n2 in neighbors:
+                G.add_edge(n, n2)
+        return G

@@ -82,11 +82,6 @@ if args.degree_copy:
 if args.export_edge_list:
     nx.write_adjlist(G, args.export_edge_list)
 
-model = fit(G, args.rule_min, args.rule_max, args.shortcut)
-generated = generate(model)
-
-rm = FullApproximateRuleMiner(G, args.rule_min, args.rule_max, args.shortcut)
-
 while not rm.done():
     best_rule = rm.determine_best_rule()
     rm.contract_valid_tuples(best_rule)
